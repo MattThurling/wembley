@@ -21,6 +21,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/tournament', 'TournamentController@store');
-Route::post('tournament/{id}/join', 'TournamentController@join');
-Route::post('tournament/{id}/start', 'TournamentController@start');
-Route::get('tournament/{id}', 'TournamentController@show');
+Route::post('tournament/{tournament}/join', 'TournamentController@join');
+Route::post('tournament/{tournament}/start', 'TournamentController@start');
+Route::post('tournament/{tournament}/round', 'TournamentController@round');
+Route::get('tournament/{tournament}', 'TournamentController@show');

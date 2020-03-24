@@ -8,6 +8,7 @@ use App\Tournament;
 use App\Team;
 use App\Allocation;
 use App\Player;
+use App\Round;
 
 class TournamentController extends Controller
 {
@@ -20,28 +21,35 @@ class TournamentController extends Controller
      */
     public function store(Request $request)
     {
-        $tournament = Tournament::create(['owner_id' => Auth::id()]);
+        $tournament = Tournament::create(['owner_id' => Auth::id(), 'number_of_rounds' => 4]);
         // Also join the tournament as a player
-        return $this->join($tournament->id);
+        return $this->join($tournament);
     }
 
 
-    public function join($id)
+    public function join(Tournament $tournament)
     {
-        $tournament = Tournament::find($id);
         $tournament->players()->create(['user_id' => Auth::id()]);
         return redirect('home');
     }
 
-    public function start($id)
+    public function start(Tournament $tournament)
     {
         $this->allocate();
-        return $this->show($id);
+        return $this->show($tournament);
     }
 
-    public function show($id)
+    public function round(Tournament $tournament)
     {
-        $tournament = Tournament::find($id);
+        $number_of_matches = 2 ** $tournament->number_of_rounds;
+        Round::create([
+                'number_of_matches' => $number_of_matches,
+                'tournament_id' => $tournament->id,
+                'name' => 'Fourth Round']); //TODO: move round names to config or at least constant
+    }
+
+    public function show(Tournament $tournament)
+    {
         $player = Player::where('user_id', Auth::id())->with('allocations.team')->first();
         return view('tournament', compact(['player']));
     }
