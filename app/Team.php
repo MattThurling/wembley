@@ -4,6 +4,7 @@ namespace App;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 use App\Tournament;
+use DB;
 
 class Team extends Model
 {
