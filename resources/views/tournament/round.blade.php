@@ -1,9 +1,7 @@
-@extends('layouts.app')
+@extends('tournament.base')
 
-@section('content')
-<div class="container">
+@section('controls')
     <div class="row no-gutters">
-
         <div class="col-md-6 text-center mt-3 mb-3">
             <form method="POST" action="{{ url()->current() . '/round' }}">
                 @csrf
@@ -12,10 +10,4 @@
             
         </div>
     </div>
-
-    @include('partials.bank')
-
-    @include('partials.teams')
-
-</div>
 @endsection
