@@ -18,7 +18,6 @@ class CreateTeamsTable extends Migration
             $table->string('name');
             $table->integer('gate');
             $table->integer('division_id');
-            $table->timestamps();
         });
     }
 

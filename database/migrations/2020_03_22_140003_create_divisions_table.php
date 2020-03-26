@@ -17,7 +17,6 @@ class CreateDivisionsTable extends Migration
             $table->id();
             $table->string('name');
             $table->integer('level');
-            $table->timestamps();
         });
     }
 

@@ -17,6 +17,8 @@ class CreateAllocationsTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('player_id');
             $table->uuid('team_id');
+            $table->uuid('tournament_id');
+            $table->integer('status')->default(0);
             $table->timestamps();
             $table->unique(['player_id','team_id']);
         });

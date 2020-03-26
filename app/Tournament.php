@@ -15,4 +15,9 @@ class Tournament extends Model
     {
       return $this->hasMany('App\Player');
     }
+
+    public function round()
+    {
+      return $this->hasOne('App\Round');
+    }
 }

@@ -24,4 +24,6 @@ Route::post('/tournament', 'TournamentController@store');
 Route::post('tournament/{tournament}/join', 'TournamentController@join');
 Route::post('tournament/{tournament}/start', 'TournamentController@start');
 Route::post('tournament/{tournament}/round', 'TournamentController@round');
+Route::post('tournament/{tournament}/match', 'TournamentController@match');
+Route::post('tournament/{tournament}/next', 'TournamentController@next');
 Route::get('tournament/{tournament}', 'TournamentController@show');

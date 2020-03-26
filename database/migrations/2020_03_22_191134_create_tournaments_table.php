@@ -17,6 +17,7 @@ class CreateTournamentsTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('owner_id');
             $table->integer('number_of_rounds');
+            $table->uuid('round_id')->nullable();
             $table->integer('status')->default(0);
             $table->timestamps();
         });

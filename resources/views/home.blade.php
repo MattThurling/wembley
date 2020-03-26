@@ -16,25 +16,18 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">{{ $tournament->owner->name }}</h5>
-                    <p class="card-text small">{{ $tournament->owner->created_at }}</p>
-                    @if ($tournament->owner->id == Auth::id())
-                        <form method="POST" action="tournament/{{ $tournament->id }}/start">
-                            @csrf
-                            <button
-                                type="submit"
-                                class="btn btn-outline-success btn-sm"
-                                {{ (count($tournament->players) < 2) ? 'disabled' : ''}}>
-                                Start
-                            </button>
-                        </form>
-                    @else
-                        <form method="POST" action="tournament/{{ $tournament->id }}/join">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-primary btn-sm">
-                                Join
-                            </button>
-                        </form>
-                    @endif
+                    <p class="card-text small">{{ $tournament->created_at }}</p>
+                    @switch ($tournament->status)
+                        @case(0)
+                            @include('partials.open')
+                            @break
+                        @case(1)
+                            @include('partials.live')
+                            @break
+                        @case(-1)
+                            @include('partials.complete')
+                            @break
+                    @endswitch
                 </div>
 
                 <div class="card-body">
