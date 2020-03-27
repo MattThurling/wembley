@@ -1,6 +1,6 @@
 
 <template>
-   <div class="row">
+   <div class="row mb-3">
 
        <div class="col-8">
            <div class="card card-default">

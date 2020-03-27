@@ -47380,7 +47380,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
+  return _c("div", { staticClass: "row mb-3" }, [
     _c("div", { staticClass: "col-8" }, [
       _c("div", { staticClass: "card card-default" }, [
         _c("div", { staticClass: "card-header" }, [_vm._v("Messages")]),
@@ -59725,7 +59725,7 @@ window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/d
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
   key: "fe9f6662777ea249210f",
-  cluster: "mt1",
+  cluster: "eu",
   encrypted: true
 });
 
