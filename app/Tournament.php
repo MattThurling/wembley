@@ -16,8 +16,9 @@ class Tournament extends Model
       return $this->hasMany('App\Player');
     }
 
+    // A tournament has many rounds but this function gives the CURRENT round
     public function round()
     {
-      return $this->hasOne('App\Round');
+      return $this->belongsTo('App\Round');
     }
 }

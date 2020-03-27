@@ -1,12 +1,14 @@
 
 <template>
-   <div class="row mb-3">
+   <div class="row">
 
-       <div class="col-8">
+       <div class="col-sm-8 mb-3">
            <div class="card card-default">
-               <div class="card-header">Messages</div>
+              <div class="card-header">
+                Chat <small class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</small>
+              </div>
                <div class="card-body p-0">
-                   <ul class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll>
+                   <ul class="list-unstyled" style="height:180px; overflow-y:scroll" v-chat-scroll>
                        <li class="p-2" v-for="(message, index) in messages" :key="index" >
                            <strong>{{ message.user.name }}</strong>
                            {{ message.message }}
@@ -23,10 +25,9 @@
                     placeholder="Enter your message..."
                     class="form-control">
            </div>
-            <span class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</span>
        </div>
 
-        <div class="col-4">
+        <div class="col-sm-4">
             <div class="card card-default">
                 <div class="card-header">Active Users</div>
                 <div class="card-body">
@@ -81,7 +82,7 @@
         },
         methods: {
             fetchMessages() {
-                axios.get('messages').then(response => {
+                axios.get(window.location.href + '/messages').then(response => {
                     this.messages = response.data;
                 })
             },
@@ -90,7 +91,7 @@
                     user: this.user,
                     message: this.newMessage
                 });
-                axios.post('messages', {message: this.newMessage});
+                axios.post(window.location.href + '/messages', {message: this.newMessage});
                 this.newMessage = '';
             },
             sendTypingEvent() {

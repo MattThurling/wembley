@@ -1,7 +1,6 @@
 @extends('tournament.base')
 
 @section('controls')
-
   <p>
     {{ $round->name . ' | Match ' . $round->position . ' of ' . $round->number_of_matches }}
   </p>

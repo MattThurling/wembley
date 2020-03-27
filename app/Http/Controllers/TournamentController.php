@@ -130,7 +130,9 @@ class TournamentController extends Controller
     // Default player view for the current tournament
     public function show(Tournament $tournament)
     {
-        $player = Player::where('user_id', Auth::id())->with('allocations.team')->first();
+        $player = Player::where('user_id', Auth::id())
+                            ->where('tournament_id', $tournament->id)
+                            ->with('allocations.team')->first();
         $datakeys = ['tournament', 'player'];
         $view = 'tournament.round';
         $round = $tournament->round;

@@ -1952,6 +1952,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -1993,7 +1994,7 @@ __webpack_require__.r(__webpack_exports__);
     fetchMessages: function fetchMessages() {
       var _this2 = this;
 
-      axios.get('messages').then(function (response) {
+      axios.get(window.location.href + '/messages').then(function (response) {
         _this2.messages = response.data;
       });
     },
@@ -2002,7 +2003,7 @@ __webpack_require__.r(__webpack_exports__);
         user: this.user,
         message: this.newMessage
       });
-      axios.post('messages', {
+      axios.post(window.location.href + '/messages', {
         message: this.newMessage
       });
       this.newMessage = '';
@@ -47380,10 +47381,17 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row mb-3" }, [
-    _c("div", { staticClass: "col-8" }, [
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col-sm-8 mb-3" }, [
       _c("div", { staticClass: "card card-default" }, [
-        _c("div", { staticClass: "card-header" }, [_vm._v("Messages")]),
+        _c("div", { staticClass: "card-header" }, [
+          _vm._v("\n             Chat "),
+          _vm.activeUser
+            ? _c("small", { staticClass: "text-muted" }, [
+                _vm._v(_vm._s(_vm.activeUser.name) + " is typing...")
+              ])
+            : _vm._e()
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body p-0" }, [
           _c(
@@ -47391,7 +47399,7 @@ var render = function() {
             {
               directives: [{ name: "chat-scroll", rawName: "v-chat-scroll" }],
               staticClass: "list-unstyled",
-              staticStyle: { height: "300px", "overflow-y": "scroll" }
+              staticStyle: { height: "180px", "overflow-y": "scroll" }
             },
             _vm._l(_vm.messages, function(message, index) {
               return _c("li", { key: index, staticClass: "p-2" }, [
@@ -47442,16 +47450,10 @@ var render = function() {
             }
           }
         })
-      ]),
-      _vm._v(" "),
-      _vm.activeUser
-        ? _c("span", { staticClass: "text-muted" }, [
-            _vm._v(_vm._s(_vm.activeUser.name) + " is typing...")
-          ])
-        : _vm._e()
+      ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "col-4" }, [
+    _c("div", { staticClass: "col-sm-4" }, [
       _c("div", { staticClass: "card card-default" }, [
         _c("div", { staticClass: "card-header" }, [_vm._v("Active Users")]),
         _vm._v(" "),
