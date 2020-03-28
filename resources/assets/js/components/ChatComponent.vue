@@ -10,7 +10,7 @@
                <div class="card-body p-0">
                    <ul class="list-unstyled" style="height:180px; overflow-y:scroll" v-chat-scroll>
                        <li class="p-2" v-for="(message, index) in messages" :key="index" >
-                           <strong>{{ message.user.name }}</strong>
+                           <strong>{{ message.player.user.name }}</strong>
                            {{ message.message }}
                        </li>
                    </ul>
@@ -29,7 +29,7 @@
 
         <div class="col-sm-4">
             <div class="card card-default">
-                <div class="card-header">Active Users</div>
+                <div class="card-header">Active Players</div>
                 <div class="card-body">
                     <ul>
                         <li class="py-2" v-for="(user, index) in users" :key="index">
@@ -45,7 +45,10 @@
 
 <script>
     export default {
-        props:['user'],
+        // TODO At the moment, we are passing in the user AND the player even though
+        // this means redundant data. May want to refactor after examining what's happening
+        // with Echo and Pusher
+        props:['player', 'user'],
         data() {
             return {
                 messages: [],
@@ -88,7 +91,7 @@
             },
             sendMessage() {
                 this.messages.push({
-                    user: this.user,
+                    player: this.player,
                     message: this.newMessage
                 });
                 axios.post(window.location.href + '/messages', {message: this.newMessage});
@@ -101,4 +104,4 @@
             }
         }
     }
-</script> 
+</script>

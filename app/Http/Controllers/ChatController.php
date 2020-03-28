@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Chat;
+use App\Tournament;
+use App\Player;
 use App\Events\ChatEvent;
 use Illuminate\Http\Request;
 
@@ -13,23 +16,22 @@ class ChatController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function fetchAllMessages(Tournament $tournament)
     {
-      return view('chat');
+      return Chat::with('player.user')->get();
     }
 
-    public function fetchAllMessages()
+    public function sendMessage(Tournament $tournament, Request $request)
     {
-      return Chat::with('user')->get();
-    }
 
-    public function sendMessage(Request $request)
-    {
-      $chat = auth()->user()->messages()->create([
-            'message' => $request->message
-        ]);
+      $chat = Player::where('user_id', Auth::id())
+                      ->where('tournament_id', $tournament->id)
+                      ->first()
+                      ->messages()
+                      ->create([
+                        'message' => $request->message]);
 
-      broadcast(new ChatEvent($chat->load('user')))->toOthers();
+      broadcast(new ChatEvent($chat->load(['player', 'player.user'])))->toOthers();
 
       return ['status' => 'success'];
     }

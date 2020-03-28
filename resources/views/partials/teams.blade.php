@@ -6,7 +6,7 @@
     </div>
     <div class="card-body">
         <div class="card-text">
-            @foreach ($player->allocations as $allocation)
+            @foreach ($allocations as $allocation)
                 @switch ($allocation->status)
                     @case(1)
                         <p class="text-success">

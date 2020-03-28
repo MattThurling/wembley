@@ -1954,7 +1954,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user'],
+  // TODO At the moment, we are passing in the user AND the player even though
+  // this means redundant data. May want to refactor after examining what's happening
+  // with Echo and Pusher
+  props: ['player', 'user'],
   data: function data() {
     return {
       messages: [],
@@ -2000,7 +2003,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     sendMessage: function sendMessage() {
       this.messages.push({
-        user: this.user,
+        player: this.player,
         message: this.newMessage
       });
       axios.post(window.location.href + '/messages', {
@@ -47403,7 +47406,7 @@ var render = function() {
             },
             _vm._l(_vm.messages, function(message, index) {
               return _c("li", { key: index, staticClass: "p-2" }, [
-                _c("strong", [_vm._v(_vm._s(message.user.name))]),
+                _c("strong", [_vm._v(_vm._s(message.player.user.name))]),
                 _vm._v(
                   "\n                        " +
                     _vm._s(message.message) +
@@ -47455,7 +47458,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "col-sm-4" }, [
       _c("div", { staticClass: "card card-default" }, [
-        _c("div", { staticClass: "card-header" }, [_vm._v("Active Users")]),
+        _c("div", { staticClass: "card-header" }, [_vm._v("Active Players")]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
           _c(

@@ -8,9 +8,9 @@ class Chat extends Model
 {
     protected $guarded = [];
 
-    public function user(){
+    public function player(){
 
-        return $this->belongsTo(User::class);
+        return $this->belongsTo('App\Player');
         
     }
 }

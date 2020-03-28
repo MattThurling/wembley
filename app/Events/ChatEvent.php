@@ -24,7 +24,9 @@ class ChatEvent implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new PresenceChannel('chat');
+        // Get the tournament_id from the player
+        $tournament_id = $this->chat->player->tournament_id;
+        return new PresenceChannel($tournament_id);
     }
 }
 
