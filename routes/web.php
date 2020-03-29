@@ -26,7 +26,7 @@ Route::post('tournament/{tournament}/start', 'TournamentController@start');
 Route::post('tournament/{tournament}/round', 'TournamentController@round');
 Route::post('tournament/{tournament}/match', 'TournamentController@match');
 Route::post('tournament/{tournament}/next', 'TournamentController@next');
-Route::get('tournament/{tournament}', 'TournamentController@show');
+Route::get('tournament/{tournament}', 'Web\TournamentController@show');
 Route::get('/chats', 'ChatController@index');
 Route::get('/tournament/{tournament}/messages', 'ChatController@fetchAllMessages');
 Route::post('/tournament/{tournament}/messages', 'ChatController@sendMessage');

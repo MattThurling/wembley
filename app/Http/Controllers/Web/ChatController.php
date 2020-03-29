@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use Auth;
+use App\Controllers\Controller;
 use App\Chat;
 use App\Tournament;
 use App\Player;
