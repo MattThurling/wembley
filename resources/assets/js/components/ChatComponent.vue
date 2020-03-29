@@ -48,7 +48,7 @@
         // TODO At the moment, we are passing in the user AND the player even though
         // this means redundant data. May want to refactor after examining what's happening
         // with Echo and Pusher
-        props:['player', 'user'],
+        props:['player', 'user', 'tournament'],
         data() {
             return {
                 messages: [],
@@ -60,17 +60,22 @@
         },
         created() {
             this.fetchMessages();
-            Echo.join('chat')
+            console.log(JSON.stringify(this.player));
+            Echo.join(this.tournament.id)
                 .here(user => {
+                    console.log('HERE: ' + JSON.stringify(user));
                     this.users = user;
                 })
                 .joining(user => {
+                    console.log('JOINING: ' + JSON.stringify(user));
                     this.users.push(user);
                 })
                 .leaving(user => {
+                    console.log('LEAVING: ' + JSON.stringify(user));
                     this.users = this.users.filter(u => u.id != user.id);
                 })
                 .listen('ChatEvent',(event) => {
+                    console.log('LISTEN: ' + JSON.stringify(event));
                     this.messages.push(event.chat);
                 })
                 .listenForWhisper('typing', user => {
@@ -90,6 +95,7 @@
                 })
             },
             sendMessage() {
+                console.log('SEND :' + JSON.stringify(this.player));
                 this.messages.push({
                     player: this.player,
                     message: this.newMessage
@@ -98,7 +104,7 @@
                 this.newMessage = '';
             },
             sendTypingEvent() {
-                Echo.join('chat')
+                Echo.join(this.tournament.id)
                     .whisper('typing', this.user);
                 console.log(this.user.name + ' is typing now')
             }

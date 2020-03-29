@@ -17,6 +17,6 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('chat', function ($user) {
-    return $user;
+Broadcast::channel('{tournament_id}', function ($user, $tournament_id) {
+    return $user->players->where('tournament_id', $tournament_id)->first();
 });

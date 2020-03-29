@@ -8,7 +8,8 @@
 
     <chat-component
       :player="{{ $player }}"
-      :user="{{ Auth::user() }}">
+      :user="{{ Auth::user() }}"
+      :tournament="{{ $tournament }}">
     </chat-component>
 
     @include('partials.bank')

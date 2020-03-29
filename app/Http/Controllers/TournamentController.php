@@ -134,8 +134,8 @@ class TournamentController extends Controller
                             ->where('tournament_id', $tournament->id)
                             ->with('user')
                             ->first();
-        $allocations = $player->allocations->load('team');
-
+                            
+        $allocations = Player::find($player->id)->allocations->load('team');
         $datakeys = ['tournament', 'player', 'allocations'];
         $view = 'tournament.round';
         $round = $tournament->round;

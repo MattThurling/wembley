@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Player;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use GoldSpecDigital\LaravelEloquentUUID\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -36,5 +37,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function players()
+    {
+        return $this->hasMany('App\Player');
+    }
 
 }
