@@ -2072,12 +2072,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tournament'],
   data: function data() {
     return {
-      tournament: {},
       round: {},
       match: {}
     };
@@ -47586,32 +47584,31 @@ var render = function() {
     _c("div", { staticClass: "col-md-6" }, [
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-10" }, [
-          _c("h4", [_vm._v(_vm._s(_vm.home.name))]),
+          _c("h4", [_vm._v(_vm._s(_vm.tournament.id))]),
           _vm._v(" "),
-          _c("p", { staticClass: "small" }, [_vm._v(_vm._s(_vm.home))])
+          _c("p", { staticClass: "small" }, [_vm._v(_vm._s(_vm.tournament.id))])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-2" }, [
-          _c("h1", [_vm._v(_vm._s(_vm.home.score))])
+          _c("h1", [_vm._v(_vm._s(_vm.tournament.id))])
         ])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-10" }, [
-          _c("h4", [_vm._v(_vm._s(_vm.away.name))]),
+          _c("h4", [_vm._v(_vm._s(_vm.tournament.id))]),
           _vm._v(" "),
-          _c("p", { staticClass: "small" }, [_vm._v(_vm._s(_vm.away))])
+          _c("p", { staticClass: "small" }, [_vm._v(_vm._s(_vm.tournament.id))])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-2" }, [
-          _c("h1", [_vm._v(_vm._s(_vm.away.score))])
+          _c("h1", [_vm._v(_vm._s(_vm.tournament.id))])
         ])
       ])
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "col-md-6 text-center mt-3 mb-3" }, [
       _c("form", { attrs: { method: "POST" }, on: { action: _vm.playMatch } }, [
-        _vm._v("\n            @csrf\n            "),
         _c(
           "button",
           { staticClass: "btn btn-success btn-lg", attrs: { type: "submit" } },
@@ -60035,8 +60032,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/vagrant/Dev/wembley/resources/assets/js/app.js */"./resources/assets/js/app.js");
-module.exports = __webpack_require__(/*! /home/vagrant/Dev/wembley/resources/assets/sass/app.scss */"./resources/assets/sass/app.scss");
+__webpack_require__(/*! /Users/mattthurling/Documents/Dev/wembley/resources/assets/js/app.js */"./resources/assets/js/app.js");
+module.exports = __webpack_require__(/*! /Users/mattthurling/Documents/Dev/wembley/resources/assets/sass/app.scss */"./resources/assets/sass/app.scss");
 
 
 /***/ })

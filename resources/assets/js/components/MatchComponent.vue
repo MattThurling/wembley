@@ -4,21 +4,21 @@
         <div class="col-md-6">
             <div class="row">
                 <div class="col-10">
-                    <h4>{{ home.name }}</h4>
-                    <p class="small">{{ home }}</p>
+                    <h4>{{ tournament.id }}</h4>
+                    <p class="small">{{ tournament.id }}</p>
                 </div>
                 <div class="col-2">
-                    <h1>{{ home.score }}</h1>
+                    <h1>{{ tournament.id }}</h1>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-10">
-                    <h4>{{ away.name }}</h4>
-                    <p class="small">{{ away }}</p>
+                    <h4>{{ tournament.id }}</h4>
+                    <p class="small">{{ tournament.id }}</p>
                 </div>
                 <div class="col-2">
-                    <h1>{{ away.score }}</h1>
+                    <h1>{{ tournament.id }}</h1>
                 </div>
             </div>
 
@@ -27,7 +27,6 @@
 
         <div class="col-md-6 text-center mt-3 mb-3">
             <form method="POST" @action="playMatch">
-                @csrf
                 <button type="submit" class="btn btn-success btn-lg">Play</button>
             </form>
         </div>
@@ -39,7 +38,6 @@
         props:['tournament'],
         data() {
             return {
-                tournament: {},
                 round: {},
                 match: {},
             }
