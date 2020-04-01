@@ -21,8 +21,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('tournament/{tournament}/start', 'TournamentController@start');
-Route::get('tournament/{tournament}/draw', 'Web\TournamentController@draw');
 Route::get('tournament/{tournament}', 'Web\TournamentController@show');
 
-Route::get('/tournament/{tournament}/messages', 'ChatController@fetchAllMessages');
-Route::post('/tournament/{tournament}/messages', 'ChatController@sendMessage');
+

@@ -10,4 +10,5 @@ class Draw extends Model
   {
     return $this->belongsTo('App\Team');
   }
+
 }

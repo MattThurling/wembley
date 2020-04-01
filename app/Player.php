@@ -25,8 +25,4 @@ class Player extends Model
       return $this->hasMany('App\Allocation');
     }
 
-    public function messages()
-    {
-        return $this->hasMany('App\Chat');
-    }
 }

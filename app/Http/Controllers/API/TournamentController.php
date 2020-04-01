@@ -34,28 +34,39 @@ class TournamentController extends Controller
 
     $allocations = Player::find($player->id)->allocations->load('team');
 
+    $phase = 'round';
     $round = $tournament->round;
-    $home = null;
-    $away = null;
+    $home_team = null;
+    $away_team = null;
+    $home_user = null;
+    $away_user = null;
     $match = null;
 
     if ($round) {
       // The initial draw of teams. There may be some shenanigans - auctions and reordering
       // before a match actually takes place
-      $home = $round->home()->team;
-      $away = $round->away()->team;
+      $phase = 'draw';
+      // TODO get the home relationship to return like normal eloquent relationship
+      $home_team = $round->home()->team;
+      $away_team = $round->away()->team;
+      $home_user = $round->home()->team->current_user($tournament)->first();
+      $away_user = $round->away()->team->current_user($tournament)->first();
       // A match is not created until the Play button is pressed
       $match = Match::where('round_id', $round->id)
               ->where('position', $round->position)
               ->first();
+      if ($match) $phase = 'match';
     }
 
     $data = ['tournament' => $tournament,
             'player' => $player,
             'allocations' => $allocations,
+            'phase' => $phase,
             'round' => $round,
-            'home' => $home,
-            'away' => $away,
+            'home_team' => $home_team,
+            'away_team' => $away_team,
+            'home_user' => $home_user,
+            'away_user' => $away_user,
             'match' => $match];
 
     return response()->json($data);

@@ -44,4 +44,9 @@ class User extends Authenticatable
         return $this->hasMany('App\Player');
     }
 
+    public function messages()
+    {
+        return $this->hasMany('App\Chat');
+    }
+
 }

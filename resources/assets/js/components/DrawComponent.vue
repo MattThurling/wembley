@@ -1,33 +1,45 @@
 <template>
     <div>
+        <p>
+            {{ tournament.round.name }} | Match {{ tournament.round.position }} of {{ tournament.round.number_of_matches }}
+        </p>
         <div class="row no-gutters">
+
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-10">
+                        <h4>{{ tournament.home_team.name }}</h4>
+                        <p class="small">{{ tournament.home_user.name }}</p>
+                    </div>
+                    <div class="col-2">
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-10">
+                        <h4>{{ tournament.away_team.name }}</h4>
+                        <p class="small">{{ tournament.away_user.name }}</p>
+                    </div>
+                    <div class="col-2">
+
+                    </div>
+                </div>
+
+            </div>
+
             <div class="col-md-6 text-center mt-3 mb-3">
-                <button @click="startDraw" class="btn btn-success btn-lg">Start</button>
+                <button @click="playMatchHandler" class="btn btn-success btn-lg">Play</button>
             </div>
         </div>
-        <chat-component :tournament="tournament" />
-        <teams-component :allocations="teams" />
-    </div>
 
+
+    </div>
 </template>
 
 <script>
-
-    import TeamsComponent from './TeamsComponent.vue';
     export default {
-        components: {
-            TeamsComponent,
-        },
-        props:['tournament', 'allocations'],
-        data() {
-            return {
-                teams: this.allocations
-            }
-        },
-        methods: {
-            startDraw() {
-                axios.post('/api/tournament/' + this.tournament.id + '/round');
-            }
-        }
+        props: ['tournament', 'playMatchHandler']
     }
+
 </script>

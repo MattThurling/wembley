@@ -26,6 +26,8 @@ Route::group(['middleware' => 'auth:api'], function () {
   Route::post('tournament/{tournament}/next', 'API\TournamentController@next');
   Route::get('tournament', 'API\TournamentController@index');
   Route::post('tournament', 'API\TournamentController@store');
+  Route::get('tournament/{tournament}/messages', 'API\ChatController@fetchAllMessages');
+  Route::post('tournament/{tournament}/messages', 'API\ChatController@sendMessage');
 });
 
 

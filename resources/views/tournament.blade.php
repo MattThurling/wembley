@@ -4,19 +4,13 @@
 
 <div class="container">
 
-  Tournament
-
-  <match-component :tournament_id="'{{ $tournament->id }}'" />
-  <teams-component :allocations="{{ $allocations }}" />
-  <chat-component
+  <tournament-component
     :player="{{ $player }}"
     :user="{{ Auth::user() }}"
-    :tournament="{{ $tournament }}">
-  </chat-component>
+    :tournament_id="'{{ $tournament->id }}'">
+  </tournament-component>
 
   @include('partials.bank')
-
-  
 
 </div>
 @endsection

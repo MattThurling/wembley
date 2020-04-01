@@ -9,8 +9,8 @@
               </div>
                <div class="card-body p-0">
                    <ul class="list-unstyled" style="height:180px; overflow-y:scroll" v-chat-scroll>
-                       <li class="p-2" v-for="(message, index) in messages" :key="index" >
-                           <strong>{{ message.player.user.name }}</strong>
+                       <li class="pl-2" v-for="(message, index) in messages" :key="index" >
+                           <strong>{{ message.user.name }}</strong>
                            {{ message.message }}
                        </li>
                    </ul>
@@ -32,8 +32,8 @@
                 <div class="card-header">Active Players</div>
                 <div class="card-body">
                     <ul>
-                        <li class="py-2" v-for="(user, index) in users" :key="index">
-                            {{ user.name }}
+                        <li class="py-2" v-for="(u, index) in users" :key="index">
+                            {{ u.name }}
                         </li>
                     </ul>
                 </div>
@@ -48,7 +48,7 @@
         // TODO At the moment, we are passing in the user AND the player even though
         // this means redundant data. May want to refactor after examining what's happening
         // with Echo and Pusher
-        props:['player', 'user', 'tournament'],
+        props:['tournament_id', 'user'],
         data() {
             return {
                 messages: [],
@@ -61,7 +61,7 @@
         created() {
             this.fetchMessages();
             console.log(JSON.stringify(this.player));
-            Echo.join(this.tournament.id)
+            Echo.join(this.tournament_id)
                 .here(user => {
                     console.log('HERE: ' + JSON.stringify(user));
                     this.users = user;
@@ -90,21 +90,21 @@
         },
         methods: {
             fetchMessages() {
-                axios.get(window.location.href + '/messages').then(response => {
+                axios.get('/api/tournament/' + this.tournament_id + '/messages').then(response => {
                     this.messages = response.data;
                 })
             },
             sendMessage() {
                 console.log('SEND :' + JSON.stringify(this.player));
                 this.messages.push({
-                    player: this.player,
+                    user: this.user,
                     message: this.newMessage
                 });
-                axios.post(window.location.href + '/messages', {message: this.newMessage});
+                axios.post('/api/tournament/' + this.tournament_id + '/messages', {message: this.newMessage});
                 this.newMessage = '';
             },
             sendTypingEvent() {
-                Echo.join(this.tournament.id)
+                Echo.join(this.tournament_id)
                     .whisper('typing', this.user);
                 console.log(this.user.name + ' is typing now')
             }
