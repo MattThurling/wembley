@@ -19,6 +19,13 @@ Route::post('register', 'API\UserController@register');
 
 Route::group(['middleware' => 'auth:api'], function () {
   Route::get('tournament/{tournament}', 'API\TournamentController@show');
+  Route::post('tournament/{tournament}/join', 'API\TournamentController@join');
+  Route::post('tournament/{tournament}/start', 'API\TournamentController@start');
+  Route::post('tournament/{tournament}/round', 'API\TournamentController@round');
+  Route::post('tournament/{tournament}/match', 'API\TournamentController@match');
+  Route::post('tournament/{tournament}/next', 'API\TournamentController@next');
+  Route::get('tournament', 'API\TournamentController@index');
+  Route::post('tournament', 'API\TournamentController@store');
 });
 
 

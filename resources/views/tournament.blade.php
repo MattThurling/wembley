@@ -6,17 +6,17 @@
 
   Tournament
 
-<!--     @yield('controls')
+  <match-component :tournament_id="'{{ $tournament->id }}'" />
+  <teams-component :allocations="{{ $allocations }}" />
+  <chat-component
+    :player="{{ $player }}"
+    :user="{{ Auth::user() }}"
+    :tournament="{{ $tournament }}">
+  </chat-component>
 
-    <chat-component
-      :player="{{ $player }}"
-      :user="{{ Auth::user() }}"
-      :tournament="{{ $tournament }}">
-    </chat-component>
+  @include('partials.bank')
 
-    @include('partials.bank')
-
-    @include('partials.teams') -->
+  
 
 </div>
 @endsection

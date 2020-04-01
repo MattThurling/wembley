@@ -24,7 +24,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $tournaments = Tournament::all()->load('owner','players','players.user');
-        return view('home', compact('tournaments'));
+        return view('home');
     }
 }

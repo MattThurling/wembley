@@ -20,3 +20,7 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 Broadcast::channel('{tournament_id}', function ($user, $tournament_id) {
     return $user->players->where('tournament_id', $tournament_id)->first();
 });
+
+Broadcast::channel('lobby', function ($user) {
+    return $user;
+});
