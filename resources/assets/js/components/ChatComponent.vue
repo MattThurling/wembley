@@ -60,7 +60,6 @@
         },
         created() {
             this.fetchMessages();
-            console.log(JSON.stringify(this.player));
             Echo.join(this.tournament_id)
                 .here(user => {
                     console.log('HERE: ' + JSON.stringify(user));

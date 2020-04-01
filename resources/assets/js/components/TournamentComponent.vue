@@ -7,7 +7,10 @@
             v-if="tournament.phase == 'draw'"
             :tournament="tournament"
             :playMatchHandler="playMatch"/>
-        <match-component v-if="tournament.phase == 'match'" />
+        <match-component
+            v-if="tournament.phase == 'match'"
+            :tournament="tournament"
+            :next-draw-handler="nextDraw"/>
         <chat-component :tournament_id="tournament_id" :user="user" />
         <teams-component :allocations="tournament.allocations" />
     </div>
@@ -37,6 +40,19 @@
         },
         created() {
             this.getTournament();
+            Echo.join(this.tournament_id)
+                .listen('TournamentRoundCreated',(event) => {
+                    console.log('LISTEN: ' + JSON.stringify(event));
+                    this.getTournament();
+                })
+                .listen('TournamentMatchCreated',(event) => {
+                    console.log('LISTEN: ' + JSON.stringify(event));
+                    this.getTournament();
+                })
+                .listen('TournamentNext',(event) => {
+                    console.log('LISTEN: ' + JSON.stringify(event));
+                    this.getTournament();
+                })
         },
         methods: {
             getTournament() {
@@ -44,11 +60,22 @@
                     this.tournament = response.data;
                 })
             },
-            playMatch() {
-                axios.get('/api/tournament/' + this.tournament_id + '/match').then(response => {
+            startRound() {
+                axios.post('/api/tournament/' + this.tournament_id + '/round').then(response => {
                     this.tournament = response.data;
                 })
-            }
+            },
+            playMatch() {
+                axios.post('/api/tournament/' + this.tournament_id + '/match').then(response => {
+                    this.tournament = response.data;
+                })
+            },
+            nextDraw() {
+                axios.post('/api/tournament/' + this.tournament_id + '/next').then(response => {
+                    this.tournament = response.data;
+                })
+            },
+
         }
     }
 </script>

@@ -15,4 +15,9 @@ class Match extends Model
     {
       return $this->belongsTo('App\Allocation', 'away_allocation_id');
     }
+
+    public function round()
+    {
+      return $this->belongsTo('App\Round');
+    }
 }

@@ -14,6 +14,8 @@ use App\Match;
 use App\Events\TournamentJoined;
 use App\Events\TournamentStarted;
 use App\Events\TournamentRoundCreated;
+use App\Events\TournamentMatchCreated;
+use App\Events\TournamentNext;
 
 class TournamentController extends Controller
 {
@@ -55,7 +57,14 @@ class TournamentController extends Controller
       $match = Match::where('round_id', $round->id)
               ->where('position', $round->position)
               ->first();
-      if ($match) $phase = 'match';
+      if ($match) {
+        $phase = 'match';
+        // Make sure relationships are loaded
+        $match->home_allocation->team;
+        $match->away_allocation->team;
+        $match->home_allocation->player->user;
+        $match->away_allocation->player->user;
+      }
     }
 
     $data = ['tournament' => $tournament,
@@ -142,7 +151,7 @@ class TournamentController extends Controller
       $away = rand(0,5);
       $home_allocation_id = $round->home()->team->allocation($tournament)->first()->id;
       $away_allocation_id = $round->away()->team->allocation($tournament)->first()->id;
-      Match::create([
+      $match = Match::create([
               'round_id' => $round->id,
               'position' => $round->position,
               'home_allocation_id' => $home_allocation_id,
@@ -162,7 +171,8 @@ class TournamentController extends Controller
           $home_allocation->update(['status' => 1]);
           $away_allocation->update(['status' => -1]);
       }
-      return redirect ('tournament/' . $tournament->id);
+      broadcast(new TournamentMatchCreated($match));
+      return $this->show($tournament);
   }
 
   // Move on to the next draw of the round
@@ -178,8 +188,8 @@ class TournamentController extends Controller
           $next_matches = $round->number_of_matches/2;
           return $this->round($tournament, $next_matches, 'Fifth Round');
       }
-
-      return redirect ('tournament/' . $tournament->id);
+      broadcast(new TournamentNext($round));
+      return $this->show($tournament);
   }
 
   // Deal teams at random to players
