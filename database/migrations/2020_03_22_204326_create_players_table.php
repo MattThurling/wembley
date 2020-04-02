@@ -17,6 +17,7 @@ class CreatePlayersTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('tournament_id');
             $table->uuid('user_id');
+            $table->integer('balance');
             $table->timestamps();
             $table->unique(['tournament_id', 'user_id']);
         });

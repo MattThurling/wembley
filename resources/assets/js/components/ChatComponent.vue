@@ -4,11 +4,11 @@
 
        <div class="col-sm-8 mb-3">
            <div class="card card-default">
-              <div class="card-header">
-                Chat <small class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</small>
+              <div class="card-header px-2 py-0">
+                Live <small class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</small>
               </div>
                <div class="card-body p-0">
-                   <ul class="list-unstyled" style="height:180px; overflow-y:scroll" v-chat-scroll>
+                   <ul class="list-unstyled" style="height:100px; overflow-y:scroll" v-chat-scroll>
                        <li class="pl-2" v-for="(message, index) in messages" :key="index" >
                            <strong>{{ message.user.name }}</strong>
                            {{ message.message }}
@@ -28,16 +28,12 @@
        </div>
 
         <div class="col-sm-4">
-            <div class="card card-default">
-                <div class="card-header">Active Players</div>
-                <div class="card-body">
-                    <ul>
-                        <li class="py-2" v-for="(u, index) in users" :key="index">
-                            {{ u.name }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
+
+            <ul class="list-group"><h6 class="text-center">Active players</h6>
+                <li class="list-group-item py-0" v-for="(u, index) in users" :key="index">
+                    {{ u.name }}
+                </li>
+            </ul>
         </div>
 
    </div>

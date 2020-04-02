@@ -1,29 +1,18 @@
-<div class="col-md-6">
-    <div class="row">
-        <div class="col-10">
-            <h4>{{ home }}</h4>
-            <p class="small">{{ home }}</p>
-        </div>
-        <div class="col-2">
-            <h1>{{ home }}</h1>
-        </div>
-    </div>
+<div class="card-body">
 
-    <div class="row">
-        <div class="col-10">
-            <h4>{{ away }}</h4>
-            <p class="small">{{ away }}</p>
-        </div>
-        <div class="col-2">
-            <h1>{{ away }}</h1>
-        </div>
-    </div>
+
+    <p v-if="allocation.status == 1" class="text-success">
+        {{ allocation.team.name }}
+    </p>
+
+    <p v-if="allocation.status == -1" class="text-danger">
+        {{ allocation.team.name }}
+    </p>
+
+    <p v-if="allocation.status == 0">
+        {{ allocation.team.name }}
+    </p>
 
 </div>
-{{ player.id }}
-
-<div class="col-md-6 text-center mt-3 mb-3">
-    <button v-if="match != null" @click="playMatch" class="btn btn-success btn-lg">Play</button>
-    <button v-else="round" @click="startDraw" class="btn btn-success btn-lg">Start</button>
-
+</div>
 </div>

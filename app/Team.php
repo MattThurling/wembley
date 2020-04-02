@@ -36,4 +36,9 @@ class Team extends Model
 
     return $allocation;
   }
+
+  public function division ()
+  {
+    return $this->belongsTo('App\Division');
+  }
 }

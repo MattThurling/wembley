@@ -1,32 +1,38 @@
 <template>
-    <div class="card mt-3">
-        <div class="card-header">
-            <div class="card-title">
-                <h5 class="card-text">Your teams</h5>
-            </div>
-        </div>
-        <div class="card-body">
-            <div v-for="allocation in allocations" class="card-text teams">
-
-                <p v-if="allocation.status == 1" class="text-success">
-                    {{ allocation.team.name }}
-                </p>
-
-                <p v-if="allocation.status == -1" class="text-danger">
-                    {{ allocation.team.name }}
-                </p>
-
-                <p v-if="allocation.status == 0">
-                    {{ allocation.team.name }}
-                </p>
-
-            </div>
-        </div>
+    <div class="col-sm-8">
+        <table class="table table-sm mt-3">
+            <thead>
+                <tr>
+                    <th scope="col">Your teams</th>
+                    <th class="text-center" scope="col">Division</th>
+                    <th class="text-right" scope="col">Gate</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="allocation in allocations" :class=getStatusClass(allocation)>
+                    <td>{{ allocation.team.name }}</td>
+                    <td class="text-center">{{ allocation.team.division.name }}</td>
+                    <td class="text-right">{{ numberWithCommas(allocation.team.gate) }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
 <script>
     export default {
-        props:['allocations']
+        props:['allocations','conversionHandler'],
+        methods: {
+            // TODO: DRY this up by defining it elsewhere
+            numberWithCommas(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            },
+            getStatusClass(allocation) {
+                let rowClass = "";
+                if (allocation.status == 1) rowClass = "table-success";
+                if (allocation.status == -1) rowClass = "table-danger";
+                return rowClass;
+            }
+        }
     }
 </script>

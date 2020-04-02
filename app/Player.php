@@ -12,7 +12,7 @@ class Player extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
+        'user_id', 'balance'
     ];
 
     public function user()

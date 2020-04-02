@@ -34,7 +34,7 @@ class TournamentController extends Controller
                       ->with('user')
                       ->first();
 
-    $allocations = Player::find($player->id)->allocations->load('team');
+    $allocations = Player::find($player->id)->allocations->load('team', 'team.division');
 
     $phase = 'round';
     $round = $tournament->round;
@@ -92,7 +92,7 @@ class TournamentController extends Controller
   // Add a player to an existing tournament
   public function join(Tournament $tournament)
   {
-      $tournament->players()->create(['user_id' => Auth::id()]);
+      $tournament->players()->create(['user_id' => Auth::id(), 'balance' => 12500]);
       broadcast(new TournamentJoined($tournament));
       return 'Success';
   }
@@ -164,16 +164,28 @@ class TournamentController extends Controller
       $home_allocation = Allocation::find($home_allocation_id);
       $away_allocation = Allocation::find($away_allocation_id);
 
+      $gate = $home_allocation->team->gate;
+
+      // TODO big refactor when adding proper game logic
       if ($away >= $home) {
           $home_allocation->update(['status' => -1]);
+          $home_allocation->player->balance += $gate / 3;
           $away_allocation->update(['status' => 1]);
+          $away_allocation->player->balance += 2 * $gate / 3;
       } else {
           $home_allocation->update(['status' => 1]);
+          $home_allocation->player->balance += 2 * $gate / 3;
           $away_allocation->update(['status' => -1]);
+          $away_allocation->player->balance += $gate / 3;
       }
+      $home_allocation->player->save();
+      $away_allocation->player->save();
       broadcast(new TournamentMatchCreated($match));
       return $this->show($tournament);
   }
+
+
+
 
   // Move on to the next draw of the round
   public function next(Tournament $tournament)

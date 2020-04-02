@@ -1899,9 +1899,9 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/ChatComponent.vue?vue&type=script&lang=js&":
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/BankComponent.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/ChatComponent.vue?vue&type=script&lang=js& ***!
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/BankComponent.vue?vue&type=script&lang=js& ***!
   \*******************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -1912,6 +1912,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['player', 'conversionHandler'],
+  methods: {
+    // TODO: DRY this up by defining it elsewhere
+    numberWithCommas: function numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/ChatComponent.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/ChatComponent.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 //
 //
 //
@@ -2311,14 +2343,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['allocations']
+  props: ['allocations', 'conversionHandler'],
+  methods: {
+    // TODO: DRY this up by defining it elsewhere
+    numberWithCommas: function numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    getStatusClass: function getStatusClass(allocation) {
+      var rowClass = "";
+      if (allocation.status == 1) rowClass = "table-success";
+      if (allocation.status == -1) rowClass = "table-danger";
+      return rowClass;
+    }
+  }
 });
 
 /***/ }),
@@ -2337,6 +2375,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _MatchComponent_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MatchComponent.vue */ "./resources/assets/js/components/MatchComponent.vue");
 /* harmony import */ var _ChatComponent_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ChatComponent.vue */ "./resources/assets/js/components/ChatComponent.vue");
 /* harmony import */ var _TeamsComponent_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TeamsComponent.vue */ "./resources/assets/js/components/TeamsComponent.vue");
+/* harmony import */ var _BankComponent_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./BankComponent.vue */ "./resources/assets/js/components/BankComponent.vue");
 //
 //
 //
@@ -2356,6 +2395,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 
@@ -2367,7 +2412,8 @@ __webpack_require__.r(__webpack_exports__);
     DrawComponent: _DrawComponent_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     MatchComponent: _MatchComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     ChatComponent: _ChatComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
-    TeamsComponent: _TeamsComponent_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+    TeamsComponent: _TeamsComponent_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+    BankComponent: _BankComponent_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   props: ['tournament_id', 'user'],
   data: function data() {
@@ -47776,6 +47822,51 @@ return VueChatScroll;
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/BankComponent.vue?vue&type=template&id=a6188e0c&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/BankComponent.vue?vue&type=template&id=a6188e0c& ***!
+  \***********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "col-sm-4" }, [
+    _c("div", { staticClass: "card mt-3" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c("div", { staticClass: "card-text" }, [
+          _c("h1", { staticClass: "text-center" }, [
+            _vm._v("£" + _vm._s(_vm.numberWithCommas(_vm.player.balance)))
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("p", { staticClass: "text-center" }, [_vm._v("Bank balance:")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/ChatComponent.vue?vue&type=template&id=ed7b4d44&":
 /*!***********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/ChatComponent.vue?vue&type=template&id=ed7b4d44& ***!
@@ -47794,8 +47885,8 @@ var render = function() {
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-sm-8 mb-3" }, [
       _c("div", { staticClass: "card card-default" }, [
-        _c("div", { staticClass: "card-header" }, [
-          _vm._v("\n             Chat "),
+        _c("div", { staticClass: "card-header px-2 py-0" }, [
+          _vm._v("\n             Live "),
           _vm.activeUser
             ? _c("small", { staticClass: "text-muted" }, [
                 _vm._v(_vm._s(_vm.activeUser.name) + " is typing...")
@@ -47809,7 +47900,7 @@ var render = function() {
             {
               directives: [{ name: "chat-scroll", rawName: "v-chat-scroll" }],
               staticClass: "list-unstyled",
-              staticStyle: { height: "180px", "overflow-y": "scroll" }
+              staticStyle: { height: "100px", "overflow-y": "scroll" }
             },
             _vm._l(_vm.messages, function(message, index) {
               return _c("li", { key: index, staticClass: "pl-2" }, [
@@ -47864,25 +47955,26 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "col-sm-4" }, [
-      _c("div", { staticClass: "card card-default" }, [
-        _c("div", { staticClass: "card-header" }, [_vm._v("Active Players")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-body" }, [
-          _c(
-            "ul",
-            _vm._l(_vm.users, function(u, index) {
-              return _c("li", { key: index, staticClass: "py-2" }, [
+      _c(
+        "ul",
+        { staticClass: "list-group" },
+        [
+          _c("h6", { staticClass: "text-center" }, [_vm._v("Active players")]),
+          _vm._v(" "),
+          _vm._l(_vm.users, function(u, index) {
+            return _c(
+              "li",
+              { key: index, staticClass: "list-group-item py-0" },
+              [
                 _vm._v(
-                  "\n                         " +
-                    _vm._s(u.name) +
-                    "\n                     "
+                  "\n                 " + _vm._s(u.name) + "\n             "
                 )
-              ])
-            }),
-            0
-          )
-        ])
-      ])
+              ]
+            )
+          })
+        ],
+        2
+      )
     ])
   ])
 }
@@ -48243,47 +48335,28 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "card mt-3" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "card-body" },
-      _vm._l(_vm.allocations, function(allocation) {
-        return _c("div", { staticClass: "card-text teams" }, [
-          allocation.status == 1
-            ? _c("p", { staticClass: "text-success" }, [
-                _vm._v(
-                  "\n                " +
-                    _vm._s(allocation.team.name) +
-                    "\n            "
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          allocation.status == -1
-            ? _c("p", { staticClass: "text-danger" }, [
-                _vm._v(
-                  "\n                " +
-                    _vm._s(allocation.team.name) +
-                    "\n            "
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          allocation.status == 0
-            ? _c("p", [
-                _vm._v(
-                  "\n                " +
-                    _vm._s(allocation.team.name) +
-                    "\n            "
-                )
-              ])
-            : _vm._e()
-        ])
-      }),
-      0
-    )
+  return _c("div", { staticClass: "col-sm-8" }, [
+    _c("table", { staticClass: "table table-sm mt-3" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.allocations, function(allocation) {
+          return _c("tr", { class: _vm.getStatusClass(allocation) }, [
+            _c("td", [_vm._v(_vm._s(allocation.team.name))]),
+            _vm._v(" "),
+            _c("td", { staticClass: "text-center" }, [
+              _vm._v(_vm._s(allocation.team.division.name))
+            ]),
+            _vm._v(" "),
+            _c("td", { staticClass: "text-right" }, [
+              _vm._v(_vm._s(_vm.numberWithCommas(allocation.team.gate)))
+            ])
+          ])
+        }),
+        0
+      )
+    ])
   ])
 }
 var staticRenderFns = [
@@ -48291,9 +48364,17 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("div", { staticClass: "card-title" }, [
-        _c("h5", { staticClass: "card-text" }, [_vm._v("Your teams")])
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Your teams")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
+          _vm._v("Division")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-right", attrs: { scope: "col" } }, [
+          _vm._v("Gate")
+        ])
       ])
     ])
   }
@@ -48350,9 +48431,18 @@ var render = function() {
         attrs: { tournament_id: _vm.tournament_id, user: _vm.user }
       }),
       _vm._v(" "),
-      _c("teams-component", {
-        attrs: { allocations: _vm.tournament.allocations }
-      })
+      _c(
+        "div",
+        { staticClass: "row" },
+        [
+          _c("teams-component", {
+            attrs: { allocations: _vm.tournament.allocations }
+          }),
+          _vm._v(" "),
+          _c("bank-component", { attrs: { player: _vm.tournament.player } })
+        ],
+        1
+      )
     ],
     1
   )
@@ -60617,6 +60707,75 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   cluster: "eu",
   encrypted: true
 });
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/BankComponent.vue":
+/*!**********************************************************!*\
+  !*** ./resources/assets/js/components/BankComponent.vue ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _BankComponent_vue_vue_type_template_id_a6188e0c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BankComponent.vue?vue&type=template&id=a6188e0c& */ "./resources/assets/js/components/BankComponent.vue?vue&type=template&id=a6188e0c&");
+/* harmony import */ var _BankComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BankComponent.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/BankComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _BankComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _BankComponent_vue_vue_type_template_id_a6188e0c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _BankComponent_vue_vue_type_template_id_a6188e0c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/components/BankComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/BankComponent.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/assets/js/components/BankComponent.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BankComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./BankComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/BankComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BankComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/BankComponent.vue?vue&type=template&id=a6188e0c&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/assets/js/components/BankComponent.vue?vue&type=template&id=a6188e0c& ***!
+  \*****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BankComponent_vue_vue_type_template_id_a6188e0c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./BankComponent.vue?vue&type=template&id=a6188e0c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/BankComponent.vue?vue&type=template&id=a6188e0c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BankComponent_vue_vue_type_template_id_a6188e0c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BankComponent_vue_vue_type_template_id_a6188e0c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 

@@ -12,7 +12,12 @@
             :tournament="tournament"
             :next-draw-handler="nextDraw"/>
         <chat-component :tournament_id="tournament_id" :user="user" />
-        <teams-component :allocations="tournament.allocations" />
+        <div class="row">
+            <teams-component
+                :allocations="tournament.allocations" />
+            <bank-component
+                :player="tournament.player" />
+        </div>
     </div>
 
 </template>
@@ -24,6 +29,7 @@
     import MatchComponent from './MatchComponent.vue';
     import ChatComponent from './ChatComponent.vue';
     import TeamsComponent from './TeamsComponent.vue';
+    import BankComponent from './BankComponent.vue';
     export default {
         components: {
             RoundComponent,
@@ -31,6 +37,7 @@
             MatchComponent,
             ChatComponent,
             TeamsComponent,
+            BankComponent,
         },
         props:['tournament_id', 'user'],
         data() {
@@ -75,7 +82,6 @@
                     this.tournament = response.data;
                 })
             },
-
         }
     }
 </script>
