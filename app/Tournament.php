@@ -3,6 +3,7 @@
 namespace App;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Tournament extends Model
 {
@@ -20,5 +21,10 @@ class Tournament extends Model
     public function round()
     {
       return $this->belongsTo('App\Round');
+    }
+
+    public function getCreatedAtAttribute($date)
+    {
+      return Carbon::createFromTimeStamp(strtotime($date))->diffForHumans();
     }
 }
