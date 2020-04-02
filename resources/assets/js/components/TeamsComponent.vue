@@ -8,10 +8,10 @@
                     <th class="text-right" scope="col">Gate</th>
                 </tr>
             </thead>
-            <tbody v-if="allocations">
+            <tbody>
                 <tr v-for="allocation in allocations" :class=getStatusClass(allocation)>
                     <td>{{ allocation.team.name }}</td>
-                    <td class="text-center">{{ allocation.team }}</td>
+                    <td class="text-center" v-if="allocation.team.division">{{ allocation.team.division.name }}</td>
                     <td class="text-right">{{ numberWithCommas(allocation.team.gate) }}</td>
                 </tr>
             </tbody>
