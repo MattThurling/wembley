@@ -6,7 +6,7 @@
             </div>
             <div class="card-body">
                 <div class="card-text">
-                    <h1 class="text-center">£{{ numberWithCommas(player.balance) }}</h1>
+                    <h1 class="text-center" v-if="player">£{{ numberWithCommas(player.balance) }}</h1>
                 </div>
             </div>
         </div>

@@ -47843,9 +47843,11 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
         _c("div", { staticClass: "card-text" }, [
-          _c("h1", { staticClass: "text-center" }, [
-            _vm._v("£" + _vm._s(_vm.numberWithCommas(_vm.player.balance)))
-          ])
+          _vm.player
+            ? _c("h1", { staticClass: "text-center" }, [
+                _vm._v("£" + _vm._s(_vm.numberWithCommas(_vm.player.balance)))
+              ])
+            : _vm._e()
         ])
       ])
     ])
@@ -48339,23 +48341,25 @@ var render = function() {
     _c("table", { staticClass: "table table-sm mt-3" }, [
       _vm._m(0),
       _vm._v(" "),
-      _c(
-        "tbody",
-        _vm._l(_vm.allocations, function(allocation) {
-          return _c("tr", { class: _vm.getStatusClass(allocation) }, [
-            _c("td", [_vm._v(_vm._s(allocation.team.name))]),
-            _vm._v(" "),
-            _c("td", { staticClass: "text-center" }, [
-              _vm._v(_vm._s(allocation.team.division.name))
-            ]),
-            _vm._v(" "),
-            _c("td", { staticClass: "text-right" }, [
-              _vm._v(_vm._s(_vm.numberWithCommas(allocation.team.gate)))
-            ])
-          ])
-        }),
-        0
-      )
+      _vm.allocations
+        ? _c(
+            "tbody",
+            _vm._l(_vm.allocations, function(allocation) {
+              return _c("tr", { class: _vm.getStatusClass(allocation) }, [
+                _c("td", [_vm._v(_vm._s(allocation.team.name))]),
+                _vm._v(" "),
+                _c("td", { staticClass: "text-center" }, [
+                  _vm._v(_vm._s(allocation.team.division.name))
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "text-right" }, [
+                  _vm._v(_vm._s(_vm.numberWithCommas(allocation.team.gate)))
+                ])
+              ])
+            }),
+            0
+          )
+        : _vm._e()
     ])
   ])
 }

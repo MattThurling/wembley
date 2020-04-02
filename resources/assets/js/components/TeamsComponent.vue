@@ -8,7 +8,7 @@
                     <th class="text-right" scope="col">Gate</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody v-if="allocations">
                 <tr v-for="allocation in allocations" :class=getStatusClass(allocation)>
                     <td>{{ allocation.team.name }}</td>
                     <td class="text-center">{{ allocation.team.division.name }}</td>
