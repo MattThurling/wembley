@@ -48349,7 +48349,7 @@ var render = function() {
                 _c("td", [_vm._v(_vm._s(allocation.team.name))]),
                 _vm._v(" "),
                 _c("td", { staticClass: "text-center" }, [
-                  _vm._v(_vm._s(allocation.team.division.name))
+                  _vm._v(_vm._s(allocation.team))
                 ]),
                 _vm._v(" "),
                 _c("td", { staticClass: "text-right" }, [
