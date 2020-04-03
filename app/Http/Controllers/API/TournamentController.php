@@ -54,6 +54,9 @@ class TournamentController extends Controller
       $away_team = $round->away()->team;
       $home_user = $round->home()->team->current_user($tournament)->first();
       $away_user = $round->away()->team->current_user($tournament)->first();
+      if ($home_user == $away_user) {
+        $phase = 'redraw';
+      }
       // A match is not created until the Play button is pressed
       $match = Match::where('round_id', $round->id)
               ->where('position', $round->position)
@@ -89,8 +92,8 @@ class TournamentController extends Controller
   // Create a new tournament
   public function store(Request $request)
   {
-    if (Auth::user()->tournaments->whereIn('status', [0,1])->count() > 1) {
-      return ['message' => 'You can only have two active tournaments at a time.'];
+    if (Auth::user()->tournaments->whereIn('status', [0,1])->count() + 1 > env('MAX_TOURNAMENTS')) {
+      return ['message' => 'You can only have one active tournament at a time.'];
     } else {
       $tournament = Tournament::create(['owner_id' => Auth::id(), 'number_of_rounds' => 4]);
       // Also join the tournament as a player
@@ -113,7 +116,17 @@ class TournamentController extends Controller
       $tournament->status = 1;
       $tournament->save();
       broadcast(new TournamentStarted($tournament));
-      return 'Success';
+      return ['message' => 'Success'];
+  }
+
+  // Send the players to the tournament once the dealer has started it
+  public function goTo(Tournament $tournament)
+  {
+    if ($tournament->players->where('user_id', Auth::id())->count()) {
+      return ['message' => true];
+    } else {
+      return ['message' => false];
+    }
   }
 
   // Start a new round

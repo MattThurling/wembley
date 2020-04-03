@@ -9,6 +9,11 @@
             :owner="tournament.owner"
             :tournament="tournament"
             :playMatchHandler="playMatch"/>
+        <redraw-component
+            v-if="tournament.phase == 'redraw'"
+            :owner="tournament.owner"
+            :tournament="tournament"
+            :playMatchHandler="playMatch"/>
         <match-component
             v-if="tournament.phase == 'match'"
             :owner="tournament.owner"

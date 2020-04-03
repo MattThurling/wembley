@@ -5,35 +5,36 @@
         </p>
         <div class="row no-gutters">
 
-            <div class="col-md-6">
+            <div class="col-sm-8">
                 <div class="row">
-                    <div class="col-10">
+                    <div class="col-8">
                         <h4>{{ tournament.home_team.name }}</h4>
                         <p class="small">{{ tournament.home_user.name }}</p>
                     </div>
-                    <div class="col-2">
+                    <div class="col-4">
 
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-10">
+                    <div class="col-8">
                         <h4>{{ tournament.away_team.name }}</h4>
                         <p class="small">{{ tournament.away_user.name }}</p>
                     </div>
-                    <div class="col-2">
+                    <div class="col-4">
 
                     </div>
                 </div>
 
             </div>
 
-            <div class="col-md-6 text-center mt-3 mb-3">
+            <div class="col-sm-4 text-center mt-3 mb-3">
                 <button
                     v-if="owner"
                     @click="playMatchHandler" class="btn btn-success btn-lg">
                     Play
                 </button>
+                <p v-else class="text-muted">Waiting for dealer...</p>
             </div>
         </div>
 

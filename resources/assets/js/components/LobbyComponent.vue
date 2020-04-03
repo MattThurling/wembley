@@ -83,7 +83,7 @@
                 })
                 .listen('TournamentStarted',(event) => {
                     console.log('Started: ' + JSON.stringify(event.tournament));
-                    this.getTournaments();
+                    this.goToTournament(event.tournament.id);
                 })
         },
         methods: {
@@ -106,6 +106,11 @@
                 axios(config).then(response => {
                     console.log(response);
                 })
+            },
+            goToTournament(id) {
+                axios.get('/api/tournament/' + id + '/goto').then(response => {
+                    if (response.data.message) window.location = "/tournament/" + id;
+                });
             }
         }
     }

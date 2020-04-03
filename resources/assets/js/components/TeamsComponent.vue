@@ -12,7 +12,7 @@
                 <tr v-for="allocation in allocations" :class=getStatusClass(allocation)>
                     <td>{{ allocation.team.name }}</td>
                     <td class="text-center" v-if="allocation.team.division">{{ allocation.team.division.name }}</td>
-                    <td class="text-right">{{ numberWithCommas(allocation.team.gate) }}</td>
+                    <td class="text-right">{{ numberWithCommas(allocation.team.gate * 120) }}</td>
                 </tr>
             </tbody>
         </table>

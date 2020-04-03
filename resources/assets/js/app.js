@@ -24,6 +24,7 @@ Vue.component('match-component', require('./components/MatchComponent.vue').defa
 Vue.component('lobby-component', require('./components/LobbyComponent.vue').default);
 Vue.component('teams-component', require('./components/TeamsComponent.vue').default);
 Vue.component('draw-component', require('./components/DrawComponent.vue').default);
+Vue.component('redraw-component', require('./components/RedrawComponent.vue').default);
 Vue.component('round-component', require('./components/RoundComponent.vue').default);
 Vue.component('tournament-component', require('./components/TournamentComponent.vue').default);
 

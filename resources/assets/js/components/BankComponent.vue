@@ -1,12 +1,12 @@
 <template>
-    <div class="col-sm-4">
+    <div class="col-lg-4">
         <div class="card mt-3">
             <div class="card-header">
                 <p class="text-center">Bank balance:</p>
             </div>
             <div class="card-body">
                 <div class="card-text">
-                    <h1 class="text-center" v-if="player">£{{ numberWithCommas(player.balance) }}</h1>
+                    <h1 class="text-center" v-if="player">£{{ numberWithCommas(player.balance * 120) }}</h1>
                 </div>
             </div>
         </div>
