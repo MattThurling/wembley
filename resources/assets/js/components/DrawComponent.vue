@@ -29,7 +29,11 @@
             </div>
 
             <div class="col-md-6 text-center mt-3 mb-3">
-                <button @click="playMatchHandler" class="btn btn-success btn-lg">Play</button>
+                <button
+                    v-if="owner"
+                    @click="playMatchHandler" class="btn btn-success btn-lg">
+                    Play
+                </button>
             </div>
         </div>
 
@@ -39,7 +43,7 @@
 
 <script>
     export default {
-        props: ['tournament', 'playMatchHandler']
+        props: ['tournament', 'playMatchHandler', 'owner']
     }
 
 </script>

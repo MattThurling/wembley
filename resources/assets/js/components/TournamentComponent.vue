@@ -2,13 +2,16 @@
     <div>
         <round-component
             v-if="tournament.phase == 'round'"
+            :owner="tournament.owner"
             :startRoundHandler="startRound"/>
         <draw-component
             v-if="tournament.phase == 'draw'"
+            :owner="tournament.owner"
             :tournament="tournament"
             :playMatchHandler="playMatch"/>
         <match-component
             v-if="tournament.phase == 'match'"
+            :owner="tournament.owner"
             :tournament="tournament"
             :next-draw-handler="nextDraw"/>
         <chat-component :tournament_id="tournament_id" :user="user" />

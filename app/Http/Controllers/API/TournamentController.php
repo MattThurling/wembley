@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Auth;
 use App\Http\Controllers\Controller;
 use App\Tournament;
@@ -67,8 +68,12 @@ class TournamentController extends Controller
       }
     }
 
+    $owner = false;
+    if (Auth::id() == $tournament->owner_id) $owner = true;
+
     $data = ['tournament' => $tournament,
             'player' => $player,
+            'owner' => $owner,
             'allocations' => $allocations,
             'phase' => $phase,
             'round' => $round,
@@ -84,9 +89,13 @@ class TournamentController extends Controller
   // Create a new tournament
   public function store(Request $request)
   {
+    if (Auth::user()->tournaments->whereIn('status', [0,1])->count() > 1) {
+      return ['message' => 'You can only have two active tournaments at a time.'];
+    } else {
       $tournament = Tournament::create(['owner_id' => Auth::id(), 'number_of_rounds' => 4]);
       // Also join the tournament as a player
       return $this->join($tournament);
+    }
   }
 
   // Add a player to an existing tournament

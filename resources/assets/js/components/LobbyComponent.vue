@@ -19,11 +19,13 @@
                             <div v-if="tournament.owner.id == user.id">
 
                                 <button
+                                    v-if="tournament.players.length > 1"
                                     @click="doTournament(tournament.id, 'POST', 'start')"
                                     class="btn btn-outline-success btn-sm"
                                     :disabled="tournament.players.length < 2">
                                     Start
                                 </button>
+                                <p v-else class="text-muted">Waiting for more players...</p>
                             </div>
 
                             <div v-else>
@@ -50,7 +52,7 @@
 
         </div>
         <div class="mt-3">
-            <button @click="createTournament" class="btn btn-primary">Create new tournament</button>
+            <button @click="createTournament" class="btn btn-outline-primary">Create new tournament</button>
         </div>
     </div>
 

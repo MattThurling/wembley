@@ -2107,8 +2107,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['tournament', 'playMatchHandler']
+  props: ['tournament', 'playMatchHandler', 'owner']
 });
 
 /***/ }),
@@ -2122,6 +2126,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -2282,8 +2288,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['tournament', 'nextDrawHandler']
+  props: ['tournament', 'nextDrawHandler', 'owner']
 });
 
 /***/ }),
@@ -2307,8 +2315,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['startRoundHandler']
+  props: ['startRoundHandler', 'owner']
 });
 
 /***/ }),
@@ -2376,6 +2388,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ChatComponent_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ChatComponent.vue */ "./resources/assets/js/components/ChatComponent.vue");
 /* harmony import */ var _TeamsComponent_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TeamsComponent.vue */ "./resources/assets/js/components/TeamsComponent.vue");
 /* harmony import */ var _BankComponent_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./BankComponent.vue */ "./resources/assets/js/components/BankComponent.vue");
+//
+//
+//
 //
 //
 //
@@ -48043,14 +48058,16 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-6 text-center mt-3 mb-3" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-success btn-lg",
-            on: { click: _vm.playMatchHandler }
-          },
-          [_vm._v("Play")]
-        )
+        _vm.owner
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-success btn-lg",
+                on: { click: _vm.playMatchHandler }
+              },
+              [_vm._v("\n                Play\n            ")]
+            )
+          : _vm._e()
       ])
     ])
   ])
@@ -48112,29 +48129,34 @@ var render = function() {
                   ? _c("div", [
                       tournament.owner.id == _vm.user.id
                         ? _c("div", [
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-outline-success btn-sm",
-                                attrs: {
-                                  disabled: tournament.players.length < 2
-                                },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.doTournament(
-                                      tournament.id,
-                                      "POST",
-                                      "start"
+                            tournament.players.length > 1
+                              ? _c(
+                                  "button",
+                                  {
+                                    staticClass:
+                                      "btn btn-outline-success btn-sm",
+                                    attrs: {
+                                      disabled: tournament.players.length < 2
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.doTournament(
+                                          tournament.id,
+                                          "POST",
+                                          "start"
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                Start\n                            "
                                     )
-                                  }
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                Start\n                            "
+                                  ]
                                 )
-                              ]
-                            )
+                              : _c("p", { staticClass: "text-muted" }, [
+                                  _vm._v("Waiting for more players...")
+                                ])
                           ])
                         : _c("div", [
                             _c(
@@ -48185,7 +48207,10 @@ var render = function() {
     _c("div", { staticClass: "mt-3" }, [
       _c(
         "button",
-        { staticClass: "btn btn-primary", on: { click: _vm.createTournament } },
+        {
+          staticClass: "btn btn-outline-primary",
+          on: { click: _vm.createTournament }
+        },
         [_vm._v("Create new tournament")]
       )
     ])
@@ -48266,14 +48291,16 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-6 text-center mt-3 mb-3" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-success btn-lg",
-            on: { click: _vm.nextDrawHandler }
-          },
-          [_vm._v("Next")]
-        )
+        _vm.owner
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-success btn-lg",
+                on: { click: _vm.nextDrawHandler }
+              },
+              [_vm._v("Next")]
+            )
+          : _vm._e()
       ])
     ])
   ])
@@ -48303,14 +48330,16 @@ var render = function() {
   return _c("div", [
     _c("div", { staticClass: "row no-gutters" }, [
       _c("div", { staticClass: "col-md-6 text-center mt-3 mb-3" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-success btn-lg",
-            on: { click: _vm.startRoundHandler }
-          },
-          [_vm._v("Start")]
-        )
+        _vm.owner
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-success btn-lg",
+                on: { click: _vm.startRoundHandler }
+              },
+              [_vm._v("\n                Start\n            ")]
+            )
+          : _vm._e()
       ])
     ])
   ])
@@ -48409,13 +48438,17 @@ var render = function() {
     [
       _vm.tournament.phase == "round"
         ? _c("round-component", {
-            attrs: { startRoundHandler: _vm.startRound }
+            attrs: {
+              owner: _vm.tournament.owner,
+              startRoundHandler: _vm.startRound
+            }
           })
         : _vm._e(),
       _vm._v(" "),
       _vm.tournament.phase == "draw"
         ? _c("draw-component", {
             attrs: {
+              owner: _vm.tournament.owner,
               tournament: _vm.tournament,
               playMatchHandler: _vm.playMatch
             }
@@ -48425,6 +48458,7 @@ var render = function() {
       _vm.tournament.phase == "match"
         ? _c("match-component", {
             attrs: {
+              owner: _vm.tournament.owner,
               tournament: _vm.tournament,
               "next-draw-handler": _vm.nextDraw
             }

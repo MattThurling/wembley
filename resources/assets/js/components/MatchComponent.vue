@@ -29,7 +29,9 @@
             </div>
 
             <div class="col-md-6 text-center mt-3 mb-3">
-                <button @click="nextDrawHandler" class="btn btn-success btn-lg">Next</button>
+                <button
+                    v-if="owner"
+                    @click="nextDrawHandler" class="btn btn-success btn-lg">Next</button>
             </div>
         </div>
 
@@ -38,6 +40,6 @@
 
 <script>
     export default {
-        props:['tournament', 'nextDrawHandler'],
+        props:['tournament', 'nextDrawHandler', 'owner'],
     }
 </script>
