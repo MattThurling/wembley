@@ -16,9 +16,7 @@ use App\Chat;
 use App\Events\ChatEvent;
 use App\Events\TournamentJoined;
 use App\Events\TournamentStarted;
-use App\Events\TournamentRoundCreated;
-use App\Events\TournamentMatchCreated;
-use App\Events\TournamentNext;
+use App\Events\UpdateTournamentEvent;
 
 class TournamentController extends Controller
 {
@@ -177,7 +175,7 @@ class TournamentController extends Controller
           // Flip side of draw
           $side = !$side;
       }
-      broadcast(new TournamentRoundCreated($round));
+      broadcast(new UpdateTournamentEvent($tournament->id));
       return $this->show($tournament);
   }
 
@@ -220,7 +218,8 @@ class TournamentController extends Controller
       }
       $home_allocation->player->save();
       $away_allocation->player->save();
-      broadcast(new TournamentMatchCreated($match));
+      broadcast(new UpdateTournamentEvent($tournament->id));
+      // TODO Do we need to return anything or just call it?
       return $this->show($tournament);
   }
 
@@ -240,8 +239,21 @@ class TournamentController extends Controller
           $next_matches = $round->number_of_matches/2;
           return $this->round($tournament, $next_matches, 'Fifth Round');
       }
-      broadcast(new TournamentNext($round));
+      broadcast(new UpdateTournamentEvent($tournament->id));
       return $this->show($tournament);
+  }
+
+  // redraw a team and send it to the bottom of the queue
+  public function redraw (Tournament $tournament, Request $request) {
+    if ($request->side == 'home') {
+      $draw = $tournament->round->home();
+    } else {
+      $draw = $tournament->round->away();
+    }
+    $draw->position += 1000;
+    $draw->save();
+    broadcast(new UpdateTournamentEvent($tournament->id));
+    return $this->show($tournament);
   }
 
   // Deal teams at random to players

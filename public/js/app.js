@@ -1924,13 +1924,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['player', 'conversionHandler'],
-  methods: {
-    // TODO: DRY this up by defining it elsewhere
-    numberWithCommas: function numberWithCommas(x) {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-  }
+  props: ['balance']
 });
 
 /***/ }),
@@ -1995,7 +1989,10 @@ __webpack_require__.r(__webpack_exports__);
     return {
       messages: [{
         message: '',
-        system_signature: null
+        system_signature: null,
+        user: {
+          name: ''
+        }
       }],
       newMessage: '',
       users: [],
@@ -2063,10 +2060,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/DrawComponent.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/DrawComponent.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/DetailsComponent.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/DetailsComponent.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2078,6 +2075,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['tournament', 'winGate', 'loseGate']
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/DrawComponent.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/DrawComponent.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 //
 //
 //
@@ -2298,11 +2312,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tournament', 'nextDrawHandler', 'owner']
 });
@@ -2361,9 +2370,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['tournament', 'playMatchHandler', 'owner']
+  props: ['tournament', 'redrawHandler', 'owner']
 });
 
 /***/ }),
@@ -2467,7 +2475,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _MatchComponent_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MatchComponent.vue */ "./resources/assets/js/components/MatchComponent.vue");
 /* harmony import */ var _ChatComponent_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ChatComponent.vue */ "./resources/assets/js/components/ChatComponent.vue");
 /* harmony import */ var _TeamsComponent_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TeamsComponent.vue */ "./resources/assets/js/components/TeamsComponent.vue");
-/* harmony import */ var _BankComponent_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./BankComponent.vue */ "./resources/assets/js/components/BankComponent.vue");
+/* harmony import */ var _DetailsComponent_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DetailsComponent.vue */ "./resources/assets/js/components/DetailsComponent.vue");
+/* harmony import */ var _BankComponent_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./BankComponent.vue */ "./resources/assets/js/components/BankComponent.vue");
 //
 //
 //
@@ -2500,6 +2509,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 
@@ -2513,27 +2528,28 @@ __webpack_require__.r(__webpack_exports__);
     MatchComponent: _MatchComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     ChatComponent: _ChatComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     TeamsComponent: _TeamsComponent_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
-    BankComponent: _BankComponent_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+    BankComponent: _BankComponent_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
+    DetailsComponent: _DetailsComponent_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   props: ['tournament_id', 'user'],
   data: function data() {
     return {
-      tournament: {}
+      tournament: {
+        home_team: {
+          gate: 0
+        },
+        player: {
+          balance: 0
+        },
+        round: {}
+      }
     };
   },
   created: function created() {
     var _this = this;
 
     this.getTournament();
-    Echo.join(this.tournament_id).listen('TournamentRoundCreated', function (event) {
-      console.log('LISTEN: ' + JSON.stringify(event));
-
-      _this.getTournament();
-    }).listen('TournamentMatchCreated', function (event) {
-      console.log('LISTEN: ' + JSON.stringify(event));
-
-      _this.getTournament();
-    }).listen('TournamentNext', function (event) {
+    Echo.join(this.tournament_id).listen('UpdateTournamentEvent', function (event) {
       console.log('LISTEN: ' + JSON.stringify(event));
 
       _this.getTournament();
@@ -2567,6 +2583,16 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/tournament/' + this.tournament_id + '/next').then(function (response) {
         _this5.tournament = response.data;
       });
+    },
+    redraw: function redraw(side) {
+      axios.post('/api/tournament/' + this.tournament_id + '/redraw', {
+        side: side
+      }).then(function (response) {
+        console.log(response); // this.tournament = response.data;
+      });
+    },
+    numberWithCommas: function numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   }
 });
@@ -47943,13 +47969,9 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
         _c("div", { staticClass: "card-text" }, [
-          _vm.player
-            ? _c("h1", { staticClass: "text-center" }, [
-                _vm._v(
-                  "£" + _vm._s(_vm.numberWithCommas(_vm.player.balance * 120))
-                )
-              ])
-            : _vm._e()
+          _c("h1", { staticClass: "text-center" }, [
+            _vm._v("£" + _vm._s(_vm.balance))
+          ])
         ])
       ])
     ])
@@ -48091,6 +48113,47 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/DetailsComponent.vue?vue&type=template&id=44233992&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/DetailsComponent.vue?vue&type=template&id=44233992& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("p", [
+    _vm._v(
+      "\n    " +
+        _vm._s(_vm.tournament.round.name) +
+        " | Match " +
+        _vm._s(_vm.tournament.round.position) +
+        " of " +
+        _vm._s(_vm.tournament.round.number_of_matches) +
+        "\n    | Gate: Win "
+    ),
+    _c("span", { staticClass: "text-success" }, [
+      _vm._v("£" + _vm._s(_vm.winGate))
+    ]),
+    _vm._v(" Lose\n    "),
+    _c("span", { staticClass: "text-danger" }, [
+      _vm._v("£" + _vm._s(_vm.loseGate))
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/DrawComponent.vue?vue&type=template&id=4f383ef2&":
 /*!***********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/DrawComponent.vue?vue&type=template&id=4f383ef2& ***!
@@ -48106,60 +48169,50 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("p", [
-      _vm._v(
-        "\n        " +
-          _vm._s(_vm.tournament.round.name) +
-          " | Match " +
-          _vm._s(_vm.tournament.round.position) +
-          " of " +
-          _vm._s(_vm.tournament.round.number_of_matches) +
-          "\n    "
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "row no-gutters" }, [
-      _c("div", { staticClass: "col-sm-8" }, [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-8" }, [
-            _c("h4", [_vm._v(_vm._s(_vm.tournament.home_team.name))]),
-            _vm._v(" "),
-            _c("p", { staticClass: "small" }, [
-              _vm._v(_vm._s(_vm.tournament.home_user.name))
-            ])
+  return _c("div", { staticClass: "row no-gutters" }, [
+    _c("div", { staticClass: "col-sm-8" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-8" }, [
+          _c("h4", { staticClass: "mb-0" }, [
+            _vm._v(_vm._s(_vm.tournament.home_team.name))
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "col-4" })
+          _c("p", { staticClass: "small" }, [
+            _vm._v(_vm._s(_vm.tournament.home_user.name))
+          ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-8" }, [
-            _c("h4", [_vm._v(_vm._s(_vm.tournament.away_team.name))]),
-            _vm._v(" "),
-            _c("p", { staticClass: "small" }, [
-              _vm._v(_vm._s(_vm.tournament.away_user.name))
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-4" })
-        ])
+        _c("div", { staticClass: "col-4" })
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-4 text-center mt-3 mb-3" }, [
-        _vm.owner
-          ? _c(
-              "button",
-              {
-                staticClass: "btn btn-success btn-lg",
-                on: { click: _vm.playMatchHandler }
-              },
-              [_vm._v("\n                Play\n            ")]
-            )
-          : _c("p", { staticClass: "text-muted" }, [
-              _vm._v("Waiting for dealer...")
-            ])
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-8" }, [
+          _c("h4", { staticClass: "mb-0" }, [
+            _vm._v(_vm._s(_vm.tournament.away_team.name))
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "small" }, [
+            _vm._v(_vm._s(_vm.tournament.away_user.name))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-4" })
       ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-sm-4 text-center mt-3 mb-3" }, [
+      _vm.owner
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-success btn-lg",
+              on: { click: _vm.playMatchHandler }
+            },
+            [_vm._v("\n            Play\n        ")]
+          )
+        : _c("p", { staticClass: "text-muted" }, [
+            _vm._v("Waiting for dealer...")
+          ])
     ])
   ])
 }
@@ -48329,72 +48382,58 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("p", [
-      _vm._v(
-        "\n        " +
-          _vm._s(_vm.tournament.round.name) +
-          " | Match " +
-          _vm._s(_vm.tournament.round.position) +
-          " of " +
-          _vm._s(_vm.tournament.round.number_of_matches) +
-          "\n    "
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "row no-gutters" }, [
-      _c("div", { staticClass: "col-sm-8" }, [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-8" }, [
-            _c("h4", [
-              _vm._v(_vm._s(_vm.tournament.match.home_allocation.team.name))
-            ]),
-            _vm._v(" "),
-            _c("p", { staticClass: "small" }, [
-              _vm._v(
-                _vm._s(_vm.tournament.match.home_allocation.player.user.name)
-              )
-            ])
+  return _c("div", { staticClass: "row no-gutters" }, [
+    _c("div", { staticClass: "col-sm-8" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-8" }, [
+          _c("h4", { staticClass: "mb-0" }, [
+            _vm._v(_vm._s(_vm.tournament.match.home_allocation.team.name))
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "col-4" }, [
-            _c("h1", [_vm._v(_vm._s(_vm.tournament.match.home_score))])
+          _c("p", { staticClass: "small" }, [
+            _vm._v(
+              _vm._s(_vm.tournament.match.home_allocation.player.user.name)
+            )
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-8" }, [
-            _c("h4", [
-              _vm._v(_vm._s(_vm.tournament.match.away_allocation.team.name))
-            ]),
-            _vm._v(" "),
-            _c("p", { staticClass: "small" }, [
-              _vm._v(
-                _vm._s(_vm.tournament.match.away_allocation.player.user.name)
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-4" }, [
-            _c("h1", [_vm._v(_vm._s(_vm.tournament.match.away_score))])
-          ])
+        _c("div", { staticClass: "col-4" }, [
+          _c("h1", [_vm._v(_vm._s(_vm.tournament.match.home_score))])
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-4 text-center mt-3 mb-3" }, [
-        _vm.owner
-          ? _c(
-              "button",
-              {
-                staticClass: "btn btn-success btn-lg",
-                on: { click: _vm.nextDrawHandler }
-              },
-              [_vm._v("\n                Next\n            ")]
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-8" }, [
+          _c("h4", { staticClass: "mb-0" }, [
+            _vm._v(_vm._s(_vm.tournament.match.away_allocation.team.name))
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "small" }, [
+            _vm._v(
+              _vm._s(_vm.tournament.match.away_allocation.player.user.name)
             )
-          : _c("p", { staticClass: "text-muted" }, [
-              _vm._v("Waiting for dealer...")
-            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-4" }, [
+          _c("h1", [_vm._v(_vm._s(_vm.tournament.match.away_score))])
+        ])
       ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-sm-4 text-center mt-3 mb-3" }, [
+      _vm.owner
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-success btn-lg",
+              on: { click: _vm.nextDrawHandler }
+            },
+            [_vm._v("\n            Next\n        ")]
+          )
+        : _c("p", { staticClass: "text-muted" }, [
+            _vm._v("Waiting for dealer...")
+          ])
     ])
   ])
 }
@@ -48420,61 +48459,64 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("p", [
-      _vm._v(
-        "\n        " +
-          _vm._s(_vm.tournament.round.name) +
-          " | Match " +
-          _vm._s(_vm.tournament.round.position) +
-          " of " +
-          _vm._s(_vm.tournament.round.number_of_matches) +
-          "\n    "
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "row no-gutters" }, [
-      _c("div", { staticClass: "col-sm-8" }, [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-8" }, [
-            _c("h4", [_vm._v(_vm._s(_vm.tournament.home_team.name))]),
-            _vm._v(" "),
-            _c("p", { staticClass: "small" }, [
-              _vm._v(_vm._s(_vm.tournament.home_user.name))
-            ])
+  return _c("div", { staticClass: "row no-gutters" }, [
+    _c("div", { staticClass: "col-sm-8" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-8" }, [
+          _c("h4", { staticClass: "mb-0" }, [
+            _vm._v(_vm._s(_vm.tournament.home_team.name))
           ]),
           _vm._v(" "),
-          _vm._m(0)
+          _c("p", { staticClass: "small" }, [
+            _vm._v(_vm._s(_vm.tournament.home_user.name))
+          ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-8" }, [
-            _c("h4", [_vm._v(_vm._s(_vm.tournament.away_team.name))]),
-            _vm._v(" "),
-            _c("p", { staticClass: "small" }, [
-              _vm._v(_vm._s(_vm.tournament.away_user.name))
-            ])
-          ]),
-          _vm._v(" "),
-          _vm._m(1)
+        _c("div", { staticClass: "col-4" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-outline-primary btn-sm",
+              on: {
+                click: function($event) {
+                  return _vm.redrawHandler("away")
+                }
+              }
+            },
+            [_vm._v("\n                    Play\n                ")]
+          )
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-4 text-center mt-3 mb-3" }, [
-        _vm.owner
-          ? _c(
-              "button",
-              {
-                staticClass: "btn btn-success btn-lg",
-                on: { click: _vm.playMatchHandler }
-              },
-              [_vm._v("\n                Play\n            ")]
-            )
-          : _c("p", { staticClass: "text-muted" }, [
-              _vm._v("Waiting for player...")
-            ])
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-8" }, [
+          _c("h4", { staticClass: "mb-0" }, [
+            _vm._v(_vm._s(_vm.tournament.away_team.name))
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "small" }, [
+            _vm._v(_vm._s(_vm.tournament.away_user.name))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-4" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-outline-primary btn-sm",
+              on: {
+                click: function($event) {
+                  return _vm.redrawHandler("home")
+                }
+              }
+            },
+            [_vm._v("\n                    Play\n                ")]
+          )
+        ])
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _vm._m(0)
   ])
 }
 var staticRenderFns = [
@@ -48482,20 +48524,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-4" }, [
-      _c("button", { staticClass: "btn btn-outline-primary btn-sm" }, [
-        _vm._v("Play")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-4" }, [
-      _c("button", { staticClass: "btn btn-outline-primary btn-sm" }, [
-        _vm._v("Play")
-      ])
+    return _c("div", { staticClass: "col-sm-4 text-center mt-3 mb-3" }, [
+      _c("p", { staticClass: "text-muted" }, [_vm._v("Waiting for player...")])
     ])
   }
 ]
@@ -48653,6 +48683,16 @@ var render = function() {
   return _c(
     "div",
     [
+      _vm.tournament.phase != "round"
+        ? _c("details-component", {
+            attrs: {
+              tournament: _vm.tournament,
+              winGate: _vm.numberWithCommas(80 * _vm.tournament.home_team.gate),
+              loseGate: _vm.numberWithCommas(40 * _vm.tournament.home_team.gate)
+            }
+          })
+        : _vm._e(),
+      _vm._v(" "),
       _vm.tournament.phase == "round"
         ? _c("round-component", {
             attrs: {
@@ -48677,7 +48717,7 @@ var render = function() {
             attrs: {
               owner: _vm.tournament.owner,
               tournament: _vm.tournament,
-              playMatchHandler: _vm.playMatch
+              redrawHandler: _vm.redraw
             }
           })
         : _vm._e(),
@@ -48704,7 +48744,11 @@ var render = function() {
             attrs: { allocations: _vm.tournament.allocations }
           }),
           _vm._v(" "),
-          _c("bank-component", { attrs: { player: _vm.tournament.player } })
+          _c("bank-component", {
+            attrs: {
+              balance: _vm.numberWithCommas(120 * _vm.tournament.player.balance)
+            }
+          })
         ],
         1
       )
@@ -60913,6 +60957,7 @@ Vue.component('draw-component', __webpack_require__(/*! ./components/DrawCompone
 Vue.component('redraw-component', __webpack_require__(/*! ./components/RedrawComponent.vue */ "./resources/assets/js/components/RedrawComponent.vue")["default"]);
 Vue.component('round-component', __webpack_require__(/*! ./components/RoundComponent.vue */ "./resources/assets/js/components/RoundComponent.vue")["default"]);
 Vue.component('tournament-component', __webpack_require__(/*! ./components/TournamentComponent.vue */ "./resources/assets/js/components/TournamentComponent.vue")["default"]);
+Vue.component('details-component', __webpack_require__(/*! ./components/DetailsComponent.vue */ "./resources/assets/js/components/DetailsComponent.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -61109,6 +61154,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChatComponent_vue_vue_type_template_id_ed7b4d44___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChatComponent_vue_vue_type_template_id_ed7b4d44___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/DetailsComponent.vue":
+/*!*************************************************************!*\
+  !*** ./resources/assets/js/components/DetailsComponent.vue ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DetailsComponent_vue_vue_type_template_id_44233992___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DetailsComponent.vue?vue&type=template&id=44233992& */ "./resources/assets/js/components/DetailsComponent.vue?vue&type=template&id=44233992&");
+/* harmony import */ var _DetailsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DetailsComponent.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/DetailsComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _DetailsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DetailsComponent_vue_vue_type_template_id_44233992___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DetailsComponent_vue_vue_type_template_id_44233992___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/components/DetailsComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/DetailsComponent.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/assets/js/components/DetailsComponent.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./DetailsComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/DetailsComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/DetailsComponent.vue?vue&type=template&id=44233992&":
+/*!********************************************************************************************!*\
+  !*** ./resources/assets/js/components/DetailsComponent.vue?vue&type=template&id=44233992& ***!
+  \********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsComponent_vue_vue_type_template_id_44233992___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./DetailsComponent.vue?vue&type=template&id=44233992& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/DetailsComponent.vue?vue&type=template&id=44233992&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsComponent_vue_vue_type_template_id_44233992___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsComponent_vue_vue_type_template_id_44233992___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

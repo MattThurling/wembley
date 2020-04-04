@@ -18,13 +18,16 @@ Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
 
 Route::group(['middleware' => 'auth:api'], function () {
-  Route::get('tournament/{tournament}', 'API\TournamentController@show');
+
   Route::post('tournament/{tournament}/join', 'API\TournamentController@join');
   Route::post('tournament/{tournament}/start', 'API\TournamentController@start');
   Route::get('tournament/{tournament}/goto', 'API\TournamentController@goTo');
   Route::post('tournament/{tournament}/round', 'API\TournamentController@round');
+  Route::post('tournament/{tournament}/redraw', 'API\TournamentController@redraw');
   Route::post('tournament/{tournament}/match', 'API\TournamentController@match');
   Route::post('tournament/{tournament}/next', 'API\TournamentController@next');
+  Route::get('tournament/{tournament}', 'API\TournamentController@show');
+
   Route::get('tournament', 'API\TournamentController@index');
   Route::post('tournament', 'API\TournamentController@store');
   Route::get('tournament/{tournament}/messages', 'API\ChatController@fetchAllMessages');

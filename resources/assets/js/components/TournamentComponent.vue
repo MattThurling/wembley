@@ -1,5 +1,10 @@
 <template>
     <div>
+        <details-component
+            v-if="tournament.phase != 'round'"
+            :tournament="tournament"
+            :winGate="numberWithCommas(80*tournament.home_team.gate)"
+            :loseGate="numberWithCommas(40*tournament.home_team.gate)"/>
         <round-component
             v-if="tournament.phase == 'round'"
             :owner="tournament.owner"
@@ -13,7 +18,7 @@
             v-if="tournament.phase == 'redraw'"
             :owner="tournament.owner"
             :tournament="tournament"
-            :playMatchHandler="playMatch"/>
+            :redrawHandler="redraw"/>
         <match-component
             v-if="tournament.phase == 'match'"
             :owner="tournament.owner"
@@ -24,7 +29,7 @@
             <teams-component
                 :allocations="tournament.allocations" />
             <bank-component
-                :player="tournament.player" />
+                :balance="numberWithCommas(120*tournament.player.balance)" />
         </div>
     </div>
 
@@ -37,6 +42,7 @@
     import MatchComponent from './MatchComponent.vue';
     import ChatComponent from './ChatComponent.vue';
     import TeamsComponent from './TeamsComponent.vue';
+    import DetailsComponent from './DetailsComponent.vue';
     import BankComponent from './BankComponent.vue';
     export default {
         components: {
@@ -46,25 +52,18 @@
             ChatComponent,
             TeamsComponent,
             BankComponent,
+            DetailsComponent,
         },
         props:['tournament_id', 'user'],
         data() {
            return {
-               tournament: {}
+               tournament: {home_team: {gate: 0}, player: {balance:0}, round: {}}
            }
         },
         created() {
             this.getTournament();
             Echo.join(this.tournament_id)
-                .listen('TournamentRoundCreated',(event) => {
-                    console.log('LISTEN: ' + JSON.stringify(event));
-                    this.getTournament();
-                })
-                .listen('TournamentMatchCreated',(event) => {
-                    console.log('LISTEN: ' + JSON.stringify(event));
-                    this.getTournament();
-                })
-                .listen('TournamentNext',(event) => {
+                .listen('UpdateTournamentEvent',(event) => {
                     console.log('LISTEN: ' + JSON.stringify(event));
                     this.getTournament();
                 })
@@ -89,6 +88,15 @@
                 axios.post('/api/tournament/' + this.tournament_id + '/next').then(response => {
                     this.tournament = response.data;
                 })
+            },
+            redraw(side) {
+                axios.post('/api/tournament/' + this.tournament_id + '/redraw', {side: side}).then(response => {
+                    console.log(response);
+                    // this.tournament = response.data;
+                })
+            },
+            numberWithCommas(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             },
         }
     }

@@ -48,7 +48,11 @@
         props:['tournament_id', 'user'],
         data() {
             return {
-                messages: [{message: '', system_signature: null}],
+                messages: [{
+                    message: '',
+                    system_signature: null,
+                    user: {name: ''}
+                }],
                 newMessage: '',
                 users:[],
                 activeUser: false,

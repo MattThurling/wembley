@@ -6,7 +6,7 @@
             </div>
             <div class="card-body">
                 <div class="card-text">
-                    <h1 class="text-center" v-if="player">£{{ numberWithCommas(player.balance * 120) }}</h1>
+                    <h1 class="text-center">£{{ balance }}</h1>
                 </div>
             </div>
         </div>
@@ -15,12 +15,6 @@
 
 <script>
     export default {
-        props: ['player', 'conversionHandler'],
-        methods: {
-            // TODO: DRY this up by defining it elsewhere
-            numberWithCommas(x) {
-                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-        }
+        props: ['balance'],
     }
 </script>
