@@ -10,7 +10,8 @@
                <div class="card-body p-0">
                    <ul class="list-unstyled" style="height:100px; overflow-y:scroll" v-chat-scroll>
                        <li class="pl-2" v-for="(message, index) in messages" :key="index" >
-                           <strong>{{ message.user.name }}</strong>
+                           <span v-if="message.system_signature">🏆</span>
+                           <strong v-else>{{ message.user.name}}</strong>
                            {{ message.message }}
                        </li>
                    </ul>
@@ -47,7 +48,7 @@
         props:['tournament_id', 'user'],
         data() {
             return {
-                messages: [],
+                messages: [{message: '', system_signature: null}],
                 newMessage: '',
                 users:[],
                 activeUser: false,

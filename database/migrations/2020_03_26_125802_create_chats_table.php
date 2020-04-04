@@ -18,6 +18,7 @@ class CreateChatsTable extends Migration
             $table->uuid('user_id');
             $table->uuid('tournament_id');
             $table->text('message');
+            $table->string('system_signature')->nullable();
             $table->timestamps();
         });
     }

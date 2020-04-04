@@ -12,6 +12,8 @@ use App\Allocation;
 use App\Player;
 use App\Round;
 use App\Match;
+use App\Chat;
+use App\Events\ChatEvent;
 use App\Events\TournamentJoined;
 use App\Events\TournamentStarted;
 use App\Events\TournamentRoundCreated;
@@ -56,6 +58,22 @@ class TournamentController extends Controller
       $away_user = $round->away()->team->current_user($tournament)->first();
       if ($home_user == $away_user) {
         $phase = 'redraw';
+        // Emit system message from the owner user so it only goes once
+        if (Auth::id() == $tournament->owner_id) {
+          // System messages have a unique signature to prevent duplication
+          $sig = $round->id . $round->position . $phase;
+
+          if (!Chat::where('system_signature', $sig)->count()) {
+            $chat = Auth::user()
+                      ->messages()
+                      ->create([
+                        'message' => 'Teams are owned by the same player. Choose who plays!',
+                        'tournament_id' => $tournament->id,
+                        'system_signature' => $sig]);
+
+            broadcast(new ChatEvent($chat->load('user')));
+          }
+        }
       }
       // A match is not created until the Play button is pressed
       $match = Match::where('round_id', $round->id)

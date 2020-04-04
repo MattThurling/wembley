@@ -1985,6 +1985,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   // TODO At the moment, we are passing in the user AND the player even though
   // this means redundant data. May want to refactor after examining what's happening
@@ -1992,7 +1993,10 @@ __webpack_require__.r(__webpack_exports__);
   props: ['tournament_id', 'user'],
   data: function data() {
     return {
-      messages: [],
+      messages: [{
+        message: '',
+        system_signature: null
+      }],
       newMessage: '',
       users: [],
       activeUser: false,
@@ -48004,7 +48008,9 @@ var render = function() {
             },
             _vm._l(_vm.messages, function(message, index) {
               return _c("li", { key: index, staticClass: "pl-2" }, [
-                _c("strong", [_vm._v(_vm._s(message.user.name))]),
+                message.system_signature
+                  ? _c("span", [_vm._v("🏆")])
+                  : _c("strong", [_vm._v(_vm._s(message.user.name))]),
                 _vm._v(
                   "\n                        " +
                     _vm._s(message.message) +
