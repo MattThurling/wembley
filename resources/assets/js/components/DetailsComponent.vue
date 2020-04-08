@@ -1,13 +1,18 @@
 <template>
-    <p>
-        {{ tournament.round.name }} | Match {{ tournament.round.position }} of {{ tournament.round.number_of_matches }}
-        | Gate: Win <span class="text-success">£{{ winGate }}</span> Lose
-        <span class="text-danger">£{{ loseGate }}</span>
+  <div>
+    <p class="mb-0">
+        {{ game.round.name }} | Match {{ game.round.position }} of {{ game.round.number_of_matches }}
+        
     </p>
+    <p class="text-sm">
+      Win <strong>£{{ winGate }}</strong> | Lose <strong>£{{ loseGate }}</strong>
+    </p>
+    <hr />
+  </div>
 </template>
 
 <script>
     export default {
-        props: ['tournament', 'winGate', 'loseGate']
+        props: ['game', 'winGate', 'loseGate']
     }
 </script>

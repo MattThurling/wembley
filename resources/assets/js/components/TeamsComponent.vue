@@ -1,21 +1,21 @@
 <template>
-    <div class="col-sm-8">
-        <table class="table table-sm mt-3">
-            <thead>
-                <tr>
-                    <th scope="col">Your teams</th>
-                    <th class="text-center" scope="col">Division</th>
-                    <th class="text-right" scope="col">Gate</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="allocation in allocations" :class=getStatusClass(allocation)>
-                    <td>{{ allocation.team.name }}</td>
-                    <td class="text-center" v-if="allocation.team.division">{{ allocation.team.division.name }}</td>
-                    <td class="text-right">{{ numberWithCommas(allocation.team.gate * 120) }}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="col-sm-8 mt-3">
+        <h6 class="text-center">YOUR TEAMS</h6>
+        <div class="card-deck">
+            <div
+                v-for="allocation in allocations"
+                class="card card-team mb-2">
+                <div class="card-header text-center m-0 py-0">
+                    <p class="text-small p-0 m-0">{{ allocation.team.nickname }}</p>
+                </div>
+<!--                <div class="card-body text-center" v-if="allocation.team.division">{{ allocation.team.division.name }}</div>-->
+                <div
+                    class="card-body card-body-team text-center">
+                    £{{ numberWithCommas(allocation.team.gate) }}
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 

@@ -13,6 +13,7 @@
         </div>
         @endif
 
+
         <lobby-component :user="{{ auth()->user() }}" />
 
     </div>

@@ -10,3 +10,64 @@
 .teams p {
   margin: 0;
 }
+
+.lawn {
+  background: repeating-linear-gradient(
+  45deg,
+  green,
+  green 300px,
+  forestgreen 300px,
+  forestgreen 600px
+  );
+}
+
+.list-group-item {
+  background-color: rgba(27, 27, 27, 0.5);
+}
+
+.dealer-status {
+  color: rgba(241, 241, 241, 0.6);
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  color: rgba(241, 241, 241, 0.85);
+  margin-bottom: 60px; /* Margin bottom by footer height */
+}
+
+
+.card-header {
+  background-color: rgba(27, 27, 27, 0.51);
+}
+
+.card {
+  background-color: rgba(27, 27, 27, 0.5);
+  border: none;
+}
+
+.card-team {
+  min-width: 110px;
+  max-width: 110px;
+}
+
+.card-body-team {
+  max-height: 20px; 
+  padding: 0;
+}
+
+
+#chat-message {
+  background: rgba(27, 27, 27, 0.5);
+  color: rgba(241, 241, 241, 0.9);
+  border: none;
+}
+
+
+
+
+
+

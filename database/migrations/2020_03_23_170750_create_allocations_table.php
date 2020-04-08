@@ -15,7 +15,7 @@ class CreateAllocationsTable extends Migration
     {
         Schema::create('allocations', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('player_id');
+            $table->uuid('player_id')->nullable();
             $table->uuid('team_id');
             $table->uuid('tournament_id');
             $table->integer('status')->default(0);

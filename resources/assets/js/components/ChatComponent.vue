@@ -1,42 +1,46 @@
 
 <template>
-   <div class="row">
+  <div>
+  <hr class="mt-0"/>
+    <div class="row">
+      <div class="col-sm-8 mb-3">
+        <div class="card card-default">
+          <div class="card-header px-2 py-0">
+            Live <small class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</small>
+          </div>
+          <div class="card-body p-0">
+             <ul id="chat-list" class="list-unstyled" style="height:100px; overflow-y:hidden" v-chat-scroll>
+                 <li class="pl-2" v-for="(message, index) in messages" :key="index" >
+                     <span v-if="message.system_signature">🏆</span>
+                     <strong v-else>{{ message.user.name}}</strong>
+                     {{ message.message }}
+                 </li>
+             </ul>
+          </div>
 
-       <div class="col-sm-8 mb-3">
-           <div class="card card-default">
-              <div class="card-header px-2 py-0">
-                Live <small class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</small>
-              </div>
-               <div class="card-body p-0">
-                   <ul class="list-unstyled" style="height:100px; overflow-y:scroll" v-chat-scroll>
-                       <li class="pl-2" v-for="(message, index) in messages" :key="index" >
-                           <span v-if="message.system_signature">🏆</span>
-                           <strong v-else>{{ message.user.name}}</strong>
-                           {{ message.message }}
-                       </li>
-                   </ul>
-               </div>
-
-               <input
-                    @keydown="sendTypingEvent"
-                    @keyup.enter="sendMessage"
-                    v-model="newMessage"
-                    type="text"
-                    name="message"
-                    placeholder="Enter your message..."
-                    class="form-control">
-           </div>
-       </div>
+          <input
+              @keydown="sendTypingEvent"
+              @keyup.enter="sendMessage"
+              v-model="newMessage"
+              type="text"
+              name="message"
+              placeholder="Enter your message..."
+              class="form-control"
+              id="chat-message">
+        </div>
+      </div>
 
         <div class="col-sm-4">
-
-            <ul class="list-group"><h6 class="text-center">Active players</h6>
+            <h6 class="text-center">ACTIVE PLAYERS</h6>
+            <ul class="list-group">
                 <li class="list-group-item py-0" v-for="(u, index) in users" :key="index">
                     {{ u.name }}
                 </li>
             </ul>
         </div>
 
+    </div>
+     <hr class="mt-0"/>
    </div>
 </template>
 

@@ -18,20 +18,25 @@ Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
 
 Route::group(['middleware' => 'auth:api'], function () {
-
+  
   Route::post('tournament/{tournament}/join', 'API\TournamentController@join');
-  Route::post('tournament/{tournament}/start', 'API\TournamentController@start');
-  Route::get('tournament/{tournament}/goto', 'API\TournamentController@goTo');
-  Route::post('tournament/{tournament}/round', 'API\TournamentController@round');
-  Route::post('tournament/{tournament}/redraw', 'API\TournamentController@redraw');
-  Route::post('tournament/{tournament}/match', 'API\TournamentController@match');
-  Route::post('tournament/{tournament}/next', 'API\TournamentController@next');
-  Route::get('tournament/{tournament}', 'API\TournamentController@show');
+  Route::post('tournament/{tournament}/start', 'API\GameController@start');
+  Route::get('tournament/{tournament}/goto', 'API\GameController@goTo');
+  Route::post('tournament/{tournament}/round', 'API\GameController@round');
+  Route::post('tournament/{tournament}/redraw', 'API\GameController@redraw');
+  Route::post('tournament/{tournament}/match', 'API\GameController@match');
+  Route::post('tournament/{tournament}/next', 'API\GameController@next');
+  Route::post('tournament/{tournament}/bid', 'API\BidController@store');
+  Route::post('tournament/{tournament}/close-auction', 'API\GameController@closeAuction');
+  Route::get('tournament/{tournament}', 'API\GameController@show');
+
+  
+  Route::get('tournament/{tournament}/messages', 'API\ChatController@fetchAllMessages');
+  Route::post('tournament/{tournament}/messages', 'API\ChatController@sendMessage');
 
   Route::get('tournament', 'API\TournamentController@index');
   Route::post('tournament', 'API\TournamentController@store');
-  Route::get('tournament/{tournament}/messages', 'API\ChatController@fetchAllMessages');
-  Route::post('tournament/{tournament}/messages', 'API\ChatController@sendMessage');
+
 });
 
 

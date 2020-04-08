@@ -11,10 +11,10 @@
             <div class="col-sm-4 mt-3 text-center mb-3">
                 <button
                     v-if="owner"
-                    @click="startRoundHandler" class="btn btn-success btn-lg">
+                    @click="startRoundHandler" class="btn btn-primary btn-lg">
                     Start
                 </button>
-                <p v-else class="text-muted">Waiting for dealer...</p>
+                <p v-else class="dealer-status">Waiting for dealer...</p>
             </div>
         </div>
     </div>

@@ -1,35 +1,42 @@
 <template>
     <div>
         <details-component
-            v-if="tournament.phase != 'round'"
-            :tournament="tournament"
-            :winGate="numberWithCommas(80*tournament.home_team.gate)"
-            :loseGate="numberWithCommas(40*tournament.home_team.gate)"/>
+            v-if="game.phase != 'round'"
+            :game="game"
+            :winGate="numberWithCommas(2*game.home_team.gate/3)"
+            :loseGate="numberWithCommas(game.home_team.gate/3)"/>
         <round-component
-            v-if="tournament.phase == 'round'"
-            :owner="tournament.owner"
+            v-if="game.phase == 'round'"
+            :owner="game.owner"
             :startRoundHandler="startRound"/>
+        <bid-component
+            v-if="game.phase == 'bid'"
+            :owner="game.owner"
+            :game="game"
+            :highBid="numberWithCommas(game.high_bid_amount)"
+            :bidHandler="bid"
+            :closeHandler="closeAuction"/>
         <draw-component
-            v-if="tournament.phase == 'draw'"
-            :owner="tournament.owner"
-            :tournament="tournament"
+            v-if="game.phase == 'draw'"
+            :owner="game.owner"
+            :game="game"
             :playMatchHandler="playMatch"/>
         <redraw-component
-            v-if="tournament.phase == 'redraw'"
-            :owner="tournament.owner"
-            :tournament="tournament"
+            v-if="game.phase == 'redraw'"
+            :owner="game.owner"
+            :game="game"
             :redrawHandler="redraw"/>
         <match-component
-            v-if="tournament.phase == 'match'"
-            :owner="tournament.owner"
-            :tournament="tournament"
+            v-if="game.phase == 'match'"
+            :owner="game.owner"
+            :game="game"
             :next-draw-handler="nextDraw"/>
         <chat-component :tournament_id="tournament_id" :user="user" />
         <div class="row">
             <teams-component
-                :allocations="tournament.allocations" />
+                :allocations="game.allocations" />
             <bank-component
-                :balance="numberWithCommas(120*tournament.player.balance)" />
+                :balance="numberWithCommas(game.player.balance)" />
         </div>
     </div>
 
@@ -44,6 +51,8 @@
     import TeamsComponent from './TeamsComponent.vue';
     import DetailsComponent from './DetailsComponent.vue';
     import BankComponent from './BankComponent.vue';
+    import RedrawComponent from './RedrawComponent.vue';
+    import BidComponent from './BidComponent.vue';
     export default {
         components: {
             RoundComponent,
@@ -53,12 +62,26 @@
             TeamsComponent,
             BankComponent,
             DetailsComponent,
+            BidComponent,
+            RedrawComponent,
         },
         props:['tournament_id', 'user'],
         data() {
            return {
-               tournament: {home_team: {gate: 0}, player: {balance:0}, round: {}}
-           }
+                bidAmount: 0,
+                game: {
+                    home_team: {gate: 0},
+                    player: {balance:0},
+                    round: {},
+                    bid: {
+                        high_bid: {
+                            player: {
+                                user: {}
+                            }
+                        }
+                    }
+                }
+            }
         },
         created() {
             this.getTournament();
@@ -71,28 +94,46 @@
         methods: {
             getTournament() {
                 axios.get('/api/tournament/' + this.tournament_id).then(response => {
-                    this.tournament = response.data;
+                    this.game = response.data;
                 })
             },
             startRound() {
                 axios.post('/api/tournament/' + this.tournament_id + '/round').then(response => {
-                    this.tournament = response.data;
+                    this.game = response.data;
                 })
             },
             playMatch() {
                 axios.post('/api/tournament/' + this.tournament_id + '/match').then(response => {
-                    this.tournament = response.data;
+                    this.game = response.data;
                 })
             },
             nextDraw() {
                 axios.post('/api/tournament/' + this.tournament_id + '/next').then(response => {
-                    this.tournament = response.data;
+                    this.game = response.data;
                 })
             },
             redraw(side) {
                 axios.post('/api/tournament/' + this.tournament_id + '/redraw', {side: side}).then(response => {
                     console.log(response);
-                    // this.tournament = response.data;
+
+                })
+            },
+            bid(amount) {
+                axios.post('/api/tournament/' + this.tournament_id + '/bid',
+                    {
+                        amount: amount,
+                        side: this.game.bid_side,
+                    })
+                    .then(response => {
+                        console.log(response);
+                    })
+                    .catch(err => {
+                        alert('Invalid bid');
+                    })
+            },
+            closeAuction() {
+                axios.post('/api/tournament/' + this.tournament_id + '/close-auction').then(response => {
+                    console.log(response);
                 })
             },
             numberWithCommas(x) {

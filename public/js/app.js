@@ -1921,10 +1921,97 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['balance']
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/BidComponent.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/BidComponent.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['balance']
+  props: ['game', 'bidHandler', 'highBid', 'closeHandler'],
+  data: function data() {
+    return {
+      amount: 0
+    };
+  },
+  methods: {
+    submitBid: function submitBid() {
+      this.bidHandler(this.amount);
+      this.amount = 0;
+    }
+  }
 });
 
 /***/ }),
@@ -1938,6 +2025,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
 //
 //
 //
@@ -2077,8 +2168,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['tournament', 'winGate', 'loseGate']
+  props: ['game', 'winGate', 'loseGate']
 });
 
 /***/ }),
@@ -2131,7 +2227,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['tournament', 'playMatchHandler', 'owner']
+  props: ['game', 'playMatchHandler', 'owner']
 });
 
 /***/ }),
@@ -2313,7 +2409,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['tournament', 'nextDrawHandler', 'owner']
+  props: ['game', 'nextDrawHandler', 'owner']
 });
 
 /***/ }),
@@ -2370,8 +2466,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['tournament', 'redrawHandler', 'owner']
+  props: ['game', 'redrawHandler', 'owner']
 });
 
 /***/ }),
@@ -2477,6 +2574,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TeamsComponent_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TeamsComponent.vue */ "./resources/assets/js/components/TeamsComponent.vue");
 /* harmony import */ var _DetailsComponent_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DetailsComponent.vue */ "./resources/assets/js/components/DetailsComponent.vue");
 /* harmony import */ var _BankComponent_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./BankComponent.vue */ "./resources/assets/js/components/BankComponent.vue");
+/* harmony import */ var _RedrawComponent_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./RedrawComponent.vue */ "./resources/assets/js/components/RedrawComponent.vue");
+/* harmony import */ var _BidComponent_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./BidComponent.vue */ "./resources/assets/js/components/BidComponent.vue");
 //
 //
 //
@@ -2514,6 +2613,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
@@ -2529,19 +2637,29 @@ __webpack_require__.r(__webpack_exports__);
     ChatComponent: _ChatComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     TeamsComponent: _TeamsComponent_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
     BankComponent: _BankComponent_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
-    DetailsComponent: _DetailsComponent_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+    DetailsComponent: _DetailsComponent_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+    BidComponent: _BidComponent_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
+    RedrawComponent: _RedrawComponent_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
   props: ['tournament_id', 'user'],
   data: function data() {
     return {
-      tournament: {
+      bidAmount: 0,
+      game: {
         home_team: {
           gate: 0
         },
         player: {
           balance: 0
         },
-        round: {}
+        round: {},
+        bid: {
+          high_bid: {
+            player: {
+              user: {}
+            }
+          }
+        }
       }
     };
   },
@@ -2560,35 +2678,50 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.get('/api/tournament/' + this.tournament_id).then(function (response) {
-        _this2.tournament = response.data;
+        _this2.game = response.data;
       });
     },
     startRound: function startRound() {
       var _this3 = this;
 
       axios.post('/api/tournament/' + this.tournament_id + '/round').then(function (response) {
-        _this3.tournament = response.data;
+        _this3.game = response.data;
       });
     },
     playMatch: function playMatch() {
       var _this4 = this;
 
       axios.post('/api/tournament/' + this.tournament_id + '/match').then(function (response) {
-        _this4.tournament = response.data;
+        _this4.game = response.data;
       });
     },
     nextDraw: function nextDraw() {
       var _this5 = this;
 
       axios.post('/api/tournament/' + this.tournament_id + '/next').then(function (response) {
-        _this5.tournament = response.data;
+        _this5.game = response.data;
       });
     },
     redraw: function redraw(side) {
       axios.post('/api/tournament/' + this.tournament_id + '/redraw', {
         side: side
       }).then(function (response) {
-        console.log(response); // this.tournament = response.data;
+        console.log(response);
+      });
+    },
+    bid: function bid(amount) {
+      axios.post('/api/tournament/' + this.tournament_id + '/bid', {
+        amount: amount,
+        side: this.game.bid_side
+      }).then(function (response) {
+        console.log(response);
+      })["catch"](function (err) {
+        alert('Invalid bid');
+      });
+    },
+    closeAuction: function closeAuction() {
+      axios.post('/api/tournament/' + this.tournament_id + '/close-auction').then(function (response) {
+        console.log(response);
       });
     },
     numberWithCommas: function numberWithCommas(x) {
@@ -47963,10 +48096,10 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-lg-4" }, [
-    _c("div", { staticClass: "card mt-3" }, [
-      _vm._m(0),
-      _vm._v(" "),
+  return _c("div", { staticClass: "col-lg-4 mt-3" }, [
+    _c("h6", { staticClass: "text-center" }, [_vm._v("BANK BALANCE")]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-body" }, [
         _c("div", { staticClass: "card-text" }, [
           _c("h1", { staticClass: "text-center" }, [
@@ -47977,16 +48110,180 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("p", { staticClass: "text-center" }, [_vm._v("Bank balance:")])
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/BidComponent.vue?vue&type=template&id=0abfde37&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/BidComponent.vue?vue&type=template&id=0abfde37& ***!
+  \**********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row no-gutters" }, [
+    _c("div", { staticClass: "col-sm-8" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-6" }, [
+          _c("h4", { staticClass: "mb-0" }, [
+            _vm._v(_vm._s(_vm.game.home_team.name))
+          ]),
+          _vm._v(" "),
+          _vm.game.home_user
+            ? _c("p", { staticClass: "small" }, [
+                _vm._v(_vm._s(_vm.game.home_user.name))
+              ])
+            : _c("p", { staticClass: "small" }, [_vm._v("FOR SALE")])
+        ]),
+        _vm._v(" "),
+        _vm.game.bid_side == "home"
+          ? _c("div", { staticClass: "col-6" }, [
+              _c(
+                "div",
+                { staticClass: "input-group input-group-sm mb-3 mr-2" },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.amount,
+                        expression: "amount"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.amount },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.amount = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group-append mr-3" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-primary",
+                        on: { click: _vm.submitBid }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            Bid\n                        "
+                        )
+                      ]
+                    )
+                  ])
+                ]
+              )
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-6" }, [
+          _c("h4", { staticClass: "mb-0" }, [
+            _vm._v(_vm._s(_vm.game.away_team.name))
+          ]),
+          _vm._v(" "),
+          _vm.game.away_user
+            ? _c("p", { staticClass: "small" }, [
+                _vm._v(_vm._s(_vm.game.away_user.name))
+              ])
+            : _c("p", { staticClass: "small" }, [_vm._v("FOR SALE")])
+        ]),
+        _vm._v(" "),
+        _vm.game.bid_side == "away"
+          ? _c("div", { staticClass: "col-6" }, [
+              _c("div", { staticClass: "input-group input-group-sm mr-2" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.amount,
+                      expression: "amount"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.amount },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.amount = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "input-group-append mr-3" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-outline-primary",
+                      on: { click: _vm.submitBid }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            Bid\n                        "
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ])
+          : _vm._e()
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-sm-4 text-center mb-3" }, [
+      _vm.game.bid_side == "home"
+        ? _c("h5", [_vm._v("Auction for " + _vm._s(_vm.game.home_team.name))])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.game.bid_side == "away"
+        ? _c("h5", [_vm._v("Auction for " + _vm._s(_vm.game.away_team.name))])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("p", { staticClass: "text-small mb-0" }, [_vm._v("Highest bid:")]),
+      _vm._v(" "),
+      _c("p", [
+        _vm._v(_vm._s(_vm.game.high_bidder_name) + ": £" + _vm._s(_vm.highBid))
+      ]),
+      _vm._v(" "),
+      _vm.game.owner
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-primary btn-lg",
+              on: { click: _vm.closeHandler }
+            },
+            [_vm._v("\n            Close auction\n        ")]
+          )
+        : _c("p", { staticClass: "dealer-status" }, [
+            _vm._v("Waiting for dealer...")
+          ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -48008,102 +48305,108 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-sm-8 mb-3" }, [
-      _c("div", { staticClass: "card card-default" }, [
-        _c("div", { staticClass: "card-header px-2 py-0" }, [
-          _vm._v("\n             Live "),
-          _vm.activeUser
-            ? _c("small", { staticClass: "text-muted" }, [
-                _vm._v(_vm._s(_vm.activeUser.name) + " is typing...")
-              ])
-            : _vm._e()
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-body p-0" }, [
-          _c(
-            "ul",
-            {
-              directives: [{ name: "chat-scroll", rawName: "v-chat-scroll" }],
-              staticClass: "list-unstyled",
-              staticStyle: { height: "100px", "overflow-y": "scroll" }
-            },
-            _vm._l(_vm.messages, function(message, index) {
-              return _c("li", { key: index, staticClass: "pl-2" }, [
-                message.system_signature
-                  ? _c("span", [_vm._v("🏆")])
-                  : _c("strong", [_vm._v(_vm._s(message.user.name))]),
-                _vm._v(
-                  "\n                        " +
-                    _vm._s(message.message) +
-                    "\n                    "
-                )
-              ])
-            }),
-            0
-          )
-        ]),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.newMessage,
-              expression: "newMessage"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            name: "message",
-            placeholder: "Enter your message..."
-          },
-          domProps: { value: _vm.newMessage },
-          on: {
-            keydown: _vm.sendTypingEvent,
-            keyup: function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-              ) {
-                return null
-              }
-              return _vm.sendMessage($event)
-            },
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.newMessage = $event.target.value
-            }
-          }
-        })
-      ])
-    ]),
+  return _c("div", [
+    _c("hr", { staticClass: "mt-0" }),
     _vm._v(" "),
-    _c("div", { staticClass: "col-sm-4" }, [
-      _c(
-        "ul",
-        { staticClass: "list-group" },
-        [
-          _c("h6", { staticClass: "text-center" }, [_vm._v("Active players")]),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-8 mb-3" }, [
+        _c("div", { staticClass: "card card-default" }, [
+          _c("div", { staticClass: "card-header px-2 py-0" }, [
+            _vm._v("\n          Live "),
+            _vm.activeUser
+              ? _c("small", { staticClass: "text-muted" }, [
+                  _vm._v(_vm._s(_vm.activeUser.name) + " is typing...")
+                ])
+              : _vm._e()
+          ]),
           _vm._v(" "),
+          _c("div", { staticClass: "card-body p-0" }, [
+            _c(
+              "ul",
+              {
+                directives: [{ name: "chat-scroll", rawName: "v-chat-scroll" }],
+                staticClass: "list-unstyled",
+                staticStyle: { height: "100px", "overflow-y": "hidden" },
+                attrs: { id: "chat-list" }
+              },
+              _vm._l(_vm.messages, function(message, index) {
+                return _c("li", { key: index, staticClass: "pl-2" }, [
+                  message.system_signature
+                    ? _c("span", [_vm._v("🏆")])
+                    : _c("strong", [_vm._v(_vm._s(message.user.name))]),
+                  _vm._v(
+                    "\n                   " +
+                      _vm._s(message.message) +
+                      "\n               "
+                  )
+                ])
+              }),
+              0
+            )
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.newMessage,
+                expression: "newMessage"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              name: "message",
+              placeholder: "Enter your message...",
+              id: "chat-message"
+            },
+            domProps: { value: _vm.newMessage },
+            on: {
+              keydown: _vm.sendTypingEvent,
+              keyup: function($event) {
+                if (
+                  !$event.type.indexOf("key") &&
+                  _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                ) {
+                  return null
+                }
+                return _vm.sendMessage($event)
+              },
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.newMessage = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-sm-4" }, [
+        _c("h6", { staticClass: "text-center" }, [_vm._v("ACTIVE PLAYERS")]),
+        _vm._v(" "),
+        _c(
+          "ul",
+          { staticClass: "list-group" },
           _vm._l(_vm.users, function(u, index) {
             return _c(
               "li",
               { key: index, staticClass: "list-group-item py-0" },
               [
                 _vm._v(
-                  "\n                 " + _vm._s(u.name) + "\n             "
+                  "\n                  " + _vm._s(u.name) + "\n              "
                 )
               ]
             )
-          })
-        ],
-        2
-      )
-    ])
+          }),
+          0
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("hr", { staticClass: "mt-0" })
   ])
 }
 var staticRenderFns = []
@@ -48128,23 +48431,27 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("p", [
-    _vm._v(
-      "\n    " +
-        _vm._s(_vm.tournament.round.name) +
-        " | Match " +
-        _vm._s(_vm.tournament.round.position) +
-        " of " +
-        _vm._s(_vm.tournament.round.number_of_matches) +
-        "\n    | Gate: Win "
-    ),
-    _c("span", { staticClass: "text-success" }, [
-      _vm._v("£" + _vm._s(_vm.winGate))
+  return _c("div", [
+    _c("p", { staticClass: "mb-0" }, [
+      _vm._v(
+        "\n      " +
+          _vm._s(_vm.game.round.name) +
+          " | Match " +
+          _vm._s(_vm.game.round.position) +
+          " of " +
+          _vm._s(_vm.game.round.number_of_matches) +
+          "\n      \n  "
+      )
     ]),
-    _vm._v(" Lose\n    "),
-    _c("span", { staticClass: "text-danger" }, [
-      _vm._v("£" + _vm._s(_vm.loseGate))
-    ])
+    _vm._v(" "),
+    _c("p", { staticClass: "text-sm" }, [
+      _vm._v("\n    Win "),
+      _c("strong", [_vm._v("£" + _vm._s(_vm.winGate))]),
+      _vm._v(" | Lose "),
+      _c("strong", [_vm._v("£" + _vm._s(_vm.loseGate))])
+    ]),
+    _vm._v(" "),
+    _c("hr")
   ])
 }
 var staticRenderFns = []
@@ -48174,11 +48481,15 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(_vm._s(_vm.tournament.home_team.name))
+            _vm._v(
+              _vm._s(_vm.game.home_team.id) +
+                " " +
+                _vm._s(_vm.game.home_team.nickname)
+            )
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
-            _vm._v(_vm._s(_vm.tournament.home_user.name))
+            _vm._v(_vm._s(_vm.game.home_user.name))
           ])
         ]),
         _vm._v(" "),
@@ -48188,11 +48499,15 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(_vm._s(_vm.tournament.away_team.name))
+            _vm._v(
+              _vm._s(_vm.game.away_team.id) +
+                " " +
+                _vm._s(_vm.game.away_team.nickname)
+            )
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
-            _vm._v(_vm._s(_vm.tournament.away_user.name))
+            _vm._v(_vm._s(_vm.game.away_user.name))
           ])
         ]),
         _vm._v(" "),
@@ -48205,12 +48520,12 @@ var render = function() {
         ? _c(
             "button",
             {
-              staticClass: "btn btn-success btn-lg",
+              staticClass: "btn btn-primary btn-lg",
               on: { click: _vm.playMatchHandler }
             },
             [_vm._v("\n            Play\n        ")]
           )
-        : _c("p", { staticClass: "text-muted" }, [
+        : _c("p", { staticClass: "dealer-status" }, [
             _vm._v("Waiting for dealer...")
           ])
     ])
@@ -48383,40 +48698,45 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row no-gutters" }, [
+    _vm._v("\n    " + _vm._s(_vm.game.match.position) + "\n    "),
     _c("div", { staticClass: "col-sm-8" }, [
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(_vm._s(_vm.tournament.match.home_allocation.team.name))
+            _vm._v(
+              _vm._s(_vm.game.match.home_allocation.team.id) +
+                " " +
+                _vm._s(_vm.game.match.home_allocation.team.nickname)
+            )
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
-            _vm._v(
-              _vm._s(_vm.tournament.match.home_allocation.player.user.name)
-            )
+            _vm._v(_vm._s(_vm.game.match.home_allocation.player.user.name))
           ])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-4" }, [
-          _c("h1", [_vm._v(_vm._s(_vm.tournament.match.home_score))])
+          _c("h1", [_vm._v(_vm._s(_vm.game.match.home_score))])
         ])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(_vm._s(_vm.tournament.match.away_allocation.team.name))
+            _vm._v(
+              _vm._s(_vm.game.match.away_allocation.team.id) +
+                " " +
+                _vm._s(_vm.game.match.away_allocation.team.nickname)
+            )
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
-            _vm._v(
-              _vm._s(_vm.tournament.match.away_allocation.player.user.name)
-            )
+            _vm._v(_vm._s(_vm.game.match.away_allocation.player.user.name))
           ])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-4" }, [
-          _c("h1", [_vm._v(_vm._s(_vm.tournament.match.away_score))])
+          _c("h1", [_vm._v(_vm._s(_vm.game.match.away_score))])
         ])
       ])
     ]),
@@ -48426,12 +48746,12 @@ var render = function() {
         ? _c(
             "button",
             {
-              staticClass: "btn btn-success btn-lg",
+              staticClass: "btn btn-primary btn-lg",
               on: { click: _vm.nextDrawHandler }
             },
             [_vm._v("\n            Next\n        ")]
           )
-        : _c("p", { staticClass: "text-muted" }, [
+        : _c("p", { staticClass: "dealer-status" }, [
             _vm._v("Waiting for dealer...")
           ])
     ])
@@ -48464,11 +48784,15 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(_vm._s(_vm.tournament.home_team.name))
+            _vm._v(
+              _vm._s(_vm.game.home_team.id) +
+                " " +
+                _vm._s(_vm.game.home_team.nickname)
+            )
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
-            _vm._v(_vm._s(_vm.tournament.home_user.name))
+            _vm._v(_vm._s(_vm.game.home_user.name))
           ])
         ]),
         _vm._v(" "),
@@ -48491,11 +48815,15 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(_vm._s(_vm.tournament.away_team.name))
+            _vm._v(
+              _vm._s(_vm.game.away_team.id) +
+                " " +
+                _vm._s(_vm.game.away_team.nickname)
+            )
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
-            _vm._v(_vm._s(_vm.tournament.away_user.name))
+            _vm._v(_vm._s(_vm.game.away_user.name))
           ])
         ]),
         _vm._v(" "),
@@ -48525,7 +48853,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-sm-4 text-center mt-3 mb-3" }, [
-      _c("p", { staticClass: "text-muted" }, [_vm._v("Waiting for player...")])
+      _c("p", { staticClass: "dealer-status" }, [
+        _vm._v("Waiting for player...")
+      ])
     ])
   }
 ]
@@ -48579,12 +48909,12 @@ var render = function() {
           ? _c(
               "button",
               {
-                staticClass: "btn btn-success btn-lg",
+                staticClass: "btn btn-primary btn-lg",
                 on: { click: _vm.startRoundHandler }
               },
               [_vm._v("\n                Start\n            ")]
             )
-          : _c("p", { staticClass: "text-muted" }, [
+          : _c("p", { staticClass: "dealer-status" }, [
               _vm._v("Waiting for dealer...")
             ])
       ])
@@ -48613,52 +48943,34 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-sm-8" }, [
-    _c("table", { staticClass: "table table-sm mt-3" }, [
-      _vm._m(0),
-      _vm._v(" "),
-      _c(
-        "tbody",
-        _vm._l(_vm.allocations, function(allocation) {
-          return _c("tr", { class: _vm.getStatusClass(allocation) }, [
-            _c("td", [_vm._v(_vm._s(allocation.team.name))]),
-            _vm._v(" "),
-            allocation.team.division
-              ? _c("td", { staticClass: "text-center" }, [
-                  _vm._v(_vm._s(allocation.team.division.name))
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _c("td", { staticClass: "text-right" }, [
-              _vm._v(_vm._s(_vm.numberWithCommas(allocation.team.gate * 120)))
+  return _c("div", { staticClass: "col-sm-8 mt-3" }, [
+    _c("h6", { staticClass: "text-center" }, [_vm._v("YOUR TEAMS")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "card-deck" },
+      _vm._l(_vm.allocations, function(allocation) {
+        return _c("div", { staticClass: "card card-team mb-2" }, [
+          _c("div", { staticClass: "card-header text-center m-0 py-0" }, [
+            _c("p", { staticClass: "text-small p-0 m-0" }, [
+              _vm._v(_vm._s(allocation.team.nickname))
             ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body card-body-team text-center" }, [
+            _vm._v(
+              "\n                    £" +
+                _vm._s(_vm.numberWithCommas(allocation.team.gate)) +
+                "\n                "
+            )
           ])
-        }),
-        0
-      )
-    ])
+        ])
+      }),
+      0
+    )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Your teams")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
-          _vm._v("Division")
-        ]),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-right", attrs: { scope: "col" } }, [
-          _vm._v("Gate")
-        ])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -48683,50 +48995,59 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.tournament.phase != "round"
+      _vm.game.phase != "round"
         ? _c("details-component", {
             attrs: {
-              tournament: _vm.tournament,
-              winGate: _vm.numberWithCommas(80 * _vm.tournament.home_team.gate),
-              loseGate: _vm.numberWithCommas(40 * _vm.tournament.home_team.gate)
+              game: _vm.game,
+              winGate: _vm.numberWithCommas((2 * _vm.game.home_team.gate) / 3),
+              loseGate: _vm.numberWithCommas(_vm.game.home_team.gate / 3)
             }
           })
         : _vm._e(),
       _vm._v(" "),
-      _vm.tournament.phase == "round"
+      _vm.game.phase == "round"
         ? _c("round-component", {
+            attrs: { owner: _vm.game.owner, startRoundHandler: _vm.startRound }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.game.phase == "bid"
+        ? _c("bid-component", {
             attrs: {
-              owner: _vm.tournament.owner,
-              startRoundHandler: _vm.startRound
+              owner: _vm.game.owner,
+              game: _vm.game,
+              highBid: _vm.numberWithCommas(_vm.game.high_bid_amount),
+              bidHandler: _vm.bid,
+              closeHandler: _vm.closeAuction
             }
           })
         : _vm._e(),
       _vm._v(" "),
-      _vm.tournament.phase == "draw"
+      _vm.game.phase == "draw"
         ? _c("draw-component", {
             attrs: {
-              owner: _vm.tournament.owner,
-              tournament: _vm.tournament,
+              owner: _vm.game.owner,
+              game: _vm.game,
               playMatchHandler: _vm.playMatch
             }
           })
         : _vm._e(),
       _vm._v(" "),
-      _vm.tournament.phase == "redraw"
+      _vm.game.phase == "redraw"
         ? _c("redraw-component", {
             attrs: {
-              owner: _vm.tournament.owner,
-              tournament: _vm.tournament,
+              owner: _vm.game.owner,
+              game: _vm.game,
               redrawHandler: _vm.redraw
             }
           })
         : _vm._e(),
       _vm._v(" "),
-      _vm.tournament.phase == "match"
+      _vm.game.phase == "match"
         ? _c("match-component", {
             attrs: {
-              owner: _vm.tournament.owner,
-              tournament: _vm.tournament,
+              owner: _vm.game.owner,
+              game: _vm.game,
               "next-draw-handler": _vm.nextDraw
             }
           })
@@ -48741,13 +49062,11 @@ var render = function() {
         { staticClass: "row" },
         [
           _c("teams-component", {
-            attrs: { allocations: _vm.tournament.allocations }
+            attrs: { allocations: _vm.game.allocations }
           }),
           _vm._v(" "),
           _c("bank-component", {
-            attrs: {
-              balance: _vm.numberWithCommas(120 * _vm.tournament.player.balance)
-            }
+            attrs: { balance: _vm.numberWithCommas(_vm.game.player.balance) }
           })
         ],
         1
@@ -61085,6 +61404,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BankComponent_vue_vue_type_template_id_a6188e0c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BankComponent_vue_vue_type_template_id_a6188e0c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/BidComponent.vue":
+/*!*********************************************************!*\
+  !*** ./resources/assets/js/components/BidComponent.vue ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _BidComponent_vue_vue_type_template_id_0abfde37___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BidComponent.vue?vue&type=template&id=0abfde37& */ "./resources/assets/js/components/BidComponent.vue?vue&type=template&id=0abfde37&");
+/* harmony import */ var _BidComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BidComponent.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/BidComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _BidComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _BidComponent_vue_vue_type_template_id_0abfde37___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _BidComponent_vue_vue_type_template_id_0abfde37___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/components/BidComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/BidComponent.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/assets/js/components/BidComponent.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BidComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./BidComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/BidComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BidComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/BidComponent.vue?vue&type=template&id=0abfde37&":
+/*!****************************************************************************************!*\
+  !*** ./resources/assets/js/components/BidComponent.vue?vue&type=template&id=0abfde37& ***!
+  \****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BidComponent_vue_vue_type_template_id_0abfde37___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./BidComponent.vue?vue&type=template&id=0abfde37& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/BidComponent.vue?vue&type=template&id=0abfde37&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BidComponent_vue_vue_type_template_id_0abfde37___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BidComponent_vue_vue_type_template_id_0abfde37___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
