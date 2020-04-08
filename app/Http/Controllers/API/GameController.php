@@ -19,15 +19,17 @@ use App\Events\ChatEvent;
 use App\Events\TournamentStarted;
 use App\Events\UpdateTournamentEvent;
 use App\Actions\GetNextUp;
+use App\Actions\SendSystemChatOnce;
 
 class GameController extends Controller
 {
 
   public $getNextUp;
 
-  public function __construct (GetNextUp $getNextUp)
+  public function __construct (GetNextUp $getNextUp, SendSystemChatOnce $systemChat)
   {
     $this->getNextUp = $getNextUp;
+    $this->systemChat = $systemChat;
   }
 
 
@@ -39,7 +41,10 @@ class GameController extends Controller
                       ->with('user')
                       ->first();
 
-    $allocations = Player::find($player->id)->allocations->load('team', 'team.division');
+    $allocations = Player::find($player->id)
+                            ->allocations
+                            ->where('status', '!=', -1)
+                            ->load('team', 'team.division');
 
     $phase = 'round';
     $round = $tournament->round;
@@ -61,7 +66,7 @@ class GameController extends Controller
 
       $home_team = $this->getNextUp->do($round, 1)->team; // 1 => home
       $away_team = $this->getNextUp->do($round, 0)->team; // 0 => away
-      \Log::info($home_team);
+
 
       // TODO Refactor the current user function, doesn't belong in team model
       $home_user = $home_team->current_user($tournament)->first();
@@ -92,7 +97,7 @@ class GameController extends Controller
 
       // Check for teams owned by same player - and check they're not just both unallocated
       if ($home_user && $home_user == $away_user) {
-        // See if all he remaining teams are owned by the same player
+        // See if all the remaining teams are owned by the same player
         $remaining_allocations_info = DB::table('allocations')
                                           ->select('player_id', DB::raw('count(*) as total'))
                                           ->where('tournament_id', $tournament->id)
@@ -103,24 +108,13 @@ class GameController extends Controller
           $phase = 'sell';
         } else {
           $phase = 'redraw';
-          // Emit system message from the owner user so it only goes once
-          if (Auth::id() == $tournament->owner_id) {
-            // System messages have a unique signature to prevent duplication
-            $sig = $round->id . $round->position . $phase;
-
-            if (!Chat::where('system_signature', $sig)->count()) {
-              $chat = Auth::user()
-                        ->messages()
-                        ->create([
-                          'message' => 'Teams are owned by the same player. Choose who plays!',
-                          'tournament_id' => $tournament->id,
-                          'system_signature' => $sig]);
-
-              broadcast(new ChatEvent($chat->load('user')));
-            }
-          }
+          // System messages have a unique signature to prevent duplication
+          $signature = $round->id . $round->position . $phase;
+          $message = 'Teams are owned by the same player. Choose who plays!';
+          $this->systemChat->do($tournament, $message, $signature);
         }
       }
+    
       
       // A match is not created until the Play button is pressed
       $match = Match::where('round_id', $round->id)
@@ -251,8 +245,6 @@ class GameController extends Controller
       $home_allocation->player->save();
       $away_allocation->player->save();
       broadcast(new UpdateTournamentEvent($tournament->id));
-      // TODO Do we need to return anything or just call it?
-      return $this->show($tournament);
   }
 
 
@@ -270,7 +262,6 @@ class GameController extends Controller
           return $this->round($tournament, $next_matches, 'Fifth Round');
       }
       broadcast(new UpdateTournamentEvent($tournament->id));
-      return $this->show($tournament);
   }
 
   // redraw a team and send it to the bottom of the queue
@@ -284,7 +275,6 @@ class GameController extends Controller
     $draw->position += 1000;
     $draw->save();
     broadcast(new UpdateTournamentEvent($tournament->id));
-    return $this->show($tournament);
   }
 
   // Award the auctioned team to the highest bidder

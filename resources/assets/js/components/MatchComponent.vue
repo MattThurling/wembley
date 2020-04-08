@@ -1,7 +1,6 @@
 <template>
 
     <div class="row no-gutters">
-        {{ game.match.position }}
         <div class="col-sm-8">
             <div class="row">
                 <div class="col-8">

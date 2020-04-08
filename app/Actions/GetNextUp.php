@@ -10,14 +10,15 @@ class GetNextUp
 {
   public function do(Round $round, $side)
   {
-    $draw = DB::table('draws')
-                      ->join('allocations', 'draws.team_id', '=', 'allocations.team_id')
-                      ->where('round_id', $round->id)
-                      ->where('status', 0)
-                      ->where('side', $side)
-                      ->orderBy('position')
-                      ->first();
 
-    return Draw::find($draw->id);
+    $query_object = DB::select (DB::raw("SELECT draws.id
+                                FROM draws JOIN allocations on draws.team_id = allocations.team_id
+                                WHERE round_id = '$round->id'
+                                AND side = '$side'
+                                AND status = 0
+                                ORDER BY position
+                                LIMIT 1"));
+    
+    return Draw::find($query_object[0]->id);
   }
 }

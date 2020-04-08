@@ -5,7 +5,7 @@
             <div
                 v-for="allocation in allocations"
                 class="card card-team mb-2">
-                <div class="card-header text-center m-0 py-0">
+                <div class="card-header text-center m-0 p-0">
                     <p class="text-small p-0 m-0">{{ allocation.team.nickname }}</p>
                 </div>
 <!--                <div class="card-body text-center" v-if="allocation.team.division">{{ allocation.team.division.name }}</div>-->

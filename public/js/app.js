@@ -2407,7 +2407,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['game', 'nextDrawHandler', 'owner']
 });
@@ -48137,7 +48136,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-6" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(_vm._s(_vm.game.home_team.name))
+            _vm._v(_vm._s(_vm.game.home_team.nickname))
           ]),
           _vm._v(" "),
           _vm.game.home_user
@@ -48198,7 +48197,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-6" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(_vm._s(_vm.game.away_team.name))
+            _vm._v(_vm._s(_vm.game.away_team.nickname))
           ]),
           _vm._v(" "),
           _vm.game.away_user
@@ -48255,11 +48254,15 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "col-sm-4 text-center mb-3" }, [
       _vm.game.bid_side == "home"
-        ? _c("h5", [_vm._v("Auction for " + _vm._s(_vm.game.home_team.name))])
+        ? _c("h5", [
+            _vm._v("Auction for " + _vm._s(_vm.game.home_team.nickname))
+          ])
         : _vm._e(),
       _vm._v(" "),
       _vm.game.bid_side == "away"
-        ? _c("h5", [_vm._v("Auction for " + _vm._s(_vm.game.away_team.name))])
+        ? _c("h5", [
+            _vm._v("Auction for " + _vm._s(_vm.game.away_team.nickname))
+          ])
         : _vm._e(),
       _vm._v(" "),
       _c("p", { staticClass: "text-small mb-0" }, [_vm._v("Highest bid:")]),
@@ -48698,7 +48701,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row no-gutters" }, [
-    _vm._v("\n    " + _vm._s(_vm.game.match.position) + "\n    "),
     _c("div", { staticClass: "col-sm-8" }, [
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
@@ -48951,7 +48953,7 @@ var render = function() {
       { staticClass: "card-deck" },
       _vm._l(_vm.allocations, function(allocation) {
         return _c("div", { staticClass: "card card-team mb-2" }, [
-          _c("div", { staticClass: "card-header text-center m-0 py-0" }, [
+          _c("div", { staticClass: "card-header text-center m-0 p-0" }, [
             _c("p", { staticClass: "text-small p-0 m-0" }, [
               _vm._v(_vm._s(allocation.team.nickname))
             ])

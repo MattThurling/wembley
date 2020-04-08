@@ -4,7 +4,7 @@
         <div class="col-sm-8">
             <div class="row">
                 <div class="col-6">
-                    <h4 class="mb-0">{{ game.home_team.name }}</h4>
+                    <h4 class="mb-0">{{ game.home_team.nickname }}</h4>
                     <p v-if="game.home_user" class="small">{{ game.home_user.name }}</p>
                     <p v-else class="small">FOR SALE</p>
                 </div>
@@ -24,7 +24,7 @@
 
             <div class="row">
                 <div class="col-6">
-                    <h4 class="mb-0">{{ game.away_team.name }}</h4>
+                    <h4 class="mb-0">{{ game.away_team.nickname }}</h4>
                     <p v-if="game.away_user" class="small">{{ game.away_user.name }}</p>
                     <p v-else class="small">FOR SALE</p>
                 </div>
@@ -46,8 +46,8 @@
         </div>
 
         <div class="col-sm-4 text-center mb-3">
-            <h5 v-if="game.bid_side == 'home'">Auction for {{ game.home_team.name }}</h5>
-            <h5 v-if="game.bid_side == 'away'">Auction for {{ game.away_team.name }}</h5>
+            <h5 v-if="game.bid_side == 'home'">Auction for {{ game.home_team.nickname }}</h5>
+            <h5 v-if="game.bid_side == 'away'">Auction for {{ game.away_team.nickname }}</h5>
             <p class="text-small mb-0">Highest bid:</p>
             <p>{{ game.high_bidder_name }}: £{{highBid}}</p>
             <button
