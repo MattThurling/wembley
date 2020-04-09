@@ -177,7 +177,7 @@ class GameController extends Controller
   // Start a new round
   public function round(Tournament $tournament, $number_of_matches=16, $name='Fourth Round')
   {
-      // $number_of_matches = 2 ** $tournament->number_of_rounds;
+
       $round = Round::create([
                   'number_of_matches' => $number_of_matches,
                   'tournament_id' => $tournament->id,
@@ -261,7 +261,8 @@ class GameController extends Controller
           broadcast(new UpdateTournamentEvent($tournament->id));
       } else {
           $next_matches = $round->number_of_matches/2;
-          $this->round($tournament, $next_matches, 'Fifth Round');
+          $name = $this->getRoundName($next_matches);
+          $this->round($tournament, $next_matches, $name);
       }
       
   }
@@ -289,6 +290,8 @@ class GameController extends Controller
                               ->where('tournament_id', $tournament->id)
                               ->first();
     $allocation->update(['player_id'=> $player->id]);
+    $player->balance -= $bid->amount;
+    $player->save();
     Bid::where('round_id', $tournament->round->id)->delete();
     broadcast(new UpdateTournamentEvent($tournament->id));
   }
@@ -326,6 +329,30 @@ class GameController extends Controller
                 ->orderBy('amount', 'desc')
                 ->first();
     return $high;
+  }
+
+  // Name the rounds
+  private function getRoundName ($number_of_matches)
+  {
+    switch ($number_of_matches) {
+      case 1:
+        $name = 'Final';
+        break;
+      case 2:
+        $name = 'Semi Finals';
+        break;
+      case 4:
+        $name = 'Quarter Finals';
+        break;
+      case 8:
+        $name = 'Fifth Round';
+        break;
+      case 16:
+        $name = 'Fourth Round';
+        break;
+    }
+
+    return $name;
   }
 
 

@@ -23,18 +23,27 @@ class BidController extends Controller
 
   public function store (Tournament $tournament, Request $request)
   {
+
+    $player = Player::where('user_id', Auth::id())
+                      ->where('tournament_id', $tournament->id)
+                      ->first();
+
     $message = '';
+
     $amount = $request->input('amount');
+
     $high = Bid::where('round_id', $tournament->round_id)
                 ->where('position', $tournament->round->position)
                 ->orderBy('amount', 'desc')
                 ->first();
 
-    if ($amount < 1000) $message = 'Minimum bid is £1,000';
+    if ($amount < 10000) $message = 'Minimum bid is £10,000';
 
     if ($high) {
-      if ($amount < $high->amount + 1000) $message = 'Bid must be at least £1,000 more than highest bid';
+      if ($amount < $high->amount + 10000) $message = 'Bid must be at least £10,000 more than highest bid';
     }
+
+    if ($amount > $player->balance) $message = "That's more than you've got";
 
     if ($message) return response()->json(['message' => $message], 403);
 
@@ -46,9 +55,7 @@ class BidController extends Controller
       $team = $this->getNextUp->do($round, 0)->team;
     }
 
-    $player = Player::where('user_id', Auth::id())
-                      ->where('tournament_id', $tournament->id)
-                      ->first();
+    
 
     Bid::create([
           'amount' => $amount,

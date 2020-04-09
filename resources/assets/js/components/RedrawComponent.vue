@@ -5,7 +5,7 @@
         <div class="col-sm-8">
             <div class="row">
                 <div class="col-8">
-                    <h4 class="mb-0">{{ game.home_team.id }} {{ game.home_team.nickname }}</h4>
+                    <h4 class="mb-0">{{ game.home_team.nickname }}</h4>
                     <p class="small">{{ game.home_user.name }}</p>
                 </div>
                 <div class="col-4">
@@ -19,7 +19,7 @@
 
             <div class="row">
                 <div class="col-8">
-                    <h4 class="mb-0">{{ game.away_team.id }} {{ game.away_team.nickname }}</h4>
+                    <h4 class="mb-0">{{ game.away_team.nickname }}</h4>
                     <p class="small">{{ game.away_user.name }}</p>
                 </div>
                 <div class="col-4">

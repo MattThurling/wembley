@@ -4,7 +4,7 @@
         <div class="col-sm-8">
             <div class="row">
                 <div class="col-6">
-                    <h4 class="mb-0">{{ game.home_team.id }} {{ game.home_team.nickname }}</h4>
+                    <h4 class="mb-0">{{ game.home_team.nickname }}</h4>
                     <p v-if="game.home_user" class="small">{{ game.home_user.name }}</p>
                     <p v-else class="small">FOR SALE</p>
                 </div>
@@ -24,7 +24,7 @@
 
             <div class="row">
                 <div class="col-6">
-                    <h4 class="mb-0">{{ game.away_team.id }} {{ game.away_team.nickname }}</h4>
+                    <h4 class="mb-0">{{ game.away_team.nickname }}</h4>
                     <p v-if="game.away_user" class="small">{{ game.away_user.name }}</p>
                     <p v-else class="small">FOR SALE</p>
                 </div>

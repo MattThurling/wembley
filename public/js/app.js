@@ -48230,11 +48230,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-6" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(
-              _vm._s(_vm.game.home_team.id) +
-                " " +
-                _vm._s(_vm.game.home_team.nickname)
-            )
+            _vm._v(_vm._s(_vm.game.home_team.nickname))
           ]),
           _vm._v(" "),
           _vm.game.home_user
@@ -48295,11 +48291,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-6" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(
-              _vm._s(_vm.game.away_team.id) +
-                " " +
-                _vm._s(_vm.game.away_team.nickname)
-            )
+            _vm._v(_vm._s(_vm.game.away_team.nickname))
           ]),
           _vm._v(" "),
           _vm.game.away_user
@@ -48586,11 +48578,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(
-              _vm._s(_vm.game.home_team.id) +
-                " " +
-                _vm._s(_vm.game.home_team.nickname)
-            )
+            _vm._v(_vm._s(_vm.game.home_team.nickname))
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
@@ -48604,11 +48592,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(
-              _vm._s(_vm.game.away_team.id) +
-                " " +
-                _vm._s(_vm.game.away_team.nickname)
-            )
+            _vm._v(_vm._s(_vm.game.away_team.nickname))
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
@@ -48807,11 +48791,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(
-              _vm._s(_vm.game.match.home_allocation.team.id) +
-                " " +
-                _vm._s(_vm.game.match.home_allocation.team.nickname)
-            )
+            _vm._v(_vm._s(_vm.game.match.home_allocation.team.nickname))
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
@@ -48827,11 +48807,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(
-              _vm._s(_vm.game.match.away_allocation.team.id) +
-                " " +
-                _vm._s(_vm.game.match.away_allocation.team.nickname)
-            )
+            _vm._v(_vm._s(_vm.game.match.away_allocation.team.nickname))
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
@@ -48888,11 +48864,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(
-              _vm._s(_vm.game.home_team.id) +
-                " " +
-                _vm._s(_vm.game.home_team.nickname)
-            )
+            _vm._v(_vm._s(_vm.game.home_team.nickname))
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
@@ -48919,11 +48891,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(
-              _vm._s(_vm.game.away_team.id) +
-                " " +
-                _vm._s(_vm.game.away_team.nickname)
-            )
+            _vm._v(_vm._s(_vm.game.away_team.nickname))
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
