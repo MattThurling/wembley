@@ -12,10 +12,13 @@ class GetNextUp
   {
 
     $query_object = DB::select (DB::raw("SELECT draws.id
-                                FROM draws JOIN allocations on draws.team_id = allocations.team_id
-                                WHERE round_id = '$round->id'
+                                FROM draws
+                                JOIN allocations on draws.team_id = allocations.team_id
+                                JOIN tournaments on tournament_id = tournaments.id
+                                WHERE draws.round_id = '$round->id'
+                                AND tournaments.id = '$round->tournament_id'
                                 AND side = '$side'
-                                AND status = 0
+                                AND allocations.status = 0
                                 ORDER BY position
                                 LIMIT 1"));
     

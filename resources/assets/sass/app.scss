@@ -49,10 +49,6 @@ body {
   border: none;
 }
 
-.card-team {
-  min-width: 110px;
-  max-width: 110px;
-}
 
 .card-body-team {
   max-height: 20px; 
@@ -64,6 +60,10 @@ body {
   background: rgba(27, 27, 27, 0.5);
   color: rgba(241, 241, 241, 0.9);
   border: none;
+}
+
+.text-responsive {
+  font-size: calc(80% + 1vw + 1vh);
 }
 
 

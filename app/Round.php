@@ -11,4 +11,9 @@ class Round extends Model
     return $this->hasMany('App\Draw');
   }
 
+  public function matches()
+  {
+    return $this->hasMany('App\Match');
+  }
+
 }

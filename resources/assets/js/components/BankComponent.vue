@@ -1,10 +1,10 @@
 <template>
-    <div class="col-lg-4 mt-3">
+    <div class="col-sm-8 col-md-4 mt-3">
         <h6 class="text-center">BANK BALANCE</h6>
         <div class="card">
             <div class="card-body">
                 <div class="card-text">
-                    <h1 class="text-center">£{{ balance }}</h1>
+                    <h4 class="text-center text-responsive">£{{ balance }}</h4>
                 </div>
             </div>
         </div>

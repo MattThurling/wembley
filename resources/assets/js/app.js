@@ -28,6 +28,8 @@ Vue.component('redraw-component', require('./components/RedrawComponent.vue').de
 Vue.component('round-component', require('./components/RoundComponent.vue').default);
 Vue.component('tournament-component', require('./components/TournamentComponent.vue').default);
 Vue.component('details-component', require('./components/DetailsComponent.vue').default);
+Vue.component('sell-component', require('./components/SellComponent.vue').default);
+Vue.component('side-component', require('./components/SideComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

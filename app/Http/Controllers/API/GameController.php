@@ -223,27 +223,6 @@ class GameController extends Controller
               'home_score' => $home,
               'away_score' => $away]);
 
-      // For now, away team goes through if it's a draw
-      // Bit of a hack to get the allocations - could be improved
-      $home_allocation = Allocation::find($home_allocation_id);
-      $away_allocation = Allocation::find($away_allocation_id);
-
-      $gate = $home_allocation->team->gate;
-
-      // TODO big refactor when adding proper game logic
-      if ($away >= $home) {
-          $home_allocation->update(['status' => -1]);
-          $home_allocation->player->balance += $gate / 3;
-          $away_allocation->update(['status' => 1]);
-          $away_allocation->player->balance += 2 * $gate / 3;
-      } else {
-          $home_allocation->update(['status' => 1]);
-          $home_allocation->player->balance += 2 * $gate / 3;
-          $away_allocation->update(['status' => -1]);
-          $away_allocation->player->balance += $gate / 3;
-      }
-      $home_allocation->player->save();
-      $away_allocation->player->save();
       broadcast(new UpdateTournamentEvent($tournament->id));
   }
 
@@ -253,15 +232,38 @@ class GameController extends Controller
   {
       $round = $tournament->round;
 
+      // Process results of last match
+      $match = $round->matches->where('position', $round->position)->first();
+
+      $gate = $match->home_allocation->team->gate;
+
+      // For now, away team goes through if it's a draw
+      // TODO big refactor when adding proper game logic
+      if ($match->away_score >= $match->home_score) {
+        $match->home_allocation->update(['status' => -1]);
+        $match->home_allocation->player->balance += $gate / 3;
+        $match->away_allocation->update(['status' => 1]);
+        $match->away_allocation->player->balance += 2 * $gate / 3;
+      } else {
+        $match->home_allocation->update(['status' => 1]);
+        $match->home_allocation->player->balance += 2 * $gate / 3;
+        $match->away_allocation->update(['status' => -1]);
+        $match->away_allocation->player->balance += $gate / 3;
+      }
+
+      $match->home_allocation->player->save();
+      $match->away_allocation->player->save();
+
       // Increment the round position
       if ($round->position < $round->number_of_matches) {
           $round->position++;
           $round->save();
+          broadcast(new UpdateTournamentEvent($tournament->id));
       } else {
           $next_matches = $round->number_of_matches/2;
-          return $this->round($tournament, $next_matches, 'Fifth Round');
+          $this->round($tournament, $next_matches, 'Fifth Round');
       }
-      broadcast(new UpdateTournamentEvent($tournament->id));
+      
   }
 
   // redraw a team and send it to the bottom of the queue

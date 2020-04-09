@@ -44,7 +44,7 @@
 
 <script>
     export default {
-        props: ['game', 'redrawHandler', 'owner']
+        props: ['game', 'redrawHandler']
     }
 
 </script>

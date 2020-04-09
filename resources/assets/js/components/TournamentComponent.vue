@@ -26,6 +26,10 @@
             :owner="game.owner"
             :game="game"
             :redrawHandler="redraw"/>
+        <sell-component
+            v-if="game.phase == 'sell'"
+            :game="game"
+            :sellHandler="sell"/>
         <match-component
             v-if="game.phase == 'match'"
             :owner="game.owner"
@@ -53,6 +57,7 @@
     import BankComponent from './BankComponent.vue';
     import RedrawComponent from './RedrawComponent.vue';
     import BidComponent from './BidComponent.vue';
+    import SellComponent from './SellComponent.vue';
     export default {
         components: {
             RoundComponent,
@@ -64,6 +69,7 @@
             DetailsComponent,
             BidComponent,
             RedrawComponent,
+            SellComponent,
         },
         props:['tournament_id', 'user'],
         data() {
@@ -134,6 +140,12 @@
             closeAuction() {
                 axios.post('/api/tournament/' + this.tournament_id + '/close-auction').then(response => {
                     console.log(response);
+                })
+            },
+            sell(id) {
+                axios.post('/api/tournament/' + this.tournament_id + '/sell', {team_id: id}).then(response => {
+                    console.log(response);
+
                 })
             },
             numberWithCommas(x) {
