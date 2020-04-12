@@ -10918,8 +10918,38 @@ body {
   border: none;
 }
 
+.top-flight {
+  background-color: #ed000088;
+}
+
+.mid-tier {
+  background-color: #1414e044;
+}
+
+.lower-league {
+  background-color: #37ed0088;
+}
+
+.key-top {
+  color: #ed000088;
+}
+
+.key-mid {
+  color: #1414e044;
+}
+
+.key-lower {
+  color: #37ed0088;
+}
+
+.card-team {
+  background-color: #00000000;
+}
+
 .card-body-team {
   max-height: 20px;
+  background-color: #f1f1f1dd;
+  color: #1b1b1b;
   padding: 0;
 }
 
@@ -10931,5 +10961,24 @@ body {
 
 .text-responsive {
   font-size: calc(80% + 1vw + 1vh);
+}
+
+tr {
+  line-height: 18x;
+  min-height: 18px;
+  height: 18px;
+}
+
+th {
+  color: #f1f1f1;
+  font-size: 11.5px;
+}
+
+.table thead th {
+  border-bottom: none;
+}
+
+.gate {
+  color: #f1f1f1;
 }
 

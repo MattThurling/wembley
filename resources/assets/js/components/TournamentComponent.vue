@@ -20,7 +20,9 @@
             v-if="game.phase == 'draw'"
             :owner="game.owner"
             :game="game"
-            :playMatchHandler="playMatch"/>
+            :playMatchHandler="playMatch"
+            :homeGate="numberWithCommas(game.home_team.gate)"
+            :awayGate="numberWithCommas(game.away_team.gate)"/>
         <redraw-component
             v-if="game.phase == 'redraw'"
             :owner="game.owner"

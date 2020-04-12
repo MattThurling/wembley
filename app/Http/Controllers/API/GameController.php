@@ -64,8 +64,8 @@ class GameController extends Controller
       // before a match actually takes place
       $phase = 'draw';
 
-      $home_team = $this->getNextUp->do($round, 1)->team; // 1 => home
-      $away_team = $this->getNextUp->do($round, 0)->team; // 0 => away
+      $home_team = $this->getNextUp->do($round, 1)->team->load('division', 'division.odds'); // 1 => home
+      $away_team = $this->getNextUp->do($round, 0)->team->load('division', 'division.odds');; // 0 => away
 
 
       // TODO Refactor the current user function, doesn't belong in team model
