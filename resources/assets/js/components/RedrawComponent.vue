@@ -1,50 +1,23 @@
 <template>
 
-    <div class="row no-gutters">
-
-        <div class="col-sm-8">
-            <div class="row">
-                <div class="col-8">
-                    <h4 class="mb-0">{{ game.home_team.nickname }}</h4>
-                    <p class="small">{{ game.home_user.name }}</p>
-                </div>
-                <div class="col-4">
-                    <button
-                        @click="redrawHandler('away')"
-                        class="btn btn-outline-primary btn-sm">
-                        Play
-                    </button>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-8">
-                    <h4 class="mb-0">{{ game.away_team.nickname }}</h4>
-                    <p class="small">{{ game.away_user.name }}</p>
-                </div>
-                <div class="col-4">
-                    <button
-                        @click="redrawHandler('home')"
-                        class="btn btn-outline-primary btn-sm">
-                        Play
-                    </button>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-sm-4 text-center mt-3 mb-3">
-            <p class="dealer-status">Waiting for player...</p>
-        </div>
-
-    </div>
-
+    <button
+        @click="handler"
+        class="btn btn-outline-primary btn-sm">
+        Play
+    </button>
 
 </template>
 
 <script>
     export default {
-        props: ['game', 'redrawHandler']
-    }
+        props: ['side'],
+        methods: {
+            handler() {
+                axios.post('/api/tournament/' + this.$store.getters.GET_TOURNAMENT_ID + '/redraw', {side: this.side}).then(response => {
+                    console.log(response);
+                });
+            }
+        }
+    };
 
 </script>

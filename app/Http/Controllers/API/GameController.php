@@ -15,6 +15,7 @@ use App\Round;
 use App\Match;
 use App\Chat;
 use App\Bid;
+use App\Star;
 use App\Events\ChatEvent;
 use App\Events\TournamentStarted;
 use App\Events\UpdateTournamentEvent;
@@ -148,7 +149,8 @@ class GameController extends Controller
             'match' => $match,
             'bid_side' => $bid_side,
             'high_bid_amount' => $high_bid_amount,
-            'high_bidder_name' => $high_bidder_name];
+            'high_bidder_name' => $high_bidder_name,
+            'stars' => $this->getStars($player)];
 
     return response()->json($data);
   }
@@ -355,5 +357,15 @@ class GameController extends Controller
     return $name;
   }
 
+  // Get a list of stars and whether the player has them and is playing them
+  private function getStars (Player $player)
+  {
+    $stars = DB::select (DB::raw("SELECT *
+                                  FROM stars
+                                  LEFT JOIN
+                                  (select star_id, play from player_star where player_id = '$player->id') as p 
+                                  ON id = star_id"));
+    return $stars;
+  }
 
 }

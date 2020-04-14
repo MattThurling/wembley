@@ -8,6 +8,20 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+//support vuex
+import Vuex from 'vuex';
+Vue.use(Vuex);
+import storeData from "./store/index";
+
+const store = new Vuex.Store(
+   storeData
+)
+
+import api from "./api/index";
+import helpers from "./helpers/index"
+Vue.mixin(api);
+Vue.mixin(helpers);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -30,6 +44,8 @@ Vue.component('tournament-component', require('./components/TournamentComponent.
 Vue.component('details-component', require('./components/DetailsComponent.vue').default);
 Vue.component('sell-component', require('./components/SellComponent.vue').default);
 Vue.component('side-component', require('./components/SideComponent.vue').default);
+Vue.component('boost-component', require('./components/BoostComponent.vue').default);
+Vue.component('control-component', require('./components/ControlComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -42,4 +58,5 @@ Vue.use(VueChatScroll)
 
 const app = new Vue({
     el: '#app',
+    store,
 });

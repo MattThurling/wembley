@@ -4,15 +4,10 @@
         <div class="card">
             <div class="card-body">
                 <div class="card-text">
-                    <h4 class="text-center text-responsive">£{{ balance }}</h4>
+                    <h4 class="text-center text-responsive">£{{ numberWithCommas($store.getters.GET_GAME.player.balance) }}</h4>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-<script>
-    export default {
-        props: ['balance'],
-    }
-</script>

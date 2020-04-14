@@ -108,6 +108,7 @@
                 })
             },
             goToTournament(id) {
+                
                 axios.get('/api/tournament/' + id + '/goto').then(response => {
                     if (response.data.message) window.location = "/tournament/" + id;
                 });

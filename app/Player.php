@@ -25,4 +25,9 @@ class Player extends Model
       return $this->hasMany('App\Allocation');
     }
 
+    public function stars()
+    {
+        return $this->belongsToMany('App\Star');
+    }
+
 }
