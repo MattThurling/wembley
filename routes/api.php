@@ -29,6 +29,8 @@ Route::group(['middleware' => 'auth:api'], function () {
   Route::post('tournament/{tournament}/bid', 'API\BidController@store');
   Route::post('tournament/{tournament}/sell', 'API\AllocationController@sell');
   Route::post('tournament/{tournament}/buy-star', 'API\StarController@buy');
+  Route::post('tournament/{tournament}/rest-star', 'API\StarController@rest');
+  Route::post('tournament/{tournament}/play-star', 'API\StarController@play');
   Route::post('tournament/{tournament}/close-auction', 'API\GameController@closeAuction');
   Route::get('tournament/{tournament}', 'API\GameController@show');
 

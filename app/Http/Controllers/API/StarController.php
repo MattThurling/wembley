@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Auth;
+use DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Star;
@@ -13,6 +14,7 @@ use App\Actions\GetNextUp;
 
 class StarController extends Controller
 {
+  // Purchase a star player
   public function buy (Tournament $tournament, Request $request)
   {
     $message = '';
@@ -32,6 +34,38 @@ class StarController extends Controller
     $player->stars()->attach($star);
     $player->balance -= $star->price;
     $player->save();
+    broadcast(new UpdateTournamentEvent($tournament->id));
+  }
+
+  // Choose not to deploy star
+  public function rest (Tournament $tournament, Request $request)
+  {
+    
+    $player = Player::where('user_id', Auth::id())
+                      ->where('tournament_id', $tournament->id)
+                      ->first();
+
+    DB::table('player_star')
+          ->where('player_id', $player->id)
+          ->where('star_id', $request->input('star_id'))
+          ->update(['play' => 0]);
+
+    broadcast(new UpdateTournamentEvent($tournament->id));
+  }
+
+  // Choose to deploy star
+  public function play (Tournament $tournament, Request $request)
+  {
+    
+    $player = Player::where('user_id', Auth::id())
+                      ->where('tournament_id', $tournament->id)
+                      ->first();
+
+    DB::table('player_star')
+          ->where('player_id', $player->id)
+          ->where('star_id', $request->input('star_id'))
+          ->update(['play' => 1]);
+
     broadcast(new UpdateTournamentEvent($tournament->id));
   }
 }

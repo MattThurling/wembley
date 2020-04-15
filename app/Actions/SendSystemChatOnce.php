@@ -18,7 +18,7 @@ class SendSystemChatOnce
         $chat = Auth::user()
                   ->messages()
                   ->create([
-                    'message' => 'Teams are owned by the same player. Choose who plays!',
+                    'message' => $message,
                     'tournament_id' => $tournament->id,
                     'system_signature' => $signature]);
 

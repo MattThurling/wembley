@@ -3,7 +3,7 @@
     <template v-if="xGame.owner">
       <button
           @click="handler" class="btn btn-primary btn-lg">
-          {{ buttonAction }}
+          {{ buttonText }}
       </button>
     </template>
   </div>
@@ -20,6 +20,12 @@
         if (this.xGame.phase == 'round') verb = '';
         if (this.xGame.phase == 'match') verb = 'next';
         return verb;
+      },
+      buttonText: function() {
+        let text = 'Play';
+        if (this.xGame.phase == 'round') text = 'Start';
+        if (this.xGame.phase == 'match') text = 'Next';
+        return text;
       }
     },
     methods: {

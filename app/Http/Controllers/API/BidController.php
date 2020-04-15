@@ -10,15 +10,17 @@ use App\Player;
 use App\Tournament;
 use App\Events\UpdateTournamentEvent;
 use App\Actions\GetNextUp;
+use App\Actions\SendSystemChatOnce;
 
 class BidController extends Controller
 {
 
   public $getNextUp;
 
-  public function __construct (GetNextUp $getNextUp)
+  public function __construct (GetNextUp $getNextUp, SendSystemChatOnce $systemChat)
   {
     $this->getNextUp = $getNextUp;
+    $this->systemChat = $systemChat;
   }
 
   public function store (Tournament $tournament, Request $request)
@@ -45,6 +47,8 @@ class BidController extends Controller
 
     if ($amount > $player->balance) $message = "That's more than you've got";
 
+    \Log::info($message);
+
     if ($message) return response()->json(['message' => $message], 403);
 
     $round = $tournament->round;
@@ -64,6 +68,10 @@ class BidController extends Controller
           'position' => $tournament->round->position,
           'player_id' => $player->id,
           'team_id' => $team->id]);
+
+    $system_message = $player->user->name . ' has bid £' . number_format($amount) . ' for ' . $team->nickname;
+
+    $this->systemChat->do($tournament, $system_message, $system_message); 
 
     broadcast(new UpdateTournamentEvent($tournament->id));
   }

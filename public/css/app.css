@@ -10982,3 +10982,7 @@ th {
   color: #f1f1f1;
 }
 
+.clickball {
+  cursor: pointer;
+}
+

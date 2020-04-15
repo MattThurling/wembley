@@ -22,7 +22,13 @@ class TournamentController extends Controller
   // Show information for all tournaments
   public function index ()
   {
-    $tournaments = Tournament::all()->load('owner','players','players.user');
+    $tournaments = Tournament::where('status', 0)->get()->load('owner','players','players.user');
+
+    foreach (Auth::user()->players as $player) {
+      $tournament = $player->tournament()->where('status', 1)->first();
+      if ($tournament) $tournaments->push($tournament->load('owner','players','players.user'));
+    }
+
     return response()->json(['data' => $tournaments]);
   }
 

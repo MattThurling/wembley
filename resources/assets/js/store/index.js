@@ -8,8 +8,8 @@ export default {
         away_team: {gate: 0, division: {}},
         player: {balance:0},
         high_bid_amount: 0,
-        home_user: {},
-        away_user: {},
+        home_player: {user: {}, stars: []},
+        away_player: {user: {}, stars: []},
         round: {},
         owner: false,
         bid: {

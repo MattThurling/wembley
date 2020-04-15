@@ -5,7 +5,8 @@
             <div class="row">
                 <side-component
                 :teamName="xGame.home_team.nickname"
-                :userName="xGame.home_user ? xGame.home_user.name : 'FOR SALE'"
+                :userName="xGame.home_player ? xGame.home_player.user.name : 'FOR SALE'"
+                :player="xGame.home_player"
                 :division="xGame.home_team.division.level"
                 :gate="numberWithCommas(xGame.home_team.gate)" />
 
@@ -32,14 +33,17 @@
                     <h1 v-if="xGame.phase == 'match'">{{ xGame.match.home_score }}</h1>
                     <redraw-component v-if="xGame.phase == 'redraw'" side="away" />
                     <sell-component v-if="xGame.phase == 'sell'" :id="xGame.home_team.id" />
-                    <boost-component v-if="xGame.phase == 'draw'" />
+                    <boost-component
+                        v-if="xGame.phase == 'draw'"
+                        :player="xGame.home_player" />
                 </div>
             </div>
 
             <div class="row">
                 <side-component
                 :teamName="xGame.away_team.nickname"
-                :userName="xGame.away_user ? xGame.away_user.name : 'FOR SALE'"
+                :userName="xGame.away_player ? xGame.away_player.user.name : 'FOR SALE'"
+                :player="xGame.away_player"
                 :division="xGame.away_team.division.level"
                 :gate="numberWithCommas(xGame.away_team.gate)"/>
 
@@ -67,7 +71,9 @@
                     <h1 v-if="xGame.phase == 'match'">{{ xGame.match.away_score }}</h1>
                     <redraw-component v-if="xGame.phase == 'redraw'" side="home" />
                     <sell-component v-if="xGame.phase == 'sell'" :id="xGame.away_team.id" />
-                    <boost-component v-if="xGame.phase == 'draw'" />
+                    <boost-component
+                        v-if="xGame.phase == 'draw'"
+                        :player="xGame.away_player"/>
                 </div>
 
             </div>

@@ -2018,19 +2018,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['player'],
   data: function data() {
     return {
       selected: 0
     };
   },
+  computed: {
+    activeStars: function activeStars() {
+      if (this.player) {
+        return this.player.stars.filter(function (star) {
+          return star.pivot.play == 1;
+        });
+      }
+    },
+    auth: function auth() {
+      if (this.$store.getters.GET_GAME.player.id == this.player.id) return true;
+    }
+  },
   methods: {
-    handler: function handler() {
+    buyStar: function buyStar() {
       axios.post('/api/tournament/' + this.$store.getters.GET_TOURNAMENT_ID + '/buy-star', {
         'star_id': this.selected
       }).then(function (response) {
         return console.log(response.data);
       });
+    },
+    restStar: function restStar(id) {
+      if (this.auth) {
+        axios.post('/api/tournament/' + this.$store.getters.GET_TOURNAMENT_ID + '/rest-star', {
+          'star_id': id
+        }).then(function (response) {
+          return console.log(response.data);
+        });
+      }
+    },
+    getDisabled: function getDisabled(id) {
+      if (this.player.stars.filter(function (star) {
+        return star.id == id;
+      }).length) return true;
     }
   }
 });
@@ -2203,6 +2238,12 @@ __webpack_require__.r(__webpack_exports__);
       if (this.xGame.phase == 'round') verb = '';
       if (this.xGame.phase == 'match') verb = 'next';
       return verb;
+    },
+    buttonText: function buttonText() {
+      var text = 'Play';
+      if (this.xGame.phase == 'round') text = 'Start';
+      if (this.xGame.phase == 'match') text = 'Next';
+      return text;
     }
   },
   methods: {
@@ -2488,6 +2529,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2655,8 +2702,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['teamName', 'userName', 'division', 'gate'],
+  props: ['player', 'teamName', 'userName', 'division', 'gate'],
+  computed: {
+    restingStars: function restingStars() {
+      if (this.player) {
+        return this.player.stars.filter(function (star) {
+          return star.pivot.play == 0;
+        });
+      }
+    },
+    auth: function auth() {
+      if (this.$store.getters.GET_GAME.player.id == this.player.id) return true;
+    }
+  },
   methods: {
     getClass: function getClass(division) {
       var myClass = "";
@@ -2664,6 +2728,16 @@ __webpack_require__.r(__webpack_exports__);
       if (division == 2) myClass = "mid-tier";
       if (division == 3) myClass = "lower-league";
       return myClass;
+    },
+    playStar: function playStar(id) {
+      if (this.auth) {
+        console.log(id);
+        axios.post('/api/tournament/' + this.$store.getters.GET_TOURNAMENT_ID + '/play-star', {
+          'star_id': id
+        }).then(function (response) {
+          return console.log(response.data);
+        });
+      }
     }
   }
 });
@@ -48975,65 +49049,101 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "input-group" }, [
-    _c(
-      "select",
-      {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.selected,
-            expression: "selected"
-          }
-        ],
-        staticClass: "custom-select custom-select-sm",
-        on: {
-          change: function($event) {
-            var $$selectedVal = Array.prototype.filter
-              .call($event.target.options, function(o) {
-                return o.selected
+  return _c("div", [
+    _vm.auth
+      ? _c("div", { staticClass: "input-group" }, [
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.selected,
+                  expression: "selected"
+                }
+              ],
+              staticClass: "custom-select custom-select-sm",
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.selected = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
+            },
+            [
+              _c("option", { attrs: { value: "0", selected: "" } }, [
+                _vm._v("Boost...")
+              ]),
+              _vm._v(" "),
+              _vm._l(_vm.$store.getters.GET_GAME.stars, function(star, index) {
+                return _c(
+                  "option",
+                  {
+                    attrs: { disabled: _vm.getDisabled(star.id) },
+                    domProps: { value: star.id }
+                  },
+                  [
+                    _vm._v(
+                      "\n        " +
+                        _vm._s(star.type) +
+                        " (£" +
+                        _vm._s(_vm.numberWithCommas(star.price)) +
+                        ")   \n      "
+                    )
+                  ]
+                )
               })
-              .map(function(o) {
-                var val = "_value" in o ? o._value : o.value
-                return val
-              })
-            _vm.selected = $event.target.multiple
-              ? $$selectedVal
-              : $$selectedVal[0]
-          }
-        }
-      },
-      [
-        _c("option", { attrs: { value: "0", selected: "" } }, [
-          _vm._v("Boost...")
-        ]),
-        _vm._v(" "),
-        _vm._l(_vm.$store.getters.GET_GAME.stars, function(star, index) {
-          return _c("option", { domProps: { value: star.id } }, [
-            _vm._v(
-              _vm._s(star.type) +
-                " (£" +
-                _vm._s(_vm.numberWithCommas(star.price)) +
-                ")\n    "
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group-append" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-primary btn-sm",
+                attrs: { type: "button" },
+                on: { click: _vm.buyStar }
+              },
+              [_vm._v("Buy")]
             )
           ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c(
+      "p",
+      { staticClass: "mt-2" },
+      [
+        _vm._l(_vm.activeStars, function(star) {
+          return [
+            _c(
+              "span",
+              {
+                class: { clickball: _vm.auth },
+                on: {
+                  click: function($event) {
+                    return _vm.restStar(star.id)
+                  }
+                }
+              },
+              [_vm._v("⚽")]
+            )
+          ]
         })
       ],
       2
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "input-group-append" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-outline-primary btn-sm",
-          attrs: { type: "button" },
-          on: { click: _vm.handler }
-        },
-        [_vm._v("Buy")]
-      )
-    ])
+    )
   ])
 }
 var staticRenderFns = []
@@ -49196,7 +49306,7 @@ var render = function() {
                 staticClass: "btn btn-primary btn-lg",
                 on: { click: _vm.handler }
               },
-              [_vm._v("\n        " + _vm._s(_vm.buttonAction) + "\n    ")]
+              [_vm._v("\n        " + _vm._s(_vm.buttonText) + "\n    ")]
             )
           ]
         : _vm._e()
@@ -49518,9 +49628,10 @@ var render = function() {
             _c("side-component", {
               attrs: {
                 teamName: _vm.xGame.home_team.nickname,
-                userName: _vm.xGame.home_user
-                  ? _vm.xGame.home_user.name
+                userName: _vm.xGame.home_player
+                  ? _vm.xGame.home_player.user.name
                   : "FOR SALE",
+                player: _vm.xGame.home_player,
                 division: _vm.xGame.home_team.division.level,
                 gate: _vm.numberWithCommas(_vm.xGame.home_team.gate)
               }
@@ -49585,7 +49696,11 @@ var render = function() {
                     })
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.xGame.phase == "draw" ? _c("boost-component") : _vm._e()
+                _vm.xGame.phase == "draw"
+                  ? _c("boost-component", {
+                      attrs: { player: _vm.xGame.home_player }
+                    })
+                  : _vm._e()
               ],
               1
             )
@@ -49600,9 +49715,10 @@ var render = function() {
             _c("side-component", {
               attrs: {
                 teamName: _vm.xGame.away_team.nickname,
-                userName: _vm.xGame.away_user
-                  ? _vm.xGame.away_user.name
+                userName: _vm.xGame.away_player
+                  ? _vm.xGame.away_player.user.name
                   : "FOR SALE",
+                player: _vm.xGame.away_player,
                 division: _vm.xGame.away_team.division.level,
                 gate: _vm.numberWithCommas(_vm.xGame.away_team.gate)
               }
@@ -49667,7 +49783,11 @@ var render = function() {
                     })
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.xGame.phase == "draw" ? _c("boost-component") : _vm._e()
+                _vm.xGame.phase == "draw"
+                  ? _c("boost-component", {
+                      attrs: { player: _vm.xGame.away_player }
+                    })
+                  : _vm._e()
               ],
               1
             )
@@ -49831,6 +49951,30 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "col-4" }, [
+    _c(
+      "p",
+      { staticClass: "small mb-0" },
+      [
+        _vm._l(_vm.restingStars, function(star) {
+          return [
+            _c(
+              "span",
+              {
+                class: { clickball: _vm.auth },
+                on: {
+                  click: function($event) {
+                    return _vm.playStar(star.id)
+                  }
+                }
+              },
+              [_vm._v("⚽")]
+            )
+          ]
+        })
+      ],
+      2
+    ),
+    _vm._v(" "),
     _c("p", { staticClass: "small mb-0" }, [_vm._v(_vm._s(_vm.userName))]),
     _vm._v(" "),
     _c("h4", { staticClass: "mb-0" }, [_vm._v(_vm._s(_vm.teamName))]),
@@ -63265,7 +63409,6 @@ Vue.component('chat-component', __webpack_require__(/*! ./components/ChatCompone
 Vue.component('match-component', __webpack_require__(/*! ./components/MatchComponent.vue */ "./resources/assets/js/components/MatchComponent.vue")["default"]);
 Vue.component('lobby-component', __webpack_require__(/*! ./components/LobbyComponent.vue */ "./resources/assets/js/components/LobbyComponent.vue")["default"]);
 Vue.component('teams-component', __webpack_require__(/*! ./components/TeamsComponent.vue */ "./resources/assets/js/components/TeamsComponent.vue")["default"]);
-Vue.component('draw-component', __webpack_require__(/*! ./components/DrawComponent.vue */ "./resources/assets/js/components/DrawComponent.vue")["default"]);
 Vue.component('redraw-component', __webpack_require__(/*! ./components/RedrawComponent.vue */ "./resources/assets/js/components/RedrawComponent.vue")["default"]);
 Vue.component('round-component', __webpack_require__(/*! ./components/RoundComponent.vue */ "./resources/assets/js/components/RoundComponent.vue")["default"]);
 Vue.component('tournament-component', __webpack_require__(/*! ./components/TournamentComponent.vue */ "./resources/assets/js/components/TournamentComponent.vue")["default"]);
@@ -63788,17 +63931,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsComponent_vue_vue_type_template_id_44233992___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/DrawComponent.vue":
-/*!**********************************************************!*\
-  !*** ./resources/assets/js/components/DrawComponent.vue ***!
-  \**********************************************************/
-/*! exports provided: default */
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed (from ./node_modules/vue-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/Users/mattthurling/Documents/Dev/wembley/resources/assets/js/components/DrawComponent.vue'");
 
 /***/ }),
 
@@ -64485,8 +64617,14 @@ __webpack_require__.r(__webpack_exports__);
         balance: 0
       },
       high_bid_amount: 0,
-      home_user: {},
-      away_user: {},
+      home_player: {
+        user: {},
+        stars: []
+      },
+      away_player: {
+        user: {},
+        stars: []
+      },
       round: {},
       owner: false,
       bid: {

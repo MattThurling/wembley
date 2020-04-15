@@ -8,7 +8,7 @@ use DB;
 
 class Team extends Model
 {
-  // Gets the user behind the player who currently owns the team
+  // Gets the user behind the player who currently owns the team TODO - don't think this is used and it doesn't belong here
   public function current_user(Tournament $tournament)
   {
     $user = DB::table('allocations')
@@ -25,7 +25,7 @@ class Team extends Model
 
   public function allocation(Tournament $tournament)
   {
-    // Gets the linking record of the team the player is allocated to in the current tournament
+    // Gets the linking record of the team the player is allocated to in the current tournament TODO - don't think this is used and it doesn't belong here
     $allocation = DB::table('allocations')
                       ->join('players', 'allocations.player_id', '=', 'players.id')
                       ->join('tournaments', 'players.tournament_id', '=', 'tournaments.id')
