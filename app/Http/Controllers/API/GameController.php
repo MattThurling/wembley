@@ -49,6 +49,7 @@ class GameController extends Controller
                             ->where('status', '!=', -1)
                             ->load('team', 'team.division');
 
+    $message = '';
     $phase = 'round';
     $round = $tournament->round;
     $home_team = null;
@@ -72,6 +73,8 @@ class GameController extends Controller
 
       $home_allocation = $this->getAllocation($tournament, $home_team);
       $away_allocation = $this->getAllocation($tournament, $away_team);
+
+      
       
       // Check for unallocated teams
       if (!$away_allocation) {
@@ -113,10 +116,17 @@ class GameController extends Controller
         } else {
           $phase = 'redraw';
           // System messages have a unique signature to prevent duplication
-          $signature = $round->id . $round->position . $phase;
-          $message = 'Teams are owned by the same player. Choose who plays!';
-          $this->systemChat->do($tournament, $message, $signature);
+          $signature = $round->id . $round->position . $phase . 'same-owner';
+          $message = __('messages.same-owner', ['owner' => $home_player->user->name]);
+          
         }
+      } else {
+
+        if ($home_player && $away_player) $message = __('messages.boost-help', [
+                                        'home_user' => $home_player->user->name,
+                                        'away_user' => $away_player->user->name]);
+
+        $signature = $tournament->id . 'boost-help';
       }
     
       
@@ -156,6 +166,7 @@ class GameController extends Controller
             'high_bidder_name' => $high_bidder_name,
             'stars' => $this->getStars($player)];
 
+    if ($message) $this->systemChat->do($tournament, $message, $signature);
     return response()->json($data);
   }
 
@@ -238,35 +249,40 @@ class GameController extends Controller
   // Move on to the next draw of the round
   public function next(Tournament $tournament)
   {
-      $round = $tournament->round;
+    $message = '';
+    $round = $tournament->round;
 
-      // Process results of last match
-      $match = $round->matches->where('position', $round->position)->first();
+    // Process results of last match
+    $match = $round->matches->where('position', $round->position)->first();
 
-      $gate = $match->home_allocation->team->gate;
+    $gate = $match->home_allocation->team->gate;
 
-      // For now, away team goes through if it's a draw
-      if ($match->away_score >= $match->home_score) {
-        $this->processMatchResult($match->home_allocation, $gate, 'lose');
-        $this->processMatchResult($match->away_allocation, $gate, 'win');    
-      } else {
-        $this->processMatchResult($match->away_allocation, $gate, 'lose');
-        $this->processMatchResult($match->home_allocation, $gate, 'win');   
-      }
+    // For now, away team goes through if it's a draw
+    if ($match->away_score >= $match->home_score) {
+      $this->processMatchResult($match->home_allocation, $gate, 'lose');
+      $this->processMatchResult($match->away_allocation, $gate, 'win');    
+    } else {
+      $this->processMatchResult($match->away_allocation, $gate, 'lose');
+      $this->processMatchResult($match->home_allocation, $gate, 'win');   
+    }
 
-      // Increment the round position
-      if ($round->position < $round->number_of_matches) {
-          $round->position++;
-          $round->save();
-          broadcast(new UpdateTournamentEvent($tournament->id));
-      } else {
-          $next_matches = $round->number_of_matches/2;
-          $name = $this->getRoundName($next_matches);
-          $message = "It's the " . $name . '!';
-          $this->systemChat->do($tournament, $message, $message);
-          $this->round($tournament, $next_matches, $name);
-      }
-      
+    // Increment the round position
+    if ($round->position < $round->number_of_matches) {
+        $round->position++;
+        $round->save();
+        broadcast(new UpdateTournamentEvent($tournament->id));
+    } else {
+        $next_matches = $round->number_of_matches/2;
+        $name = $this->getRoundName($next_matches);
+        $message = "It's the " . $name . '!';
+        $signature = $message;
+        
+        $this->round($tournament, $next_matches, $name);
+    }
+    
+    $message = __('messages.gate-help', ['home_team' => $match->home_allocation->team->nickname]);
+    $signature = $tournament->id . 'gate-help'; // so it only gets sent once
+    if ($message) $this->systemChat->do($tournament, $message, $signature);
   }
 
   // redraw a team and send it to the bottom of the queue
