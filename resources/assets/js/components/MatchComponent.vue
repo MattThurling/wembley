@@ -4,7 +4,7 @@
         <div class="col-sm-8">
             <div class="row">
                 <div class="col-8">
-                    <h4 class="mb-0">{{ game.match.home_allocation.team.nickname }}</h4>
+                    <h4 class="mb-0">{{ game.match.home_allocation.team.name }}</h4>
                     <p class="small">{{ game.match.home_allocation.player.user.name }}</p>
                 </div>
                 <div class="col-4">
@@ -14,7 +14,7 @@
 
             <div class="row">
                 <div class="col-8">
-                    <h4 class="mb-0">{{ game.match.away_allocation.team.nickname }}</h4>
+                    <h4 class="mb-0">{{ game.match.away_allocation.team.name }}</h4>
                     <p class="small">{{ game.match.away_allocation.player.user.name }}</p>
                 </div>
                 <div class="col-4">

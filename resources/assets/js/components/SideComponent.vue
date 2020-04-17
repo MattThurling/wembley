@@ -1,5 +1,5 @@
 <template>
-  <div class="col-4">
+  <div>
     <p class="small mb-0">
       <template v-for="star in restingStars">
         <span :class=" {clickball: auth }" @click="playStar(star.id)">⚽</span>
@@ -14,13 +14,18 @@
           <th class="py-0 gate text-right">£{{gate}}</th>
         </tr>
       </thead>
-    </table>    
-  </div>
+    </table>
+  </div>     
 </template>
 
 <script>
   export default {
     props: ['player', 'teamName', 'userName', 'division', 'gate'],
+    data() {
+      return {
+        count: 0
+      }
+    },
     computed: {
       restingStars: function() {
         if (this.player) {
@@ -47,7 +52,7 @@
           axios.post('/api/tournament/' + this.$store.getters.GET_TOURNAMENT_ID + '/play-star', {'star_id': id}).
           then(response => console.log(response.data));
         }
-      }
+      },
     }
   };
 </script>

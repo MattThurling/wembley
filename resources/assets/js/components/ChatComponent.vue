@@ -9,7 +9,7 @@
             Live <small class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</small>
           </div>
           <div class="card-body p-0">
-             <ul id="chat-list" class="list-unstyled" style="height:100px; overflow-y:hidden" v-chat-scroll>
+             <ul id="chat-list" class="list-unstyled" v-chat-scroll>
                  <li class="pl-2" v-for="(message, index) in messages" :key="index" >
                      <span v-if="message.system_signature">🏆</span>
                      <strong v-else>{{ message.user.name}}</strong>

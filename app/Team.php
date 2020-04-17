@@ -8,6 +8,18 @@ use DB;
 
 class Team extends Model
 {
+  // Custom attributes
+  protected $appends = ['name'];
+
+  /**
+   * The attributes that should be hidden for arrays.
+   *
+   * @var array
+   */
+  protected $hidden = [
+      'fullname', 'shortname', 'nickname', 'shirt_colour', 'shorts_colour'
+  ];
+
   // Gets the user behind the player who currently owns the team TODO - don't think this is used and it doesn't belong here
   public function current_user(Tournament $tournament)
   {
@@ -35,6 +47,11 @@ class Team extends Model
                       ->where('tournaments.id', $tournament->id);
 
     return $allocation;
+  }
+
+  public function getNameAttribute () 
+  {
+    return $this->{config('app.team_name_column')};
   }
 
   public function division ()

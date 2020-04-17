@@ -5,7 +5,7 @@
             <div v-for="allocation in $store.getters.GET_GAME.allocations" class="col-6 col-md-3">
                 <div class="card card-team mb-2">
                     <div class="card-header text-center m-0 p-0" :class="getStatusClass(allocation)">
-                        <p class="text-small p-0 m-0">{{ allocation.team.nickname }}</p>
+                        <p class="text-small p-0 m-0">{{ allocation.team.name }}</p>
                     </div>
 
                     <div

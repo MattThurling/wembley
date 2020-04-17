@@ -4,6 +4,9 @@ return [
 
     'minimum_bid' => 10000,
 
+    // Allows switching between real names and nicknames
+    'team_name_column' => 'shortname',
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

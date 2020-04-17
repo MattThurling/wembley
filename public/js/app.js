@@ -1924,17 +1924,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {
     xGame: function xGame() {
       return this.$store.getters.GET_GAME;
-    }
-  },
-  methods: {
-    handler: function handler() {
-      axios.post('/api/tournament/' + this.$store.getters.GET_TOURNAMENT_ID + '/close-auction').then(function (response) {
-        console.log(response);
-      });
     }
   }
 });
@@ -2226,29 +2222,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {
     xGame: function xGame() {
       return this.$store.getters.GET_GAME;
     },
-    buttonAction: function buttonAction() {
-      var verb = 'match'; // default for draw, redraw and bid phases
+    context: function context() {
+      var verb = 'match';
+      var buttonText = 'Play';
+      var punterText = '';
 
-      if (this.xGame.phase == 'round') verb = '';
-      if (this.xGame.phase == 'match') verb = 'next';
-      return verb;
-    },
-    buttonText: function buttonText() {
-      var text = 'Play';
-      if (this.xGame.phase == 'round') text = 'Start';
-      if (this.xGame.phase == 'match') text = 'Next';
-      return text;
+      if (this.xGame.phase == 'round') {
+        verb = '';
+        buttonText = 'Start';
+        punterText = 'Waiting for dealer';
+      }
+
+      if (this.xGame.phase == 'match') {
+        verb = 'next';
+        buttonText = 'Next';
+        punterText = 'Waiting for dealer';
+      }
+
+      if (this.xGame.phase == 'bid') {
+        verb = 'close-auction';
+        buttonText = 'Close auction';
+        punterText = 'Waiting for dealer';
+      }
+
+      return {
+        verb: verb,
+        buttonText: buttonText,
+        punterText: punterText
+      };
     }
   },
   methods: {
     handler: function handler() {
-      this.apiPost('tournament/' + this.xGame.tournament.id + '/' + this.buttonAction, {});
+      this.apiPost('tournament/' + this.xGame.tournament.id + '/' + this.context.verb, {});
     }
   }
 });
@@ -2535,6 +2546,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2546,6 +2581,12 @@ __webpack_require__.r(__webpack_exports__);
     AuctionComponent: _AuctionComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     SellComponent: _SellComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
+  data: function data() {
+    return {
+      // For testing animations
+      count: 0
+    };
+  },
   methods: {
     strokeEnd: function strokeEnd(x) {
       return 20 + x * 0.18;
@@ -2556,6 +2597,9 @@ __webpack_require__.r(__webpack_exports__);
       if (division == 2) style += "#1414e044;";
       if (division == 3) style += "#37ed0088;";
       return style;
+    },
+    triggerCount: function triggerCount() {
+      this.count++;
     }
   },
   computed: {
@@ -2709,6 +2753,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['player', 'teamName', 'userName', 'division', 'gate'],
+  data: function data() {
+    return {
+      count: 0
+    };
+  },
   computed: {
     restingStars: function restingStars() {
       if (this.player) {
@@ -2803,6 +2852,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DetailsComponent_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DetailsComponent.vue */ "./resources/assets/js/components/DetailsComponent.vue");
 /* harmony import */ var _BankComponent_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./BankComponent.vue */ "./resources/assets/js/components/BankComponent.vue");
 /* harmony import */ var _PlayComponent_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PlayComponent.vue */ "./resources/assets/js/components/PlayComponent.vue");
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -48893,38 +48949,44 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-sm-4 text-center mb-3" }, [
-    _vm.xGame.bid_side == "home"
-      ? _c("h5", [
-          _vm._v("Auction for " + _vm._s(_vm.xGame.home_team.nickname))
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.xGame.bid_side == "away"
-      ? _c("h5", [
-          _vm._v("Auction for " + _vm._s(_vm.xGame.away_team.nickname))
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _c("p", { staticClass: "text-small mb-0" }, [_vm._v("Highest bid:")]),
-    _vm._v(" "),
-    _c("p", [
-      _vm._v(
-        _vm._s(_vm.xGame.high_bidder_name) +
-          ": £" +
-          _vm._s(_vm.numberWithCommas(_vm.xGame.high_bid_amount))
-      )
-    ]),
-    _vm._v(" "),
-    _vm.xGame.owner
-      ? _c(
-          "button",
-          { staticClass: "btn btn-primary btn-lg", on: { click: _vm.handler } },
-          [_vm._v("\n        Close auction\n    ")]
+  return _c("div", { staticClass: "card auction" }, [
+    _c(
+      "div",
+      { staticClass: "card-body text-center" },
+      [
+        _vm.xGame.bid_side == "home"
+          ? _c("h5", { staticClass: "card-title mb-0" }, [
+              _vm._v("Auction for " + _vm._s(_vm.xGame.home_team.name))
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.xGame.bid_side == "away"
+          ? _c("h5", { staticClass: "card-title mb-0" }, [
+              _vm._v("Auction for " + _vm._s(_vm.xGame.away_team.name))
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("p", { staticClass: "card-text mb-0" }, [
+          _c("span", { staticClass: "small" }, [_vm._v("Highest bid:")]),
+          _vm._v(" " + _vm._s(_vm.xGame.high_bidder_name))
+        ]),
+        _vm._v(" "),
+        _c(
+          "transition",
+          {
+            attrs: { name: "fade", "enter-active-class": "animated bounceIn" }
+          },
+          [
+            _c("h3", { key: _vm.xGame.high_bid_amount }, [
+              _vm._v(
+                "£" + _vm._s(_vm.numberWithCommas(_vm.xGame.high_bid_amount))
+              )
+            ])
+          ]
         )
-      : _c("p", { staticClass: "dealer-status" }, [
-          _vm._v("Waiting for dealer...")
-        ])
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -49189,7 +49251,6 @@ var render = function() {
               {
                 directives: [{ name: "chat-scroll", rawName: "v-chat-scroll" }],
                 staticClass: "list-unstyled",
-                staticStyle: { height: "100px", "overflow-y": "hidden" },
                 attrs: { id: "chat-list" }
               },
               _vm._l(_vm.messages, function(message, index) {
@@ -49294,25 +49355,13 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "col-sm-4 text-center mb-3" },
-    [
-      _vm.xGame.owner
-        ? [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary btn-lg",
-                on: { click: _vm.handler }
-              },
-              [_vm._v("\n        " + _vm._s(_vm.buttonText) + "\n    ")]
-            )
-          ]
-        : _vm._e()
-    ],
-    2
-  )
+  return _vm.xGame.owner
+    ? _c(
+        "button",
+        { staticClass: "btn btn-primary", on: { click: _vm.handler } },
+        [_vm._v("\n    " + _vm._s(_vm.context.buttonText) + "\n")]
+      )
+    : _c("p", [_vm._v(_vm._s(_vm.context.punterText))])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -49336,46 +49385,61 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("p", { staticClass: "mb-0" }, [
-      _vm._v(
-        "\n      " +
-          _vm._s(_vm.$store.getters.GET_GAME.round.name) +
-          " | Match " +
-          _vm._s(_vm.$store.getters.GET_GAME.round.position) +
-          " of " +
-          _vm._s(_vm.$store.getters.GET_GAME.round.number_of_matches) +
-          "\n      \n  "
-      )
-    ]),
-    _vm._v(" "),
-    _c("p", { staticClass: "text-sm" }, [
-      _vm._v("\n    Win "),
-      _c("strong", [
-        _vm._v(
-          "£" +
-            _vm._s(
-              _vm.numberWithCommas(
-                (2 * _vm.$store.getters.GET_GAME.home_team.gate) / 3
-              )
+  return _c(
+    "div",
+    [
+      _c(
+        "transition",
+        {
+          attrs: {
+            name: "details-appear",
+            "enter-active-class": "animated bounceIn"
+          }
+        },
+        [
+          _c("p", { staticClass: "mb-0 small" }, [
+            _vm._v(
+              "\n        " +
+                _vm._s(_vm.$store.getters.GET_GAME.round.name) +
+                " | Match " +
+                _vm._s(_vm.$store.getters.GET_GAME.round.position) +
+                " of " +
+                _vm._s(_vm.$store.getters.GET_GAME.round.number_of_matches) +
+                "\n        \n    "
             )
-        )
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("p", { staticClass: "small" }, [
+        _vm._v("\n    Win "),
+        _c("strong", [
+          _vm._v(
+            "£" +
+              _vm._s(
+                _vm.numberWithCommas(
+                  (2 * _vm.$store.getters.GET_GAME.home_team.gate) / 3
+                )
+              )
+          )
+        ]),
+        _vm._v(" | Lose "),
+        _c("strong", [
+          _vm._v(
+            "£" +
+              _vm._s(
+                _vm.numberWithCommas(
+                  _vm.$store.getters.GET_GAME.home_team.gate / 3
+                )
+              )
+          )
+        ])
       ]),
-      _vm._v(" | Lose "),
-      _c("strong", [
-        _vm._v(
-          "£" +
-            _vm._s(
-              _vm.numberWithCommas(
-                _vm.$store.getters.GET_GAME.home_team.gate / 3
-              )
-            )
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _c("hr")
-  ])
+      _vm._v(" "),
+      _c("hr")
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -49548,7 +49612,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(_vm._s(_vm.game.match.home_allocation.team.nickname))
+            _vm._v(_vm._s(_vm.game.match.home_allocation.team.name))
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
@@ -49564,7 +49628,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-8" }, [
           _c("h4", { staticClass: "mb-0" }, [
-            _vm._v(_vm._s(_vm.game.match.away_allocation.team.nickname))
+            _vm._v(_vm._s(_vm.game.match.away_allocation.team.name))
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "small" }, [
@@ -49616,91 +49680,34 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "row no-gutters" },
-    [
-      _c("div", { staticClass: "col-sm-8" }, [
+  return _c("div", { staticClass: "row no-gutters" }, [
+    _c("div", { staticClass: "col-sm-8" }, [
+      _c("div", { staticClass: "row" }, [
         _c(
           "div",
-          { staticClass: "row" },
+          { staticClass: "col-4" },
           [
-            _c("side-component", {
-              attrs: {
-                teamName: _vm.xGame.home_team.nickname,
-                userName: _vm.xGame.home_player
-                  ? _vm.xGame.home_player.user.name
-                  : "FOR SALE",
-                player: _vm.xGame.home_player,
-                division: _vm.xGame.home_team.division.level,
-                gate: _vm.numberWithCommas(_vm.xGame.home_team.gate)
-              }
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-4 mb-3" }, [
-              _c(
-                "svg",
-                {
-                  attrs: {
-                    viewBox: "0 0 130 55",
-                    xmlns: "http://www.w3.org/2000/svg"
-                  }
-                },
-                [
-                  _vm._l(_vm.xGame.home_team.division.odds, function(odd, i) {
-                    return [
-                      _c(
-                        "text",
-                        {
-                          staticClass: "goals",
-                          attrs: { x: "7", y: 53 - 8 * i }
-                        },
-                        [_vm._v(_vm._s(i))]
-                      ),
-                      _vm._v(" "),
-                      _c("line", {
-                        style: _vm.getStyle(_vm.xGame.home_team.division.level),
-                        attrs: {
-                          x1: "20",
-                          y1: 50 - 8 * i,
-                          x2: _vm.strokeEnd(odd.home_odds),
-                          y2: 50 - 8 * i
-                        }
-                      })
-                    ]
-                  })
-                ],
-                2
-              )
-            ]),
-            _vm._v(" "),
             _c(
-              "div",
-              { staticClass: "col-4" },
+              "transition",
+              {
+                attrs: {
+                  name: "side",
+                  "enter-active-class": "animated bounceIn"
+                }
+              },
               [
-                _vm.xGame.phase == "bid" && _vm.xGame.bid_side == "home"
-                  ? _c("bid-component")
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.xGame.phase == "match"
-                  ? _c("h1", [_vm._v(_vm._s(_vm.xGame.match.home_score))])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.xGame.phase == "redraw"
-                  ? _c("redraw-component", { attrs: { side: "away" } })
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.xGame.phase == "sell"
-                  ? _c("sell-component", {
-                      attrs: { id: _vm.xGame.home_team.id }
-                    })
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.xGame.phase == "draw"
-                  ? _c("boost-component", {
-                      attrs: { player: _vm.xGame.home_player }
-                    })
-                  : _vm._e()
+                _c("side-component", {
+                  key: _vm.xGame.home_team.id,
+                  attrs: {
+                    teamName: _vm.xGame.home_team.name,
+                    userName: _vm.xGame.home_player
+                      ? _vm.xGame.home_player.user.name
+                      : "FOR SALE",
+                    player: _vm.xGame.home_player,
+                    division: _vm.xGame.home_team.division.level,
+                    gate: _vm.numberWithCommas(_vm.xGame.home_team.gate)
+                  }
+                })
               ],
               1
             )
@@ -49708,100 +49715,192 @@ var render = function() {
           1
         ),
         _vm._v(" "),
+        _c("div", { staticClass: "col-4" }, [
+          _c(
+            "svg",
+            {
+              attrs: {
+                viewBox: "0 0 130 55",
+                xmlns: "http://www.w3.org/2000/svg"
+              }
+            },
+            [
+              _vm._l(_vm.xGame.home_team.division.odds, function(odd, i) {
+                return [
+                  _c(
+                    "text",
+                    { staticClass: "goals", attrs: { x: "7", y: 53 - 8 * i } },
+                    [_vm._v(_vm._s(i))]
+                  ),
+                  _vm._v(" "),
+                  _c("line", {
+                    style: _vm.getStyle(_vm.xGame.home_team.division.level),
+                    attrs: {
+                      x1: "20",
+                      y1: 50 - 8 * i,
+                      x2: _vm.strokeEnd(odd.home_odds),
+                      y2: 50 - 8 * i
+                    }
+                  })
+                ]
+              })
+            ],
+            2
+          )
+        ]),
+        _vm._v(" "),
         _c(
           "div",
-          { staticClass: "row" },
+          { staticClass: "col-4" },
           [
-            _c("side-component", {
-              attrs: {
-                teamName: _vm.xGame.away_team.nickname,
-                userName: _vm.xGame.away_player
-                  ? _vm.xGame.away_player.user.name
-                  : "FOR SALE",
-                player: _vm.xGame.away_player,
-                division: _vm.xGame.away_team.division.level,
-                gate: _vm.numberWithCommas(_vm.xGame.away_team.gate)
-              }
-            }),
+            _vm.xGame.phase == "bid" && _vm.xGame.bid_side == "home"
+              ? _c("bid-component")
+              : _vm._e(),
             _vm._v(" "),
-            _c("div", { staticClass: "col-4 mb-3" }, [
-              _c(
-                "svg",
-                {
-                  attrs: {
-                    viewBox: "0 0 130 55",
-                    xmlns: "http://www.w3.org/2000/svg"
-                  }
-                },
-                [
-                  _vm._l(_vm.xGame.away_team.division.odds, function(odd, i) {
-                    return [
-                      _c(
-                        "text",
-                        {
-                          staticClass: "goals",
-                          attrs: { x: "7", y: 53 - 8 * i }
-                        },
-                        [_vm._v(_vm._s(i))]
-                      ),
-                      _vm._v(" "),
-                      _c("line", {
-                        style: _vm.getStyle(_vm.xGame.away_team.division.level),
-                        attrs: {
-                          x1: "20",
-                          y1: 50 - 8 * i,
-                          x2: _vm.strokeEnd(odd.away_odds),
-                          y2: 50 - 8 * i
-                        }
-                      })
-                    ]
-                  })
-                ],
-                2
-              )
-            ]),
+            _vm.xGame.phase == "match"
+              ? _c("h1", [_vm._v(_vm._s(_vm.xGame.match.home_score))])
+              : _vm._e(),
             _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "col-4" },
-              [
-                _vm.xGame.phase == "bid" && _vm.xGame.bid_side == "away"
-                  ? _c("bid-component")
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.xGame.phase == "match"
-                  ? _c("h1", [_vm._v(_vm._s(_vm.xGame.match.away_score))])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.xGame.phase == "redraw"
-                  ? _c("redraw-component", { attrs: { side: "home" } })
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.xGame.phase == "sell"
-                  ? _c("sell-component", {
-                      attrs: { id: _vm.xGame.away_team.id }
-                    })
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.xGame.phase == "draw"
-                  ? _c("boost-component", {
-                      attrs: { player: _vm.xGame.away_player }
-                    })
-                  : _vm._e()
-              ],
-              1
-            )
+            _vm.xGame.phase == "redraw"
+              ? _c("redraw-component", { attrs: { side: "away" } })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.xGame.phase == "sell"
+              ? _c("sell-component", { attrs: { id: _vm.xGame.home_team.id } })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.xGame.phase == "draw"
+              ? _c("boost-component", {
+                  attrs: { player: _vm.xGame.home_player }
+                })
+              : _vm._e()
           ],
           1
         )
       ]),
       _vm._v(" "),
-      _vm.xGame.phase == "bid"
-        ? _c("auction-component")
-        : _c("control-component")
-    ],
-    1
-  )
+      _c("div", { staticClass: "row" }, [
+        _c(
+          "div",
+          { staticClass: "col-4" },
+          [
+            _c(
+              "transition",
+              {
+                attrs: {
+                  name: "side",
+                  "enter-active-class": "animated bounceIn"
+                }
+              },
+              [
+                _c("side-component", {
+                  key: _vm.xGame.away_team.id,
+                  attrs: {
+                    teamName: _vm.xGame.away_team.name,
+                    userName: _vm.xGame.away_player
+                      ? _vm.xGame.away_player.user.name
+                      : "FOR SALE",
+                    player: _vm.xGame.away_player,
+                    division: _vm.xGame.away_team.division.level,
+                    gate: _vm.numberWithCommas(_vm.xGame.away_team.gate)
+                  }
+                })
+              ],
+              1
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-4" }, [
+          _c(
+            "svg",
+            {
+              attrs: {
+                viewBox: "0 0 130 55",
+                xmlns: "http://www.w3.org/2000/svg"
+              }
+            },
+            [
+              _vm._l(_vm.xGame.away_team.division.odds, function(odd, i) {
+                return [
+                  _c(
+                    "text",
+                    { staticClass: "goals", attrs: { x: "7", y: 53 - 8 * i } },
+                    [_vm._v(_vm._s(i))]
+                  ),
+                  _vm._v(" "),
+                  _c("line", {
+                    style: _vm.getStyle(_vm.xGame.away_team.division.level),
+                    attrs: {
+                      x1: "20",
+                      y1: 50 - 8 * i,
+                      x2: _vm.strokeEnd(odd.away_odds),
+                      y2: 50 - 8 * i
+                    }
+                  })
+                ]
+              })
+            ],
+            2
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "col-4" },
+          [
+            _vm.xGame.phase == "bid" && _vm.xGame.bid_side == "away"
+              ? _c("bid-component")
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.xGame.phase == "match"
+              ? _c("h1", [_vm._v(_vm._s(_vm.xGame.match.away_score))])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.xGame.phase == "redraw"
+              ? _c("redraw-component", { attrs: { side: "home" } })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.xGame.phase == "sell"
+              ? _c("sell-component", { attrs: { id: _vm.xGame.away_team.id } })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.xGame.phase == "draw"
+              ? _c("boost-component", {
+                  attrs: { player: _vm.xGame.away_player }
+                })
+              : _vm._e()
+          ],
+          1
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "col-sm-4" },
+      [
+        _c(
+          "transition",
+          {
+            attrs: {
+              name: "auction",
+              "enter-active-class": "animated zoomIn",
+              "leave-active-class": "animated zoomOut"
+            }
+          },
+          [
+            _vm.xGame.phase == "bid"
+              ? _c("auction-component", { key: "1" })
+              : _vm._e()
+          ],
+          1
+        )
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -49950,7 +50049,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-4" }, [
+  return _c("div", [
     _c(
       "p",
       { staticClass: "small mb-0" },
@@ -50033,7 +50132,7 @@ var render = function() {
               },
               [
                 _c("p", { staticClass: "text-small p-0 m-0" }, [
-                  _vm._v(_vm._s(allocation.team.nickname))
+                  _vm._v(_vm._s(allocation.team.name))
                 ])
               ]
             ),
@@ -50082,7 +50181,25 @@ var render = function() {
         : [
             _vm.$store.getters.GET_GAME.phase == "round"
               ? _c("round-component")
-              : [_c("details-component"), _vm._v(" "), _c("play-component")],
+              : [
+                  _c("div", { staticClass: "row" }, [
+                    _c(
+                      "div",
+                      { staticClass: "col-8" },
+                      [_c("details-component")],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-4 text-center" },
+                      [_c("control-component")],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("play-component")
+                ],
             _vm._v(" "),
             _c("chat-component", {
               attrs: { tournament_id: _vm.tournament_id, user: _vm.user }
@@ -63335,6 +63452,54 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./resources/assets/js sync recursive \\.vue$/":
+/*!******************************************!*\
+  !*** ./resources/assets/js sync \.vue$/ ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./components/AuctionComponent.vue": "./resources/assets/js/components/AuctionComponent.vue",
+	"./components/BankComponent.vue": "./resources/assets/js/components/BankComponent.vue",
+	"./components/BidComponent.vue": "./resources/assets/js/components/BidComponent.vue",
+	"./components/BoostComponent.vue": "./resources/assets/js/components/BoostComponent.vue",
+	"./components/ChatComponent.vue": "./resources/assets/js/components/ChatComponent.vue",
+	"./components/ControlComponent.vue": "./resources/assets/js/components/ControlComponent.vue",
+	"./components/DetailsComponent.vue": "./resources/assets/js/components/DetailsComponent.vue",
+	"./components/LobbyComponent.vue": "./resources/assets/js/components/LobbyComponent.vue",
+	"./components/MatchComponent.vue": "./resources/assets/js/components/MatchComponent.vue",
+	"./components/PlayComponent.vue": "./resources/assets/js/components/PlayComponent.vue",
+	"./components/RedrawComponent.vue": "./resources/assets/js/components/RedrawComponent.vue",
+	"./components/RoundComponent.vue": "./resources/assets/js/components/RoundComponent.vue",
+	"./components/SellComponent.vue": "./resources/assets/js/components/SellComponent.vue",
+	"./components/SideComponent.vue": "./resources/assets/js/components/SideComponent.vue",
+	"./components/TeamsComponent.vue": "./resources/assets/js/components/TeamsComponent.vue",
+	"./components/TournamentComponent.vue": "./resources/assets/js/components/TournamentComponent.vue"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	if(!__webpack_require__.o(map, req)) {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./resources/assets/js sync recursive \\.vue$/";
+
+/***/ }),
+
 /***/ "./resources/assets/js/api/index.js":
 /*!******************************************!*\
   !*** ./resources/assets/js/api/index.js ***!
@@ -63402,21 +63567,12 @@ Vue.mixin(_helpers_index__WEBPACK_IMPORTED_MODULE_3__["default"]);
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('chat-component', __webpack_require__(/*! ./components/ChatComponent.vue */ "./resources/assets/js/components/ChatComponent.vue")["default"]);
-Vue.component('match-component', __webpack_require__(/*! ./components/MatchComponent.vue */ "./resources/assets/js/components/MatchComponent.vue")["default"]);
-Vue.component('lobby-component', __webpack_require__(/*! ./components/LobbyComponent.vue */ "./resources/assets/js/components/LobbyComponent.vue")["default"]);
-Vue.component('teams-component', __webpack_require__(/*! ./components/TeamsComponent.vue */ "./resources/assets/js/components/TeamsComponent.vue")["default"]);
-Vue.component('redraw-component', __webpack_require__(/*! ./components/RedrawComponent.vue */ "./resources/assets/js/components/RedrawComponent.vue")["default"]);
-Vue.component('round-component', __webpack_require__(/*! ./components/RoundComponent.vue */ "./resources/assets/js/components/RoundComponent.vue")["default"]);
-Vue.component('tournament-component', __webpack_require__(/*! ./components/TournamentComponent.vue */ "./resources/assets/js/components/TournamentComponent.vue")["default"]);
-Vue.component('details-component', __webpack_require__(/*! ./components/DetailsComponent.vue */ "./resources/assets/js/components/DetailsComponent.vue")["default"]);
-Vue.component('sell-component', __webpack_require__(/*! ./components/SellComponent.vue */ "./resources/assets/js/components/SellComponent.vue")["default"]);
-Vue.component('side-component', __webpack_require__(/*! ./components/SideComponent.vue */ "./resources/assets/js/components/SideComponent.vue")["default"]);
-Vue.component('boost-component', __webpack_require__(/*! ./components/BoostComponent.vue */ "./resources/assets/js/components/BoostComponent.vue")["default"]);
-Vue.component('control-component', __webpack_require__(/*! ./components/ControlComponent.vue */ "./resources/assets/js/components/ControlComponent.vue")["default"]);
+var files = __webpack_require__("./resources/assets/js sync recursive \\.vue$/");
+
+files.keys().map(function (key) {
+  return Vue.component(key.split('/').pop().split('.')[0], files(key)["default"]);
+});
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -63676,15 +63832,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************************!*\
   !*** ./resources/assets/js/components/BoostComponent.vue ***!
   \***********************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _BoostComponent_vue_vue_type_template_id_34892cde___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BoostComponent.vue?vue&type=template&id=34892cde& */ "./resources/assets/js/components/BoostComponent.vue?vue&type=template&id=34892cde&");
 /* harmony import */ var _BoostComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BoostComponent.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/BoostComponent.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _BoostComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _BoostComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -63714,7 +63869,7 @@ component.options.__file = "resources/assets/js/components/BoostComponent.vue"
 /*!************************************************************************************!*\
   !*** ./resources/assets/js/components/BoostComponent.vue?vue&type=script&lang=js& ***!
   \************************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -63815,15 +63970,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************************************!*\
   !*** ./resources/assets/js/components/ControlComponent.vue ***!
   \*************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ControlComponent_vue_vue_type_template_id_d6082b52___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ControlComponent.vue?vue&type=template&id=d6082b52& */ "./resources/assets/js/components/ControlComponent.vue?vue&type=template&id=d6082b52&");
 /* harmony import */ var _ControlComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ControlComponent.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/ControlComponent.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _ControlComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _ControlComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -63853,7 +64007,7 @@ component.options.__file = "resources/assets/js/components/ControlComponent.vue"
 /*!**************************************************************************************!*\
   !*** ./resources/assets/js/components/ControlComponent.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

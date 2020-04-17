@@ -69,7 +69,7 @@ class BidController extends Controller
           'player_id' => $player->id,
           'team_id' => $team->id]);
 
-    $system_message = $player->user->name . ' has bid £' . number_format($amount) . ' for ' . $team->nickname;
+    $system_message = $player->user->name . ' has bid £' . number_format($amount) . ' for ' . $team->name;
 
     $this->systemChat->do($tournament, $system_message, $system_message); 
 

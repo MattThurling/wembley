@@ -43,7 +43,7 @@ class AllocationController extends Controller
 
     $player->balance += 2*$gate/3;
 
-    $message = $allocation->team->nickname . ' sold back to the bank by ' . $player->user->name . ' for £' . number_format(2*$gate/3);
+    $message = $allocation->team->name . ' sold back to the bank by ' . $player->user->name . ' for £' . number_format(2*$gate/3);
     $signature = 'Sell ' . $allocation->team->name;
     $this->systemChat->do($tournament, $message, $signature);
 

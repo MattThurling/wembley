@@ -280,7 +280,7 @@ class GameController extends Controller
         $this->round($tournament, $next_matches, $name);
     }
     
-    $message = __('messages.gate-help', ['home_team' => $match->home_allocation->team->nickname]);
+    $message = __('messages.gate-help', ['home_team' => $match->home_allocation->team->name]);
     $signature = $tournament->id . 'gate-help'; // so it only gets sent once
     if ($message) $this->systemChat->do($tournament, $message, $signature);
   }
@@ -311,7 +311,7 @@ class GameController extends Controller
     $player->balance -= $bid->amount;
     $player->save();
     Bid::where('round_id', $tournament->round->id)->delete();
-    $message = 'Auction closed! ' . $allocation->team->nickname . ' sold to ' . $player->user->name . ' for £' . number_format($bid->amount);
+    $message = 'Auction closed! ' . $allocation->team->name . ' sold to ' . $player->user->name . ' for £' . number_format($bid->amount);
     $this->systemChat->do($tournament, $message, $message);
     broadcast(new UpdateTournamentEvent($tournament->id));
   }

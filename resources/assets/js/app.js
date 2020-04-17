@@ -8,6 +8,8 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+
+
 //support vuex
 import Vuex from 'vuex';
 Vue.use(Vuex);
@@ -22,6 +24,7 @@ import helpers from "./helpers/index"
 Vue.mixin(api);
 Vue.mixin(helpers);
 
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -30,21 +33,9 @@ Vue.mixin(helpers);
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+const files = require.context('./', true, /\.vue$/i)
+files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('chat-component', require('./components/ChatComponent.vue').default);
-Vue.component('match-component', require('./components/MatchComponent.vue').default);
-Vue.component('lobby-component', require('./components/LobbyComponent.vue').default);
-Vue.component('teams-component', require('./components/TeamsComponent.vue').default);
-Vue.component('redraw-component', require('./components/RedrawComponent.vue').default);
-Vue.component('round-component', require('./components/RoundComponent.vue').default);
-Vue.component('tournament-component', require('./components/TournamentComponent.vue').default);
-Vue.component('details-component', require('./components/DetailsComponent.vue').default);
-Vue.component('sell-component', require('./components/SellComponent.vue').default);
-Vue.component('side-component', require('./components/SideComponent.vue').default);
-Vue.component('boost-component', require('./components/BoostComponent.vue').default);
-Vue.component('control-component', require('./components/ControlComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

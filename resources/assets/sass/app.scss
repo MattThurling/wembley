@@ -7,6 +7,14 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+// Animate css
+@import 'node_modules/animate.css/source/base';
+@import 'node_modules/animate.css/source/bouncing_entrances/bounceIn';
+@import 'node_modules/animate.css/source/zooming_entrances/zoomIn';
+@import 'node_modules/animate.css/source/zooming_exits/zoomOut';
+@import 'node_modules/animate.css/source/fading_entrances/fadeInLeft';
+@import 'node_modules/animate.css/source/flippers/flipOutX';
+
 .teams p {
   margin: 0;
 }
@@ -84,6 +92,14 @@ body {
   padding: 0;
 }
 
+#chat-list {
+  height: 200px;
+  overflow-y: hidden;
+}
+
+#play {
+  height: 200px;
+}
 
 #chat-message {
   background: rgba(27, 27, 27, 0.5);
@@ -117,6 +133,16 @@ th {
 .clickball {
   cursor: pointer;
 }
+
+.auction {
+  background-color: #0cff001c
+}
+
+.backface {
+  backface-visibility: hidden
+}
+
+
 
 
 

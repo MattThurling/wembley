@@ -3,14 +3,21 @@
 
         <div class="col-sm-8">
             <div class="row">
-                <side-component
-                :teamName="xGame.home_team.nickname"
-                :userName="xGame.home_player ? xGame.home_player.user.name : 'FOR SALE'"
-                :player="xGame.home_player"
-                :division="xGame.home_team.division.level"
-                :gate="numberWithCommas(xGame.home_team.gate)" />
+                <div class="col-4">
+                    <transition
+                        name="side"
+                        enter-active-class="animated bounceIn">
+                        <side-component
+                        :teamName="xGame.home_team.name"
+                        :userName="xGame.home_player ? xGame.home_player.user.name : 'FOR SALE'"
+                        :player="xGame.home_player"
+                        :division="xGame.home_team.division.level"
+                        :gate="numberWithCommas(xGame.home_team.gate)"
+                        :key="xGame.home_team.id"/>
+                    </transition>
+                </div>
 
-                <div class="col-4 mb-3">
+                <div class="col-4">
                     
                     <svg viewBox="0 0 130 55" xmlns="http://www.w3.org/2000/svg">
 
@@ -20,7 +27,7 @@
                                 x1="20"
                                 :y1="50-8*i"
                                 :x2="strokeEnd(odd.home_odds)"
-                                :y2="50-8*i"
+                                :y2="50-8*i"    
                                 :style="getStyle(xGame.home_team.division.level)" />
                         </template>
 
@@ -40,15 +47,22 @@
             </div>
 
             <div class="row">
-                <side-component
-                :teamName="xGame.away_team.nickname"
-                :userName="xGame.away_player ? xGame.away_player.user.name : 'FOR SALE'"
-                :player="xGame.away_player"
-                :division="xGame.away_team.division.level"
-                :gate="numberWithCommas(xGame.away_team.gate)"/>
+                <div class="col-4">
+                    <transition
+                        name="side"
+                        enter-active-class="animated bounceIn">
+                        <side-component
+                        :teamName="xGame.away_team.name"
+                        :userName="xGame.away_player ? xGame.away_player.user.name : 'FOR SALE'"
+                        :player="xGame.away_player"
+                        :division="xGame.away_team.division.level"
+                        :gate="numberWithCommas(xGame.away_team.gate)"
+                        :key="xGame.away_team.id"/>
+                    </transition>
+                </div>
 
 
-                <div class="col-4 mb-3">
+                <div class="col-4">
 
                     <svg viewBox="0 0 130 55" xmlns="http://www.w3.org/2000/svg">
                         
@@ -79,8 +93,18 @@
             </div>
 
         </div>
-        <auction-component v-if="xGame.phase == 'bid'" />
-        <control-component v-else />
+
+        <div class="col-sm-4">
+            <transition 
+                name="auction"
+                enter-active-class="animated zoomIn"
+                leave-active-class="animated zoomOut">
+                <auction-component v-if="xGame.phase == 'bid'" key="1"/>
+            </transition>
+        </div>
+
+        
+
     </div> 
 </template>
 
@@ -96,6 +120,12 @@
             AuctionComponent,
             SellComponent,
         },
+        data() {
+            return {
+                // For testing animations
+                count: 0
+            }
+        },
         methods: {
             strokeEnd(x) {
 
@@ -107,7 +137,10 @@
                 if (division == 2) style += "#1414e044;";
                 if (division == 3) style += "#37ed0088;";
                 return style;
-            }      
+            },
+            triggerCount() {
+                this.count++
+            }   
         },
         computed: {
             xGame: function() {

@@ -15,6 +15,7 @@
 
 
         <lobby-component :user="{{ auth()->user() }}" />
+            
 
     </div>
 

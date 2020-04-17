@@ -4,7 +4,14 @@
         <template v-else>
             <round-component v-if="$store.getters.GET_GAME.phase == 'round'"/>
             <template v-else>
-                <details-component />
+                <div class="row">
+                    <div class="col-8">
+                        <details-component />
+                    </div>
+                    <div class="col-4 text-center">
+                        <control-component />
+                    </div>
+                </div>
                 <play-component />
             </template>
             <chat-component :tournament_id="tournament_id" :user="user" />
