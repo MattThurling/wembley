@@ -23,6 +23,11 @@ class Tournament extends Model
       return $this->belongsTo('App\Round');
     }
 
+    public function rounds()
+    {
+      return $this->hasMany('App\Round');
+    }
+
     public function getCreatedAtAttribute($date)
     {
       return Carbon::createFromTimeStamp(strtotime($date))->diffForHumans();

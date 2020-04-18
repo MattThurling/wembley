@@ -144,6 +144,8 @@ class GameController extends Controller
       }
     }
 
+    $results = Match::all();
+
     $tournament->players->load('user');
 
     $owner = false;
@@ -164,7 +166,8 @@ class GameController extends Controller
             'bid_side' => $bid_side,
             'high_bid_amount' => $high_bid_amount,
             'high_bidder_name' => $high_bidder_name,
-            'stars' => $this->getStars($player)];
+            'stars' => $this->getStars($player),
+            'results' => $this->getResults($tournament)];
 
     if ($message) $this->systemChat->do($tournament, $message, $signature);
     return response()->json($data);
@@ -440,6 +443,28 @@ class GameController extends Controller
         return $odd->goals + $boost;
       }
     }
+  }
+
+  // Previous matches
+  private function getResults (Tournament $tournament)
+  {
+    $results = [];
+    foreach ($tournament->rounds()->orderBy('number_of_matches')->get() as $round) {
+      $stage = ['name' => $this->getRoundName($round->number_of_matches)];
+      $rubbers = [];
+      foreach ($round->matches()->orderBy('position', 'desc')->get() as $match) {
+        $result = [
+          'home_team_name' => $match->home_allocation->team->name,
+          'home_score' => $match->home_score,
+          'away_team_name' => $match->away_allocation->team->name,
+          'away_score' => $match->away_score,
+        ];
+        array_push($rubbers, $result);
+      }
+      $stage['rubbers'] = $rubbers;
+      array_push($results, $stage);
+    }
+    return $results;
   }
 
 }

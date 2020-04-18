@@ -1,16 +1,17 @@
 <template>
-
-    <div class="input-group input-group-sm mb-3 mr-2">
-        <input type="text" class="form-control" v-model="amount">
-        <div class="input-group-append mr-3">
-            <button
-                class="btn btn-outline-primary"
-                @click="submitBid">
-                Bid
-            </button>
+    <form v-on:submit.prevent="submitBid">    
+        <div class="input-group input-group-sm mb-3 mr-2">
+            
+                <input type="text" class="form-control" v-model="amount">
+                <div class="input-group-append mr-3">
+                    <button
+                        class="btn btn-outline-primary"
+                        type="submit">
+                        Bid
+                    </button>
+                </div>
         </div>
-    </div>
-
+    </form> 
 </template>
 
 
@@ -19,7 +20,7 @@
         props: ['bidHandler'],
         data() {
             return {
-                amount: 0
+                amount: null
             }
         },
         methods: {
@@ -35,7 +36,7 @@
                     .catch(err => {
                         alert('Invalid bid');
                     });
-                this.amount = 0;
+                this.amount = null;
             }
         }
     };

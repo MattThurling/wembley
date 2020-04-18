@@ -19,6 +19,11 @@
                 <teams-component />
                 <bank-component />
             </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <results-component />
+                </div>
+            </div>
         </template>
     </div>
 
@@ -31,6 +36,7 @@
     import DetailsComponent from './DetailsComponent.vue';
     import BankComponent from './BankComponent.vue';
     import PlayComponent from './PlayComponent.vue';
+    import ResultsComponent from './ResultsComponent.vue'
     export default {
         components: {
             RoundComponent,
@@ -39,6 +45,7 @@
             BankComponent,
             DetailsComponent,
             PlayComponent,
+            ResultsComponent,
         },
         props:['tournament_id', 'user'],
         mounted() {

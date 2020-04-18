@@ -11156,6 +11156,123 @@ a.text-dark:focus {
           backface-visibility: visible !important;
 }
 
+@-webkit-keyframes flipInX {
+  from {
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    opacity: 0;
+  }
+
+  40% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+
+  60% {
+    transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    opacity: 1;
+  }
+
+  80% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+  }
+
+  to {
+    transform: perspective(400px);
+  }
+}
+
+@keyframes flipInX {
+  from {
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    opacity: 0;
+  }
+
+  40% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+
+  60% {
+    transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    opacity: 1;
+  }
+
+  80% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+  }
+
+  to {
+    transform: perspective(400px);
+  }
+}
+
+.flipInX {
+  -webkit-backface-visibility: visible !important;
+          backface-visibility: visible !important;
+  -webkit-animation-name: flipInX;
+          animation-name: flipInX;
+}
+
+@-webkit-keyframes slideInUp {
+  from {
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.slideInUp {
+  -webkit-animation-name: slideInUp;
+          animation-name: slideInUp;
+}
+
+@-webkit-keyframes slideOutDown {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    visibility: hidden;
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+@keyframes slideOutDown {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    visibility: hidden;
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+.slideOutDown {
+  -webkit-animation-name: slideOutDown;
+          animation-name: slideOutDown;
+}
+
 .teams p {
   margin: 0;
 }
@@ -11246,12 +11363,6 @@ body {
   font-size: calc(80% + 1vw + 1vh);
 }
 
-tr {
-  line-height: 18x;
-  min-height: 18px;
-  height: 18px;
-}
-
 th {
   color: #f1f1f1;
   font-size: 11.5px;
@@ -11259,6 +11370,24 @@ th {
 
 .table thead th {
   border-bottom: none;
+}
+
+tr {
+  line-height: 18x;
+  min-height: 18px;
+  height: 18px;
+  color: rgba(241, 241, 241, 0.85);
+}
+
+.results-row td {
+  border-top-width: 0.5px;
+  border-top-style: solid;
+  border-top-color: rgba(27, 27, 27, 0.2);
+}
+
+.table .results-table {
+  table-layout: fixed;
+  word-wrap: break-word;
 }
 
 .gate {
@@ -11273,8 +11402,15 @@ th {
   background-color: #0cff001c;
 }
 
-.backface {
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+.teams-move {
+  transition: transform 1s;
+}
+
+.player-1 {
+  color: #8dac1a;
+}
+
+.player-2 {
+  color: #f03bf0;
 }
 
