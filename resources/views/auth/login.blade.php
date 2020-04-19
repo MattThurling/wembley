@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v6.0&appId=222768702338160&autoLogAppEvents=1"></script>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -73,6 +75,10 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="fb-login-button" data-size="large" data-button-type="login_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="true" data-width=""></div>
+
+                    <a href="login/facebook">Facebook login</a>
                 </div>
             </div>
         </div>

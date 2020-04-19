@@ -56,9 +56,9 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function handleProviderCallback()
+    public function handleProviderCallback($provider)
     {
-        $userSocial = Socialite::driver('linkedin')->user();
+        $userSocial = Socialite::driver($provider)->user();
 
         $user = User::where(['email' => $userSocial->getEmail()])->first();
 
@@ -71,7 +71,7 @@ class LoginController extends Controller
                     'email'         => $userSocial->getEmail(),
                     'image'         => $userSocial->getAvatar(),
                     'provider_id'   => $userSocial->getId(),
-                    'provider'      => 'linkedin',
+                    'provider'      => $provider,
                 ]);
             return redirect()->route('home');
         }
