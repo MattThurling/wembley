@@ -68,17 +68,22 @@
                         </div>
                     </form>
                     <hr />
-                    <div class="form-group row mb-0">
-                        <div class="col-md-8 offset-md-4">
+                    <div class="row mb-2">
+                        <div class="col-md-3 offset-md-4 mb-2">
                             <a href="login/linkedin">
-                                <div id="linkedin-button" />
-                            </div>
+                                <div id="linkedin-button">
+                                </div>
+                            </a>
                         </div>
                     </div>
 
-                    <div class="fb-login-button" data-size="large" data-button-type="login_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="true" data-width=""></div>
-
-                    <a href="login/facebook">Facebook login</a>
+                    <div class="row">
+                        <div class="col-md-3 offset-md-4 mb-2">
+                            <a href="login/facebook">
+                                <img width="161px" src="{{ url('images/facebook-login.png') }}" />
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

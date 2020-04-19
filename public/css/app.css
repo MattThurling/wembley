@@ -11421,8 +11421,8 @@ tr {
 #linkedin-button {
   background-image: url(/images/linkedin-default.png?44c0e13e9edcfc614084b49d3a2b581e);
   background-size: contain;
-  width: 215px;
-  height: 40px;
+  width: 161px;
+  height: 30px;
 }
 
 #linkedin-button:hover {
