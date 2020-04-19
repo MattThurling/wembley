@@ -46,9 +46,9 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function redirectToProvider()
+    public function redirectToProvider($provider)
     {
-        return Socialite::driver('linkedin')->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
     /**
