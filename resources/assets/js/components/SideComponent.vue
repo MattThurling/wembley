@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="small mb-0">
-      <template v-for="star in restingStars">
-        <span :class=" {clickball: auth }" @click="playStar(star.id)">⚽</span>
+      <template v-for="star in activeStars">
+        <span :class=" {clickball: auth }" @click="restStar(star.id)">⚽</span>
       </template>
     </p>
     <p class="small mb-0">{{ userName }}</p>
@@ -27,10 +27,10 @@
       }
     },
     computed: {
-      restingStars: function() {
+      activeStars: function() {
         if (this.player) {
           return this.player.stars.filter((star) => {
-            return star.pivot.play == 0;
+            return star.pivot.play == 1;
           });
         }
       },
@@ -46,10 +46,10 @@
         if (division == 3) myClass="lower-league";
         return myClass;
       },
-      playStar(id) {
+      restStar(id) {
         if (this.auth) {
           console.log(id);
-          axios.post('/api/tournament/' + this.$store.getters.GET_TOURNAMENT_ID + '/play-star', {'star_id': id}).
+          axios.post('/api/tournament/' + this.$store.getters.GET_TOURNAMENT_ID + '/rest-star', {'star_id': id}).
           then(response => console.log(response.data));
         }
       },

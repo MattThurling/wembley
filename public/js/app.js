@@ -1937,6 +1937,67 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/BankComponent.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/BankComponent.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  computed: {
+    restingStars: function restingStars() {
+      return this.$store.getters.GET_GAME.player.stars.filter(function (star) {
+        return star.pivot.play == 0;
+      });
+    }
+  },
+  methods: {
+    playStar: function playStar(id) {
+      axios.post('/api/tournament/' + this.$store.getters.GET_TOURNAMENT_ID + '/play-star', {
+        'star_id': id
+      }).then(function (response) {
+        return console.log(response.data);
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/BidComponent.vue?vue&type=script&lang=js&":
 /*!******************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/BidComponent.vue?vue&type=script&lang=js& ***!
@@ -2018,11 +2079,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['player'],
   data: function data() {
@@ -2049,15 +2105,6 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         return console.log(response.data);
       });
-    },
-    restStar: function restStar(id) {
-      if (this.auth) {
-        axios.post('/api/tournament/' + this.$store.getters.GET_TOURNAMENT_ID + '/rest-star', {
-          'star_id': id
-        }).then(function (response) {
-          return console.log(response.data);
-        });
-      }
     },
     getDisabled: function getDisabled(id) {
       if (this.player.stars.filter(function (star) {
@@ -2276,6 +2323,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -2760,10 +2808,10 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
-    restingStars: function restingStars() {
+    activeStars: function activeStars() {
       if (this.player) {
         return this.player.stars.filter(function (star) {
-          return star.pivot.play == 0;
+          return star.pivot.play == 1;
         });
       }
     },
@@ -2779,10 +2827,10 @@ __webpack_require__.r(__webpack_exports__);
       if (division == 3) myClass = "lower-league";
       return myClass;
     },
-    playStar: function playStar(id) {
+    restStar: function restStar(id) {
       if (this.auth) {
         console.log(id);
-        axios.post('/api/tournament/' + this.$store.getters.GET_TOURNAMENT_ID + '/play-star', {
+        axios.post('/api/tournament/' + this.$store.getters.GET_TOURNAMENT_ID + '/rest-star', {
           'star_id': id
         }).then(function (response) {
           return console.log(response.data);
@@ -2864,6 +2912,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _BankComponent_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./BankComponent.vue */ "./resources/assets/js/components/BankComponent.vue");
 /* harmony import */ var _PlayComponent_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PlayComponent.vue */ "./resources/assets/js/components/PlayComponent.vue");
 /* harmony import */ var _ResultsComponent_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ResultsComponent.vue */ "./resources/assets/js/components/ResultsComponent.vue");
+/* harmony import */ var _WinComponent_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./WinComponent.vue */ "./resources/assets/js/components/WinComponent.vue");
 //
 //
 //
@@ -2895,6 +2944,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -2910,7 +2960,8 @@ __webpack_require__.r(__webpack_exports__);
     BankComponent: _BankComponent_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
     DetailsComponent: _DetailsComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     PlayComponent: _PlayComponent_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
-    ResultsComponent: _ResultsComponent_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
+    ResultsComponent: _ResultsComponent_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
+    WinComponent: _WinComponent_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
   props: ['tournament_id', 'user'],
   mounted: function mounted() {
@@ -49048,7 +49099,46 @@ var render = function() {
           ])
         ])
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c("h6", { staticClass: "text-center mt-3" }, [_vm._v("STARS")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "mt-3" },
+      _vm._l(_vm.restingStars, function(star) {
+        return _c("div", [
+          _c("hr"),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-2 text-center" }, [
+              _c(
+                "h2",
+                {
+                  staticClass: "my-auto",
+                  class: _vm.clickball,
+                  on: {
+                    click: function($event) {
+                      return _vm.playStar(star.id)
+                    }
+                  }
+                },
+                [_vm._v("\n                        ⚽\n                    ")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-10 my-auto" }, [
+              _vm._v(
+                "\n                    " +
+                  _vm._s(star.type) +
+                  " (+ 1 goal)\n                "
+              )
+            ])
+          ])
+        ])
+      }),
+      0
+    )
   ])
 }
 var staticRenderFns = []
@@ -49147,102 +49237,76 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm.auth
-      ? _c("div", { staticClass: "input-group" }, [
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.selected,
-                  expression: "selected"
-                }
-              ],
-              staticClass: "custom-select custom-select-sm",
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.selected = $event.target.multiple
-                    ? $$selectedVal
-                    : $$selectedVal[0]
-                }
+  return _vm.auth
+    ? _c("div", { staticClass: "input-group" }, [
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.selected,
+                expression: "selected"
               }
-            },
-            [
-              _c("option", { attrs: { value: "0", selected: "" } }, [
-                _vm._v("Boost...")
-              ]),
-              _vm._v(" "),
-              _vm._l(_vm.$store.getters.GET_GAME.stars, function(star, index) {
-                return _c(
-                  "option",
-                  {
-                    attrs: { disabled: _vm.getDisabled(star.id) },
-                    domProps: { value: star.id }
-                  },
-                  [
-                    _vm._v(
-                      "\n        " +
-                        _vm._s(star.type) +
-                        " (£" +
-                        _vm._s(_vm.numberWithCommas(star.price)) +
-                        ")   \n      "
-                    )
-                  ]
-                )
-              })
             ],
-            2
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "input-group-append" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-outline-primary btn-sm",
-                attrs: { type: "button" },
-                on: { click: _vm.buyStar }
-              },
-              [_vm._v("Buy")]
-            )
-          ])
+            staticClass: "custom-select custom-select-sm",
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.selected = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { value: "0", selected: "" } }, [
+              _vm._v("Boost...")
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.$store.getters.GET_GAME.stars, function(star, index) {
+              return _c(
+                "option",
+                {
+                  attrs: { disabled: _vm.getDisabled(star.id) },
+                  domProps: { value: star.id }
+                },
+                [
+                  _vm._v(
+                    "\n      " +
+                      _vm._s(star.type) +
+                      " (£" +
+                      _vm._s(_vm.numberWithCommas(star.price)) +
+                      ")   \n    "
+                  )
+                ]
+              )
+            })
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "input-group-append" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-outline-primary btn-sm",
+              attrs: { type: "button" },
+              on: { click: _vm.buyStar }
+            },
+            [_vm._v("Buy")]
+          )
         ])
-      : _vm._e(),
-    _vm._v(" "),
-    _c(
-      "p",
-      { staticClass: "mt-2" },
-      [
-        _vm._l(_vm.activeStars, function(star) {
-          return [
-            _c(
-              "span",
-              {
-                class: { clickball: _vm.auth },
-                on: {
-                  click: function($event) {
-                    return _vm.restStar(star.id)
-                  }
-                }
-              },
-              [_vm._v("⚽")]
-            )
-          ]
-        })
-      ],
-      2
-    )
-  ])
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -49524,6 +49588,11 @@ var render = function() {
               [
                 _vm._l(tournament.players, function(player) {
                   return _c("p", { staticClass: "card-text" }, [
+                    player.user.image
+                      ? _c("img", {
+                          attrs: { width: "50px", src: player.user.image }
+                        })
+                      : _vm._e(),
                     _vm._v(
                       "\n                        " +
                         _vm._s(player.user.name) +
@@ -50156,7 +50225,7 @@ var render = function() {
       "p",
       { staticClass: "small mb-0" },
       [
-        _vm._l(_vm.restingStars, function(star) {
+        _vm._l(_vm.activeStars, function(star) {
           return [
             _c(
               "span",
@@ -50164,7 +50233,7 @@ var render = function() {
                 class: { clickball: _vm.auth },
                 on: {
                   click: function($event) {
-                    return _vm.playStar(star.id)
+                    return _vm.restStar(star.id)
                   }
                 }
               },
@@ -50300,8 +50369,8 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.$store.getters.GET_LOADING
-        ? _c("p", [_vm._v("L O A D I N G")])
+      _vm.$store.getters.GET_GAME.phase == "complete"
+        ? _c("win-component")
         : [
             _vm.$store.getters.GET_GAME.phase == "round"
               ? _c("round-component")
@@ -50348,6 +50417,40 @@ var render = function() {
     ],
     2
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/WinComponent.vue?vue&type=template&id=5e60f1b8&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/WinComponent.vue?vue&type=template&id=5e60f1b8& ***!
+  \**********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("h1", [_vm._v(_vm._s(_vm.$store.getters.GET_GAME.user_name))]),
+    _vm._v(" "),
+    _c("img", {
+      attrs: {
+        width: "300px",
+        src:
+          "https://images.ladbible.com/thumbnail?type=webp&url=http://beta.ems.ladbiblegroup.com/s3/content/0de3b6485e8669ae4483c127fa23a1ef.png&quality=70&width=1440"
+      }
+    })
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -63609,7 +63712,8 @@ var map = {
 	"./components/SellComponent.vue": "./resources/assets/js/components/SellComponent.vue",
 	"./components/SideComponent.vue": "./resources/assets/js/components/SideComponent.vue",
 	"./components/TeamsComponent.vue": "./resources/assets/js/components/TeamsComponent.vue",
-	"./components/TournamentComponent.vue": "./resources/assets/js/components/TournamentComponent.vue"
+	"./components/TournamentComponent.vue": "./resources/assets/js/components/TournamentComponent.vue",
+	"./components/WinComponent.vue": "./resources/assets/js/components/WinComponent.vue"
 };
 
 
@@ -63850,15 +63954,17 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _BankComponent_vue_vue_type_template_id_a6188e0c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BankComponent.vue?vue&type=template&id=a6188e0c& */ "./resources/assets/js/components/BankComponent.vue?vue&type=template&id=a6188e0c&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _BankComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BankComponent.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/BankComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-var script = {}
+
+
 
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
-  script,
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _BankComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _BankComponent_vue_vue_type_template_id_a6188e0c___WEBPACK_IMPORTED_MODULE_0__["render"],
   _BankComponent_vue_vue_type_template_id_a6188e0c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
@@ -63872,6 +63978,20 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 if (false) { var api; }
 component.options.__file = "resources/assets/js/components/BankComponent.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/BankComponent.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/assets/js/components/BankComponent.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BankComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./BankComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/BankComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BankComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -64909,6 +65029,59 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TournamentComponent_vue_vue_type_template_id_7a5f31ad___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TournamentComponent_vue_vue_type_template_id_7a5f31ad___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/WinComponent.vue":
+/*!*********************************************************!*\
+  !*** ./resources/assets/js/components/WinComponent.vue ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _WinComponent_vue_vue_type_template_id_5e60f1b8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WinComponent.vue?vue&type=template&id=5e60f1b8& */ "./resources/assets/js/components/WinComponent.vue?vue&type=template&id=5e60f1b8&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+var script = {}
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  script,
+  _WinComponent_vue_vue_type_template_id_5e60f1b8___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _WinComponent_vue_vue_type_template_id_5e60f1b8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/components/WinComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/WinComponent.vue?vue&type=template&id=5e60f1b8&":
+/*!****************************************************************************************!*\
+  !*** ./resources/assets/js/components/WinComponent.vue?vue&type=template&id=5e60f1b8& ***!
+  \****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_WinComponent_vue_vue_type_template_id_5e60f1b8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./WinComponent.vue?vue&type=template&id=5e60f1b8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/WinComponent.vue?vue&type=template&id=5e60f1b8&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_WinComponent_vue_vue_type_template_id_5e60f1b8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_WinComponent_vue_vue_type_template_id_5e60f1b8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

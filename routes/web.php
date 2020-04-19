@@ -25,4 +25,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('tournament/{tournament}', 'Web\TournamentController@show');
 });
 
+Route::get('login/linkedin', 'Auth\LoginController@redirectToProvider');
+Route::get('login/linkedin/callback', 'Auth\LoginController@handleProviderCallback');
+
 

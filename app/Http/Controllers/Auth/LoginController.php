@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\User;
+use Socialite;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -36,5 +39,43 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Redirect the user to the LinkedIn authentication page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function redirectToProvider()
+    {
+        return Socialite::driver('linkedin')->redirect();
+    }
+
+    /**
+     * Obtain the user information from LinkedIn.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function handleProviderCallback()
+    {
+        $userSocial = Socialite::driver('linkedin')->user();
+
+        $user = User::where(['email' => $userSocial->getEmail()])->first();
+
+        if ($user){
+            Auth::login($user);
+            return redirect('/');
+        } else {
+            $user = User::create([
+                    'name'          => $userSocial->getName(),
+                    'email'         => $userSocial->getEmail(),
+                    'image'         => $userSocial->getAvatar(),
+                    'provider_id'   => $userSocial->getId(),
+                    'provider'      => 'linkedin',
+                ]);
+            return redirect()->route('home');
+        }
+
+        // $user->token;
     }
 }

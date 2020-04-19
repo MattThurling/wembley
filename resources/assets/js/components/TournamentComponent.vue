@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p v-if="$store.getters.GET_LOADING">L O A D I N G</p>
+        <win-component v-if="$store.getters.GET_GAME.phase == 'complete'"/>
         <template v-else>
             <round-component v-if="$store.getters.GET_GAME.phase == 'round'"/>
             <template v-else>
@@ -37,6 +37,7 @@
     import BankComponent from './BankComponent.vue';
     import PlayComponent from './PlayComponent.vue';
     import ResultsComponent from './ResultsComponent.vue'
+    import WinComponent from './WinComponent.vue'
     export default {
         components: {
             RoundComponent,
@@ -46,6 +47,7 @@
             DetailsComponent,
             PlayComponent,
             ResultsComponent,
+            WinComponent,
         },
         props:['tournament_id', 'user'],
         mounted() {

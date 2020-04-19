@@ -37,9 +37,10 @@ class GameController extends Controller
   // Show the information for a given tournament
   public function show (Tournament $tournament)
   {
+
     $player = Player::where('user_id', Auth::id())
                       ->where('tournament_id', $tournament->id)
-                      ->with('user')
+                      ->with('user', 'stars')
                       ->first();
 
     $players = Player::with(['user', 'allocations', 'allocations.team', 'stars'])->get();
@@ -245,6 +246,13 @@ class GameController extends Controller
               'home_score' => $this->generateScore($home_allocation, 'home_odds'),
               'away_score' => $this->generateScore($away_allocation, 'away_odds')]);
 
+      // Was it the final?
+      if ($round->number_of_matches == 1) {
+
+        $tournament->status = -1;
+        $tournament->save();
+      }
+
       broadcast(new UpdateTournamentEvent($tournament->id));
   }
 
@@ -268,6 +276,7 @@ class GameController extends Controller
       $this->processMatchResult($match->away_allocation, $gate, 'lose');
       $this->processMatchResult($match->home_allocation, $gate, 'win');   
     }
+
 
     // Increment the round position
     if ($round->position < $round->number_of_matches) {
