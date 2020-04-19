@@ -32,7 +32,7 @@ return [
         'linkedin' => [
         'client_id' => env('LINKEDIN_CLIENT_ID'),
         'client_secret' => env('LINKEDIN_CLIENT_SECRET'),
-        'redirect' => 'http://wembley.test/login/linkedin/callback',
+        'redirect' => env('APP_URL') . '/login/linkedin/callback',
     ],
 
 ];
