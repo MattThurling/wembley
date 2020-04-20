@@ -22,8 +22,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
 Route::group(['middleware' => 'auth'], function () {
+  Route::get('/home', 'HomeController@index')->name('home');
   Route::post('tournament/{tournament}/start', 'TournamentController@start');
   Route::get('tournament/{tournament}', 'Web\TournamentController@show');
 });
