@@ -62,10 +62,7 @@ class LoginController extends Controller
 
         $user = User::where(['email' => $userSocial->getEmail()])->first();
 
-        if ($user){
-            Auth::login($user);
-            return redirect('/');
-        } else {
+        if (!$user){
             $user = User::create([
                     'name'          => $userSocial->getName(),
                     'email'         => $userSocial->getEmail(),
@@ -73,9 +70,10 @@ class LoginController extends Controller
                     'provider_id'   => $userSocial->getId(),
                     'provider'      => $provider,
                 ]);
-            return redirect()->route('home');
+            
         }
+        Auth::login($user);
+        return redirect()->route('home');
 
-        // $user->token;
     }
 }
