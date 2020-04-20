@@ -49590,6 +49590,7 @@ var render = function() {
                   return _c("p", { staticClass: "card-text" }, [
                     player.user.image
                       ? _c("img", {
+                          staticClass: "avatar-image",
                           attrs: { width: "50px", src: player.user.image }
                         })
                       : _vm._e(),

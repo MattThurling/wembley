@@ -11433,3 +11433,7 @@ tr {
   background-image: url(/images/linkedin-active.png?65c826285db35803a0948db87d139f4b);
 }
 
+.avatar-image {
+  border-radius: 50%;
+}
+

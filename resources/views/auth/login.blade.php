@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v6.0&appId=222768702338160&autoLogAppEvents=1"></script>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -68,8 +67,11 @@
                         </div>
                     </form>
                     <hr />
+
                     <div class="row mb-2">
+                        
                         <div class="col-md-3 offset-md-4 mb-2">
+                            <p>or</p>
                             <a href="login/linkedin">
                                 <div id="linkedin-button">
                                 </div>

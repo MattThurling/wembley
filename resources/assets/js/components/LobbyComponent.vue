@@ -11,7 +11,7 @@
                     <div class="card-body">
 
                         <p v-for="player in tournament.players" class="card-text">
-                            <img v-if="player.user.image" width="50px" :src="player.user.image" />
+                            <img v-if="player.user.image" width="50px" class="avatar-image" :src="player.user.image" />
                             {{ player.user.name }}
                         </p>
 

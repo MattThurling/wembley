@@ -70,11 +70,22 @@
                         </div>
                     </form>
                     <hr />
-                    <div class="form-group row mb-0">
-                        <div class="col-md-8 offset-md-4">
+                    <div class="row mb-2">
+                        
+                        <div class="col-md-3 offset-md-4 mb-2">
+                            <p>or</p>
                             <a href="login/linkedin">
-                                <div id="linkedin-button" />
-                            </div>
+                                <div id="linkedin-button">
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 offset-md-4 mb-2">
+                            <a href="login/facebook">
+                                <img width="161px" src="{{ url('images/facebook-login.png') }}" />
+                            </a>
                         </div>
                     </div>
                 </div>
