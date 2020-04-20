@@ -11,11 +11,11 @@
 
         <h6 class="text-center mt-3">STARS</h6>
         <div class="mt-3">
-            <div v-for="star in restingStars">
+            <div v-if="restingStars" v-for="star in restingStars">
                 <hr />
                 <div class="row">
                     <div class="col-2 text-center">
-                        <h2 class="my-auto" :class="clickball" @click="playStar(star.id)">
+                        <h2 class="my-auto clickball" @click="playStar(star.id)">
                             ⚽
                         </h2>
                     </div>

@@ -49107,35 +49107,40 @@ var render = function() {
       "div",
       { staticClass: "mt-3" },
       _vm._l(_vm.restingStars, function(star) {
-        return _c("div", [
-          _c("hr"),
-          _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-2 text-center" }, [
-              _c(
-                "h2",
-                {
-                  staticClass: "my-auto",
-                  class: _vm.clickball,
-                  on: {
-                    click: function($event) {
-                      return _vm.playStar(star.id)
-                    }
-                  }
-                },
-                [_vm._v("\n                        ⚽\n                    ")]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-10 my-auto" }, [
-              _vm._v(
-                "\n                    " +
-                  _vm._s(star.type) +
-                  " (+ 1 goal)\n                "
-              )
+        return _vm.restingStars
+          ? _c("div", [
+              _c("hr"),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-2 text-center" }, [
+                  _c(
+                    "h2",
+                    {
+                      staticClass: "my-auto clickball",
+                      on: {
+                        click: function($event) {
+                          return _vm.playStar(star.id)
+                        }
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                        ⚽\n                    "
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-10 my-auto" }, [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(star.type) +
+                      " (+ 1 goal)\n                "
+                  )
+                ])
+              ])
             ])
-          ])
-        ])
+          : _vm._e()
       }),
       0
     )
