@@ -29,8 +29,9 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('tournament/{tournament}', 'Web\TournamentController@show');
 });
 
-Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider');
 Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
+Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider');
+
 
 Route::get('privacy', function () {
   return view('privacy');
