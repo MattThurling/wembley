@@ -1,16 +1,21 @@
 <template>
-    <div class="col-sm-8 col-md-4 mt-3">
+    <div
+        class="col-sm-8 col-md-4 mt-3">
         <h6 class="text-center">BANK BALANCE</h6>
         <div class="card">
-            <div class="card-body">
-                <div class="card-text">
-                    <h4 class="text-center text-responsive">£{{ numberWithCommas($store.getters.GET_GAME.player.balance) }}</h4>
-                </div>
+
+            <div
+                class="card-body text-center align-bottom bank"
+                v-intro="'This is your bank balance, shown in bitcoin to futureproof against the imminent obsolescence of government-issued currencies.'">           
+                <img src="/images/opengraph.png" width="30px" class="mx-1 btc"/>
+                <span>{{ numberWithCommas($store.getters.GET_GAME.player.balance) }}</span>
             </div>
         </div>
 
         <h6 class="text-center mt-3">STARS</h6>
-        <div class="mt-3">
+        <div
+            class="mt-3"
+            v-intro="'You can buy star players and boost your score by 1 goal per star. To play or remove a star, click on the ball. (You don\'t have any stars at the beginning of the game and it\'s probably best to wait until the later rounds when you have fewer teams and more money!)'">
             <div v-if="restingStars" v-for="star in restingStars">
                 <hr />
                 <div class="row">
@@ -33,7 +38,9 @@
   export default {
     computed: {
         restingStars: function() {
-            return this.$store.getters.GET_GAME.player.stars.filter((star) => {
+            let stars = this.$store.getters.GET_GAME.player.stars;
+
+            if (stars) return stars.filter((star) => {
                 return star.pivot.play == 0;
             });
         },

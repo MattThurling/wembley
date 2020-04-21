@@ -7,6 +7,9 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+// IntroJS
+@import '~intro.js/introjs.css';
+
 // Animate css
 @import 'node_modules/animate.css/source/base';
 @import 'node_modules/animate.css/source/bouncing_entrances/bounceIn';
@@ -186,6 +189,40 @@ tr {
 
 .avatar-image {
   border-radius: 50%;
+}
+
+// IntroJS Styles
+
+.introjs-helperLayer,
+.introjs-tooltip {
+  background-color: rgba(27, 27, 27, 0.9);
+}
+
+.introjs-helperNumberLayer {
+  display: none;
+}
+
+.introjs-button,
+.introjs-skipbutton,
+.introjs-prevbutton,
+.introjs-nextbutton {
+  color: #212529;
+  border: none;
+  text-shadow: none;
+  background-color: #ffd700;
+  background-image: none;
+}
+
+a:not([href]) {
+  color: #212529;
+}
+
+.btc {
+  padding-bottom: 6px;
+}
+
+.bank {
+  font-size: 30px;
 }
 
 

@@ -1,6 +1,9 @@
 <template>
 
-  <div class="input-group" v-if="auth">
+  <div
+    class="input-group"
+    v-if="auth"
+    v-intro="'You can buy star players to boost your chances. Each one is an extra goal. Only one star of each type is allowed. If you win you keep your stars and if you lose,you lose them. Click on the ball to play or rest stars you own. Stars are usually bought in the later rounds when you have fewer teams and more money!'">
     <select class="custom-select custom-select-sm" v-model="selected">
       
       <option value="0" selected>Boost...</option>
@@ -8,7 +11,7 @@
         v-for="(star, index) in $store.getters.GET_GAME.stars"
         :value="star.id"
         :disabled="getDisabled(star.id)">
-        {{ star.type }} (£{{ numberWithCommas(star.price) }})   
+        {{ star.type }} (₿{{ numberWithCommas(star.price) }})   
       </option>
     </select>
     <div class="input-group-append">

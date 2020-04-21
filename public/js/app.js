@@ -1977,10 +1977,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {
     restingStars: function restingStars() {
-      return this.$store.getters.GET_GAME.player.stars.filter(function (star) {
+      var stars = this.$store.getters.GET_GAME.player.stars;
+      if (stars) return stars.filter(function (star) {
         return star.pivot.play == 0;
       });
     }
@@ -2057,6 +2063,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -2270,6 +2279,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {
     xGame: function xGame() {
@@ -2278,7 +2299,7 @@ __webpack_require__.r(__webpack_exports__);
     context: function context() {
       var verb = 'match';
       var buttonText = 'Play';
-      var punterText = '';
+      var punterText = 'Waiting for dealer';
 
       if (this.xGame.phase == 'round') {
         verb = '';
@@ -2390,6 +2411,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       tournaments: []
     };
+  },
+  mounted: function mounted() {
+    this.$intro().start();
   },
   created: function created() {
     var _this = this;
@@ -2509,6 +2533,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _BidComponent_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BidComponent.vue */ "./resources/assets/js/components/BidComponent.vue");
 /* harmony import */ var _AuctionComponent_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AuctionComponent.vue */ "./resources/assets/js/components/AuctionComponent.vue");
 /* harmony import */ var _SellComponent_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SellComponent.vue */ "./resources/assets/js/components/SellComponent.vue");
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2913,8 +2943,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PlayComponent_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PlayComponent.vue */ "./resources/assets/js/components/PlayComponent.vue");
 /* harmony import */ var _ResultsComponent_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ResultsComponent.vue */ "./resources/assets/js/components/ResultsComponent.vue");
 /* harmony import */ var _WinComponent_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./WinComponent.vue */ "./resources/assets/js/components/WinComponent.vue");
-//
-//
 //
 //
 //
@@ -9704,6 +9732,2534 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
   buffer[offset + i - d] |= s * 128
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/intro.js/intro.js":
+/*!****************************************!*\
+  !*** ./node_modules/intro.js/intro.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Intro.js v2.9.3
+ * https://github.com/usablica/intro.js
+ *
+ * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh)
+ */
+
+(function(f) {
+    if (true) {
+        module.exports = f();
+        // deprecated function
+        // @since 2.8.0
+        module.exports.introJs = function () {
+          console.warn('Deprecated: please use require("intro.js") directly, instead of the introJs method of the function');
+          // introJs()
+          return f().apply(this, arguments);
+        };
+    } else { var g; }
+})(function () {
+  //Default config/variables
+  var VERSION = '2.9.3';
+
+  /**
+   * IntroJs main class
+   *
+   * @class IntroJs
+   */
+  function IntroJs(obj) {
+    this._targetElement = obj;
+    this._introItems = [];
+
+    this._options = {
+      /* Next button label in tooltip box */
+      nextLabel: 'Next &rarr;',
+      /* Previous button label in tooltip box */
+      prevLabel: '&larr; Back',
+      /* Skip button label in tooltip box */
+      skipLabel: 'Skip',
+      /* Done button label in tooltip box */
+      doneLabel: 'Done',
+      /* Hide previous button in the first step? Otherwise, it will be disabled button. */
+      hidePrev: false,
+      /* Hide next button in the last step? Otherwise, it will be disabled button. */
+      hideNext: false,
+      /* Default tooltip box position */
+      tooltipPosition: 'bottom',
+      /* Next CSS class for tooltip boxes */
+      tooltipClass: '',
+      /* CSS class that is added to the helperLayer */
+      highlightClass: '',
+      /* Close introduction when pressing Escape button? */
+      exitOnEsc: true,
+      /* Close introduction when clicking on overlay layer? */
+      exitOnOverlayClick: true,
+      /* Show step numbers in introduction? */
+      showStepNumbers: true,
+      /* Let user use keyboard to navigate the tour? */
+      keyboardNavigation: true,
+      /* Show tour control buttons? */
+      showButtons: true,
+      /* Show tour bullets? */
+      showBullets: true,
+      /* Show tour progress? */
+      showProgress: false,
+      /* Scroll to highlighted element? */
+      scrollToElement: true,
+      /*
+       * Should we scroll the tooltip or target element?
+       *
+       * Options are: 'element' or 'tooltip'
+       */
+      scrollTo: 'element',
+      /* Padding to add after scrolling when element is not in the viewport (in pixels) */
+      scrollPadding: 30,
+      /* Set the overlay opacity */
+      overlayOpacity: 0.8,
+      /* Precedence of positions, when auto is enabled */
+      positionPrecedence: ["bottom", "top", "right", "left"],
+      /* Disable an interaction with element? */
+      disableInteraction: false,
+      /* Set how much padding to be used around helper element */
+      helperElementPadding: 10,
+      /* Default hint position */
+      hintPosition: 'top-middle',
+      /* Hint button label */
+      hintButtonLabel: 'Got it',
+      /* Adding animation to hints? */
+      hintAnimation: true,
+      /* additional classes to put on the buttons */
+      buttonClass: "introjs-button"
+    };
+  }
+
+  /**
+   * Initiate a new introduction/guide from an element in the page
+   *
+   * @api private
+   * @method _introForElement
+   * @param {Object} targetElm
+   * @param {String} group
+   * @returns {Boolean} Success or not?
+   */
+  function _introForElement(targetElm, group) {
+    var allIntroSteps = targetElm.querySelectorAll("*[data-intro]"),
+        introItems = [];
+
+    if (this._options.steps) {
+      //use steps passed programmatically
+      _forEach(this._options.steps, function (step) {
+        var currentItem = _cloneObject(step);
+
+        //set the step
+        currentItem.step = introItems.length + 1;
+
+        //use querySelector function only when developer used CSS selector
+        if (typeof (currentItem.element) === 'string') {
+          //grab the element with given selector from the page
+          currentItem.element = document.querySelector(currentItem.element);
+        }
+
+        //intro without element
+        if (typeof (currentItem.element) === 'undefined' || currentItem.element === null) {
+          var floatingElementQuery = document.querySelector(".introjsFloatingElement");
+
+          if (floatingElementQuery === null) {
+            floatingElementQuery = document.createElement('div');
+            floatingElementQuery.className = 'introjsFloatingElement';
+
+            document.body.appendChild(floatingElementQuery);
+          }
+
+          currentItem.element  = floatingElementQuery;
+          currentItem.position = 'floating';
+        }
+
+        currentItem.scrollTo = currentItem.scrollTo || this._options.scrollTo;
+
+        if (typeof (currentItem.disableInteraction) === 'undefined') {
+          currentItem.disableInteraction = this._options.disableInteraction;
+        }
+
+        if (currentItem.element !== null) {
+          introItems.push(currentItem);
+        }        
+      }.bind(this));
+
+    } else {
+      //use steps from data-* annotations
+      var elmsLength = allIntroSteps.length;
+      var disableInteraction;
+      
+      //if there's no element to intro
+      if (elmsLength < 1) {
+        return false;
+      }
+
+      _forEach(allIntroSteps, function (currentElement) {
+        
+        // PR #80
+        // start intro for groups of elements
+        if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
+          return;
+        }
+
+        // skip hidden elements
+        if (currentElement.style.display === 'none') {
+          return;
+        }
+
+        var step = parseInt(currentElement.getAttribute('data-step'), 10);
+
+        if (typeof (currentElement.getAttribute('data-disable-interaction')) !== 'undefined') {
+          disableInteraction = !!currentElement.getAttribute('data-disable-interaction');
+        } else {
+          disableInteraction = this._options.disableInteraction;
+        }
+
+        if (step > 0) {
+          introItems[step - 1] = {
+            element: currentElement,
+            intro: currentElement.getAttribute('data-intro'),
+            step: parseInt(currentElement.getAttribute('data-step'), 10),
+            tooltipClass: currentElement.getAttribute('data-tooltipclass'),
+            highlightClass: currentElement.getAttribute('data-highlightclass'),
+            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
+            scrollTo: currentElement.getAttribute('data-scrollto') || this._options.scrollTo,
+            disableInteraction: disableInteraction
+          };
+        }
+      }.bind(this));
+
+      //next add intro items without data-step
+      //todo: we need a cleanup here, two loops are redundant
+      var nextStep = 0;
+
+      _forEach(allIntroSteps, function (currentElement) {
+        
+        // PR #80
+        // start intro for groups of elements
+        if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
+          return;
+        }
+        
+        if (currentElement.getAttribute('data-step') === null) {
+
+          while (true) {
+            if (typeof introItems[nextStep] === 'undefined') {
+              break;
+            } else {
+              nextStep++;
+            }
+          } 
+
+          if (typeof (currentElement.getAttribute('data-disable-interaction')) !== 'undefined') {
+            disableInteraction = !!currentElement.getAttribute('data-disable-interaction');
+          } else {
+            disableInteraction = this._options.disableInteraction;
+          }
+
+          introItems[nextStep] = {
+            element: currentElement,
+            intro: currentElement.getAttribute('data-intro'),
+            step: nextStep + 1,
+            tooltipClass: currentElement.getAttribute('data-tooltipclass'),
+            highlightClass: currentElement.getAttribute('data-highlightclass'),
+            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
+            scrollTo: currentElement.getAttribute('data-scrollto') || this._options.scrollTo,
+            disableInteraction: disableInteraction
+          };
+        }
+      }.bind(this));
+    }
+
+    //removing undefined/null elements
+    var tempIntroItems = [];
+    for (var z = 0; z < introItems.length; z++) {
+      if (introItems[z]) {
+        // copy non-falsy values to the end of the array
+        tempIntroItems.push(introItems[z]);  
+      } 
+    }
+
+    introItems = tempIntroItems;
+
+    //Ok, sort all items with given steps
+    introItems.sort(function (a, b) {
+      return a.step - b.step;
+    });
+
+    //set it to the introJs object
+    this._introItems = introItems;
+
+    //add overlay layer to the page
+    if(_addOverlayLayer.call(this, targetElm)) {
+      //then, start the show
+      _nextStep.call(this);
+
+      if (this._options.keyboardNavigation) {
+        DOMEvent.on(window, 'keydown', _onKeyDown, this, true);
+      }
+      //for window resize
+      DOMEvent.on(window, 'resize', _onResize, this, true);
+    }
+    return false;
+  }
+
+  function _onResize () {
+    this.refresh.call(this);
+  }
+
+  /**
+  * on keyCode:
+  * https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
+  * This feature has been removed from the Web standards.
+  * Though some browsers may still support it, it is in
+  * the process of being dropped.
+  * Instead, you should use KeyboardEvent.code,
+  * if it's implemented.
+  *
+  * jQuery's approach is to test for
+  *   (1) e.which, then
+  *   (2) e.charCode, then
+  *   (3) e.keyCode
+  * https://github.com/jquery/jquery/blob/a6b0705294d336ae2f63f7276de0da1195495363/src/event.js#L638
+  *
+  * @param type var
+  * @return type
+  */
+  function _onKeyDown (e) {
+    var code = (e.code === null) ? e.which : e.code;
+
+    // if code/e.which is null
+    if (code === null) {
+      code = (e.charCode === null) ? e.keyCode : e.charCode;
+    }
+    
+    if ((code === 'Escape' || code === 27) && this._options.exitOnEsc === true) {
+      //escape key pressed, exit the intro
+      //check if exit callback is defined
+      _exitIntro.call(this, this._targetElement);
+    } else if (code === 'ArrowLeft' || code === 37) {
+      //left arrow
+      _previousStep.call(this);
+    } else if (code === 'ArrowRight' || code === 39) {
+      //right arrow
+      _nextStep.call(this);
+    } else if (code === 'Enter' || code === 13) {
+      //srcElement === ie
+      var target = e.target || e.srcElement;
+      if (target && target.className.match('introjs-prevbutton')) {
+        //user hit enter while focusing on previous button
+        _previousStep.call(this);
+      } else if (target && target.className.match('introjs-skipbutton')) {
+        //user hit enter while focusing on skip button
+        if (this._introItems.length - 1 === this._currentStep && typeof (this._introCompleteCallback) === 'function') {
+            this._introCompleteCallback.call(this);
+        }
+
+        _exitIntro.call(this, this._targetElement);
+      } else if (target && target.getAttribute('data-stepnumber')) {
+        // user hit enter while focusing on step bullet
+        target.click();
+      } else {
+        //default behavior for responding to enter
+        _nextStep.call(this);
+      }
+
+      //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
+      if(e.preventDefault) {
+        e.preventDefault();
+      } else {
+        e.returnValue = false;
+      }
+    }
+  }
+
+ /*
+   * makes a copy of the object
+   * @api private
+   * @method _cloneObject
+  */
+  function _cloneObject(object) {
+      if (object === null || typeof (object) !== 'object' || typeof (object.nodeType) !== 'undefined') {
+        return object;
+      }
+      var temp = {};
+      for (var key in object) {
+        if (typeof(window.jQuery) !== 'undefined' && object[key] instanceof window.jQuery) {
+          temp[key] = object[key];
+        } else {
+          temp[key] = _cloneObject(object[key]);
+        }
+      }
+      return temp;
+  }
+  /**
+   * Go to specific step of introduction
+   *
+   * @api private
+   * @method _goToStep
+   */
+  function _goToStep(step) {
+    //because steps starts with zero
+    this._currentStep = step - 2;
+    if (typeof (this._introItems) !== 'undefined') {
+      _nextStep.call(this);
+    }
+  }
+
+  /**
+   * Go to the specific step of introduction with the explicit [data-step] number
+   *
+   * @api private
+   * @method _goToStepNumber
+   */
+  function _goToStepNumber(step) {
+    this._currentStepNumber = step;
+    if (typeof (this._introItems) !== 'undefined') {
+      _nextStep.call(this);
+    }
+  }
+
+  /**
+   * Go to next step on intro
+   *
+   * @api private
+   * @method _nextStep
+   */
+  function _nextStep() {
+    this._direction = 'forward';
+
+    if (typeof (this._currentStepNumber) !== 'undefined') {
+      _forEach(this._introItems, function (item, i) {
+        if( item.step === this._currentStepNumber ) {
+          this._currentStep = i - 1;
+          this._currentStepNumber = undefined;
+        }
+      }.bind(this));
+    }
+
+    if (typeof (this._currentStep) === 'undefined') {
+      this._currentStep = 0;
+    } else {
+      ++this._currentStep;
+    }
+
+    var nextStep = this._introItems[this._currentStep];
+    var continueStep = true;
+
+    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
+      continueStep = this._introBeforeChangeCallback.call(this, nextStep.element);
+    }
+
+    // if `onbeforechange` returned `false`, stop displaying the element
+    if (continueStep === false) {
+      --this._currentStep;
+      return false;
+    }
+
+    if ((this._introItems.length) <= this._currentStep) {
+      //end of the intro
+      //check if any callback is defined
+      if (typeof (this._introCompleteCallback) === 'function') {
+        this._introCompleteCallback.call(this);
+      }
+      _exitIntro.call(this, this._targetElement);
+      return;
+    }
+
+    _showElement.call(this, nextStep);
+  }
+
+  /**
+   * Go to previous step on intro
+   *
+   * @api private
+   * @method _previousStep
+   */
+  function _previousStep() {
+    this._direction = 'backward';
+
+    if (this._currentStep === 0) {
+      return false;
+    }
+
+    --this._currentStep;
+
+    var nextStep = this._introItems[this._currentStep];
+    var continueStep = true;
+
+    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
+      continueStep = this._introBeforeChangeCallback.call(this, nextStep.element);
+    }
+
+    // if `onbeforechange` returned `false`, stop displaying the element
+    if (continueStep === false) {
+      ++this._currentStep;
+      return false;
+    }
+
+    _showElement.call(this, nextStep);
+  }
+
+  /**
+   * Update placement of the intro objects on the screen
+   * @api private
+   */
+  function _refresh() {
+    // re-align intros
+    _setHelperLayerPosition.call(this, document.querySelector('.introjs-helperLayer'));
+    _setHelperLayerPosition.call(this, document.querySelector('.introjs-tooltipReferenceLayer'));
+    _setHelperLayerPosition.call(this, document.querySelector('.introjs-disableInteraction'));
+
+    // re-align tooltip
+    if(this._currentStep !== undefined && this._currentStep !== null) {
+      var oldHelperNumberLayer = document.querySelector('.introjs-helperNumberLayer'),
+        oldArrowLayer        = document.querySelector('.introjs-arrow'),
+        oldtooltipContainer  = document.querySelector('.introjs-tooltip');
+      _placeTooltip.call(this, this._introItems[this._currentStep].element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
+    }
+
+    //re-align hints
+    _reAlignHints.call(this);
+    return this;
+  }
+
+  /**
+   * Exit from intro
+   *
+   * @api private
+   * @method _exitIntro
+   * @param {Object} targetElement
+   * @param {Boolean} force - Setting to `true` will skip the result of beforeExit callback
+   */
+  function _exitIntro(targetElement, force) {
+    var continueExit = true;
+
+    // calling onbeforeexit callback
+    //
+    // If this callback return `false`, it would halt the process
+    if (this._introBeforeExitCallback !== undefined) {
+      continueExit = this._introBeforeExitCallback.call(this);
+    }
+
+    // skip this check if `force` parameter is `true`
+    // otherwise, if `onbeforeexit` returned `false`, don't exit the intro
+    if (!force && continueExit === false) return;
+
+    //remove overlay layers from the page
+    var overlayLayers = targetElement.querySelectorAll('.introjs-overlay');
+
+    if (overlayLayers && overlayLayers.length) {
+      _forEach(overlayLayers, function (overlayLayer) {
+        overlayLayer.style.opacity = 0;
+        window.setTimeout(function () {
+          if (this.parentNode) {
+            this.parentNode.removeChild(this);
+          }
+        }.bind(overlayLayer), 500);
+      }.bind(this));
+    }
+
+    //remove all helper layers
+    var helperLayer = targetElement.querySelector('.introjs-helperLayer');
+    if (helperLayer) {
+      helperLayer.parentNode.removeChild(helperLayer);
+    }
+
+    var referenceLayer = targetElement.querySelector('.introjs-tooltipReferenceLayer');
+    if (referenceLayer) {
+      referenceLayer.parentNode.removeChild(referenceLayer);
+    }
+
+    //remove disableInteractionLayer
+    var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
+    if (disableInteractionLayer) {
+      disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
+    }
+
+    //remove intro floating element
+    var floatingElement = document.querySelector('.introjsFloatingElement');
+    if (floatingElement) {
+      floatingElement.parentNode.removeChild(floatingElement);
+    }
+
+    _removeShowElement();
+
+    //remove `introjs-fixParent` class from the elements
+    var fixParents = document.querySelectorAll('.introjs-fixParent');
+    _forEach(fixParents, function (parent) {
+      _removeClass(parent, /introjs-fixParent/g);
+    });
+
+    //clean listeners
+    DOMEvent.off(window, 'keydown', _onKeyDown, this, true);
+    DOMEvent.off(window, 'resize', _onResize, this, true);
+
+    //check if any callback is defined
+    if (this._introExitCallback !== undefined) {
+      this._introExitCallback.call(this);
+    }
+
+    //set the step to zero
+    this._currentStep = undefined;
+  }
+
+  /**
+   * Render tooltip box in the page
+   *
+   * @api private
+   * @method _placeTooltip
+   * @param {HTMLElement} targetElement
+   * @param {HTMLElement} tooltipLayer
+   * @param {HTMLElement} arrowLayer
+   * @param {HTMLElement} helperNumberLayer
+   * @param {Boolean} hintMode
+   */
+  function _placeTooltip(targetElement, tooltipLayer, arrowLayer, helperNumberLayer, hintMode) {
+    var tooltipCssClass = '',
+        currentStepObj,
+        tooltipOffset,
+        targetOffset,
+        windowSize,
+        currentTooltipPosition;
+
+    hintMode = hintMode || false;
+
+    //reset the old style
+    tooltipLayer.style.top        = null;
+    tooltipLayer.style.right      = null;
+    tooltipLayer.style.bottom     = null;
+    tooltipLayer.style.left       = null;
+    tooltipLayer.style.marginLeft = null;
+    tooltipLayer.style.marginTop  = null;
+
+    arrowLayer.style.display = 'inherit';
+
+    if (typeof(helperNumberLayer) !== 'undefined' && helperNumberLayer !== null) {
+      helperNumberLayer.style.top  = null;
+      helperNumberLayer.style.left = null;
+    }
+
+    //prevent error when `this._currentStep` is undefined
+    if (!this._introItems[this._currentStep]) return;
+
+    //if we have a custom css class for each step
+    currentStepObj = this._introItems[this._currentStep];
+    if (typeof (currentStepObj.tooltipClass) === 'string') {
+      tooltipCssClass = currentStepObj.tooltipClass;
+    } else {
+      tooltipCssClass = this._options.tooltipClass;
+    }
+
+    tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
+    tooltipLayer.setAttribute('role', 'dialog');
+
+    currentTooltipPosition = this._introItems[this._currentStep].position;
+
+    // Floating is always valid, no point in calculating
+    if (currentTooltipPosition !== "floating") { 
+      currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer, currentTooltipPosition);
+    }
+
+    var tooltipLayerStyleLeft;
+    targetOffset  = _getOffset(targetElement);
+    tooltipOffset = _getOffset(tooltipLayer);
+    windowSize    = _getWinSize();
+
+    _addClass(tooltipLayer, 'introjs-' + currentTooltipPosition);
+
+    switch (currentTooltipPosition) {
+      case 'top-right-aligned':
+        arrowLayer.className      = 'introjs-arrow bottom-right';
+
+        var tooltipLayerStyleRight = 0;
+        _checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer);
+        tooltipLayer.style.bottom    = (targetOffset.height +  20) + 'px';
+        break;
+
+      case 'top-middle-aligned':
+        arrowLayer.className      = 'introjs-arrow bottom-middle';
+
+        var tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipOffset.width / 2;
+
+        // a fix for middle aligned hints
+        if (hintMode) {
+          tooltipLayerStyleLeftRight += 5;
+        }
+
+        if (_checkLeft(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, tooltipLayer)) {
+          tooltipLayer.style.right = null;
+          _checkRight(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, windowSize, tooltipLayer);
+        }
+        tooltipLayer.style.bottom = (targetOffset.height + 20) + 'px';
+        break;
+
+      case 'top-left-aligned':
+      // top-left-aligned is the same as the default top
+      case 'top':
+        arrowLayer.className = 'introjs-arrow bottom';
+
+        tooltipLayerStyleLeft = (hintMode) ? 0 : 15;
+
+        _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
+        tooltipLayer.style.bottom = (targetOffset.height +  20) + 'px';
+        break;
+      case 'right':
+        tooltipLayer.style.left = (targetOffset.width + 20) + 'px';
+        if (targetOffset.top + tooltipOffset.height > windowSize.height) {
+          // In this case, right would have fallen below the bottom of the screen.
+          // Modify so that the bottom of the tooltip connects with the target
+          arrowLayer.className = "introjs-arrow left-bottom";
+          tooltipLayer.style.top = "-" + (tooltipOffset.height - targetOffset.height - 20) + "px";
+        } else {
+          arrowLayer.className = 'introjs-arrow left';
+        }
+        break;
+      case 'left':
+        if (!hintMode && this._options.showStepNumbers === true) {
+          tooltipLayer.style.top = '15px';
+        }
+
+        if (targetOffset.top + tooltipOffset.height > windowSize.height) {
+          // In this case, left would have fallen below the bottom of the screen.
+          // Modify so that the bottom of the tooltip connects with the target
+          tooltipLayer.style.top = "-" + (tooltipOffset.height - targetOffset.height - 20) + "px";
+          arrowLayer.className = 'introjs-arrow right-bottom';
+        } else {
+          arrowLayer.className = 'introjs-arrow right';
+        }
+        tooltipLayer.style.right = (targetOffset.width + 20) + 'px';
+
+        break;
+      case 'floating':
+        arrowLayer.style.display = 'none';
+
+        //we have to adjust the top and left of layer manually for intro items without element
+        tooltipLayer.style.left   = '50%';
+        tooltipLayer.style.top    = '50%';
+        tooltipLayer.style.marginLeft = '-' + (tooltipOffset.width / 2)  + 'px';
+        tooltipLayer.style.marginTop  = '-' + (tooltipOffset.height / 2) + 'px';
+
+        if (typeof(helperNumberLayer) !== 'undefined' && helperNumberLayer !== null) {
+          helperNumberLayer.style.left = '-' + ((tooltipOffset.width / 2) + 18) + 'px';
+          helperNumberLayer.style.top  = '-' + ((tooltipOffset.height / 2) + 18) + 'px';
+        }
+
+        break;
+      case 'bottom-right-aligned':
+        arrowLayer.className      = 'introjs-arrow top-right';
+
+        tooltipLayerStyleRight = 0;
+        _checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer);
+        tooltipLayer.style.top    = (targetOffset.height +  20) + 'px';
+        break;
+
+      case 'bottom-middle-aligned':
+        arrowLayer.className      = 'introjs-arrow top-middle';
+
+        tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipOffset.width / 2;
+
+        // a fix for middle aligned hints
+        if (hintMode) {
+          tooltipLayerStyleLeftRight += 5;
+        }
+
+        if (_checkLeft(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, tooltipLayer)) {
+          tooltipLayer.style.right = null;
+          _checkRight(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, windowSize, tooltipLayer);
+        }
+        tooltipLayer.style.top = (targetOffset.height + 20) + 'px';
+        break;
+
+      // case 'bottom-left-aligned':
+      // Bottom-left-aligned is the same as the default bottom
+      // case 'bottom':
+      // Bottom going to follow the default behavior
+      default:
+        arrowLayer.className = 'introjs-arrow top';
+
+        tooltipLayerStyleLeft = 0;
+        _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
+        tooltipLayer.style.top    = (targetOffset.height +  20) + 'px';
+    }
+  }
+
+  /**
+   * Set tooltip left so it doesn't go off the right side of the window
+   *
+   * @return boolean true, if tooltipLayerStyleLeft is ok.  false, otherwise.
+   */
+  function _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer) {
+    if (targetOffset.left + tooltipLayerStyleLeft + tooltipOffset.width > windowSize.width) {
+      // off the right side of the window
+      tooltipLayer.style.left = (windowSize.width - tooltipOffset.width - targetOffset.left) + 'px';
+      return false;
+    }
+    tooltipLayer.style.left = tooltipLayerStyleLeft + 'px';
+    return true;
+  }
+
+  /**
+   * Set tooltip right so it doesn't go off the left side of the window
+   *
+   * @return boolean true, if tooltipLayerStyleRight is ok.  false, otherwise.
+   */
+  function _checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer) {
+    if (targetOffset.left + targetOffset.width - tooltipLayerStyleRight - tooltipOffset.width < 0) {
+      // off the left side of the window
+      tooltipLayer.style.left = (-targetOffset.left) + 'px';
+      return false;
+    }
+    tooltipLayer.style.right = tooltipLayerStyleRight + 'px';
+    return true;
+  }
+
+  /**
+   * Determines the position of the tooltip based on the position precedence and availability
+   * of screen space.
+   *
+   * @param {Object}    targetElement
+   * @param {Object}    tooltipLayer
+   * @param {String}    desiredTooltipPosition
+   * @return {String}   calculatedPosition
+   */
+  function _determineAutoPosition(targetElement, tooltipLayer, desiredTooltipPosition) {
+
+    // Take a clone of position precedence. These will be the available
+    var possiblePositions = this._options.positionPrecedence.slice();
+
+    var windowSize = _getWinSize();
+    var tooltipHeight = _getOffset(tooltipLayer).height + 10;
+    var tooltipWidth = _getOffset(tooltipLayer).width + 20;
+    var targetElementRect = targetElement.getBoundingClientRect();
+
+    // If we check all the possible areas, and there are no valid places for the tooltip, the element
+    // must take up most of the screen real estate. Show the tooltip floating in the middle of the screen.
+    var calculatedPosition = "floating";
+
+    /*
+    * auto determine position 
+    */
+
+    // Check for space below
+    if (targetElementRect.bottom + tooltipHeight + tooltipHeight > windowSize.height) {
+      _removeEntry(possiblePositions, "bottom");
+    }
+
+    // Check for space above
+    if (targetElementRect.top - tooltipHeight < 0) {
+      _removeEntry(possiblePositions, "top");
+    }
+
+    // Check for space to the right
+    if (targetElementRect.right + tooltipWidth > windowSize.width) {
+      _removeEntry(possiblePositions, "right");
+    }
+
+    // Check for space to the left
+    if (targetElementRect.left - tooltipWidth < 0) {
+      _removeEntry(possiblePositions, "left");
+    }
+
+    // @var {String}  ex: 'right-aligned'
+    var desiredAlignment = (function (pos) {
+      var hyphenIndex = pos.indexOf('-');
+      if (hyphenIndex !== -1) {
+        // has alignment
+        return pos.substr(hyphenIndex);
+      }
+      return '';
+    })(desiredTooltipPosition || '');
+
+    // strip alignment from position
+    if (desiredTooltipPosition) {
+      // ex: "bottom-right-aligned"
+      // should return 'bottom'
+      desiredTooltipPosition = desiredTooltipPosition.split('-')[0];
+    }
+
+    if (possiblePositions.length) {
+      if (desiredTooltipPosition !== "auto" &&
+          possiblePositions.indexOf(desiredTooltipPosition) > -1) {
+        // If the requested position is in the list, choose that
+        calculatedPosition = desiredTooltipPosition;
+      } else {
+        // Pick the first valid position, in order
+        calculatedPosition = possiblePositions[0];
+      }
+    }
+
+    // only top and bottom positions have optional alignments
+    if (['top', 'bottom'].indexOf(calculatedPosition) !== -1) {
+      calculatedPosition += _determineAutoAlignment(targetElementRect.left, tooltipWidth, windowSize, desiredAlignment);
+    }
+
+    return calculatedPosition;
+  }
+
+  /**
+  * auto-determine alignment
+  * @param {Integer}  offsetLeft
+  * @param {Integer}  tooltipWidth
+  * @param {Object}   windowSize
+  * @param {String}   desiredAlignment
+  * @return {String}  calculatedAlignment
+  */
+  function _determineAutoAlignment (offsetLeft, tooltipWidth, windowSize, desiredAlignment) {
+    var halfTooltipWidth = tooltipWidth / 2,
+      winWidth = Math.min(windowSize.width, window.screen.width),
+      possibleAlignments = ['-left-aligned', '-middle-aligned', '-right-aligned'],
+      calculatedAlignment = '';
+    
+    // valid left must be at least a tooltipWidth
+    // away from right side
+    if (winWidth - offsetLeft < tooltipWidth) {
+      _removeEntry(possibleAlignments, '-left-aligned');
+    }
+
+    // valid middle must be at least half 
+    // width away from both sides
+    if (offsetLeft < halfTooltipWidth || 
+      winWidth - offsetLeft < halfTooltipWidth) {
+      _removeEntry(possibleAlignments, '-middle-aligned');
+    }
+
+    // valid right must be at least a tooltipWidth
+    // width away from left side
+    if (offsetLeft < tooltipWidth) {
+      _removeEntry(possibleAlignments, '-right-aligned');
+    }
+
+    if (possibleAlignments.length) {
+      if (possibleAlignments.indexOf(desiredAlignment) !== -1) {
+        // the desired alignment is valid
+        calculatedAlignment = desiredAlignment;
+      } else {
+        // pick the first valid position, in order
+        calculatedAlignment = possibleAlignments[0];
+      }
+    } else {
+      // if screen width is too small 
+      // for ANY alignment, middle is 
+      // probably the best for visibility
+      calculatedAlignment = '-middle-aligned';
+    }
+
+    return calculatedAlignment;
+  }
+
+  /**
+   * Remove an entry from a string array if it's there, does nothing if it isn't there.
+   *
+   * @param {Array} stringArray
+   * @param {String} stringToRemove
+   */
+  function _removeEntry(stringArray, stringToRemove) {
+    if (stringArray.indexOf(stringToRemove) > -1) {
+      stringArray.splice(stringArray.indexOf(stringToRemove), 1);
+    }
+  }
+
+  /**
+   * Update the position of the helper layer on the screen
+   *
+   * @api private
+   * @method _setHelperLayerPosition
+   * @param {Object} helperLayer
+   */
+  function _setHelperLayerPosition(helperLayer) {
+    if (helperLayer) {
+      //prevent error when `this._currentStep` in undefined
+      if (!this._introItems[this._currentStep]) return;
+
+      var currentElement  = this._introItems[this._currentStep],
+          elementPosition = _getOffset(currentElement.element),
+          widthHeightPadding = this._options.helperElementPadding;
+
+      // If the target element is fixed, the tooltip should be fixed as well.
+      // Otherwise, remove a fixed class that may be left over from the previous
+      // step.
+      if (_isFixed(currentElement.element)) {
+        _addClass(helperLayer, 'introjs-fixedTooltip');
+      } else {
+        _removeClass(helperLayer, 'introjs-fixedTooltip');
+      }
+
+      if (currentElement.position === 'floating') {
+        widthHeightPadding = 0;
+      }
+
+      //set new position to helper layer
+      helperLayer.style.cssText = 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
+                                        'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
+                                        'top:'    + (elementPosition.top    - widthHeightPadding / 2)   + 'px;' +
+                                        'left: '  + (elementPosition.left   - widthHeightPadding / 2)   + 'px;';
+
+    }
+  }
+
+  /**
+   * Add disableinteraction layer and adjust the size and position of the layer
+   *
+   * @api private
+   * @method _disableInteraction
+   */
+  function _disableInteraction() {
+    var disableInteractionLayer = document.querySelector('.introjs-disableInteraction');
+
+    if (disableInteractionLayer === null) {
+      disableInteractionLayer = document.createElement('div');
+      disableInteractionLayer.className = 'introjs-disableInteraction';
+      this._targetElement.appendChild(disableInteractionLayer);
+    }
+
+    _setHelperLayerPosition.call(this, disableInteractionLayer);
+  }
+
+  /**
+   * Setting anchors to behave like buttons
+   *
+   * @api private
+   * @method _setAnchorAsButton
+   */
+  function _setAnchorAsButton(anchor){
+    anchor.setAttribute('role', 'button');
+    anchor.tabIndex = 0;
+  }
+
+  /**
+   * Show an element on the page
+   *
+   * @api private
+   * @method _showElement
+   * @param {Object} targetElement
+   */
+  function _showElement(targetElement) {
+    if (typeof (this._introChangeCallback) !== 'undefined') {
+      this._introChangeCallback.call(this, targetElement.element);
+    }
+
+    var self = this,
+        oldHelperLayer = document.querySelector('.introjs-helperLayer'),
+        oldReferenceLayer = document.querySelector('.introjs-tooltipReferenceLayer'),
+        highlightClass = 'introjs-helperLayer',
+        nextTooltipButton,
+        prevTooltipButton,
+        skipTooltipButton,
+        scrollParent;
+
+    //check for a current step highlight class
+    if (typeof (targetElement.highlightClass) === 'string') {
+      highlightClass += (' ' + targetElement.highlightClass);
+    }
+    //check for options highlight class
+    if (typeof (this._options.highlightClass) === 'string') {
+      highlightClass += (' ' + this._options.highlightClass);
+    }
+
+    if (oldHelperLayer !== null) {
+      var oldHelperNumberLayer = oldReferenceLayer.querySelector('.introjs-helperNumberLayer'),
+          oldtooltipLayer      = oldReferenceLayer.querySelector('.introjs-tooltiptext'),
+          oldArrowLayer        = oldReferenceLayer.querySelector('.introjs-arrow'),
+          oldtooltipContainer  = oldReferenceLayer.querySelector('.introjs-tooltip');
+          
+      skipTooltipButton    = oldReferenceLayer.querySelector('.introjs-skipbutton');
+      prevTooltipButton    = oldReferenceLayer.querySelector('.introjs-prevbutton');
+      nextTooltipButton    = oldReferenceLayer.querySelector('.introjs-nextbutton');
+
+      //update or reset the helper highlight class
+      oldHelperLayer.className = highlightClass;
+      //hide the tooltip
+      oldtooltipContainer.style.opacity = 0;
+      oldtooltipContainer.style.display = "none";
+
+      if (oldHelperNumberLayer !== null) {
+        var lastIntroItem = this._introItems[(targetElement.step - 2 >= 0 ? targetElement.step - 2 : 0)];
+
+        if (lastIntroItem !== null && (this._direction === 'forward' && lastIntroItem.position === 'floating') || (this._direction === 'backward' && targetElement.position === 'floating')) {
+          oldHelperNumberLayer.style.opacity = 0;
+        }
+      }
+
+      // scroll to element
+      scrollParent = _getScrollParent( targetElement.element );
+
+      if (scrollParent !== document.body) {
+        // target is within a scrollable element
+        _scrollParentToElement(scrollParent, targetElement.element);
+      }
+
+      // set new position to helper layer
+      _setHelperLayerPosition.call(self, oldHelperLayer);
+      _setHelperLayerPosition.call(self, oldReferenceLayer);
+
+      //remove `introjs-fixParent` class from the elements
+      var fixParents = document.querySelectorAll('.introjs-fixParent');
+      _forEach(fixParents, function (parent) {
+        _removeClass(parent, /introjs-fixParent/g);
+      });
+      
+      //remove old classes if the element still exist
+      _removeShowElement();
+
+      //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
+      if (self._lastShowElementTimer) {
+        window.clearTimeout(self._lastShowElementTimer);
+      }
+
+      self._lastShowElementTimer = window.setTimeout(function() {
+        //set current step to the label
+        if (oldHelperNumberLayer !== null) {
+          oldHelperNumberLayer.innerHTML = targetElement.step;
+        }
+        //set current tooltip text
+        oldtooltipLayer.innerHTML = targetElement.intro;
+        //set the tooltip position
+        oldtooltipContainer.style.display = "block";
+        _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
+
+        //change active bullet
+        if (self._options.showBullets) {
+            oldReferenceLayer.querySelector('.introjs-bullets li > a.active').className = '';
+            oldReferenceLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
+        }
+        oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').style.cssText = 'width:' + _getProgress.call(self) + '%;';
+        oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').setAttribute('aria-valuenow', _getProgress.call(self));
+
+        //show the tooltip
+        oldtooltipContainer.style.opacity = 1;
+        if (oldHelperNumberLayer) oldHelperNumberLayer.style.opacity = 1;
+
+        //reset button focus
+        if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null && /introjs-donebutton/gi.test(skipTooltipButton.className)) {
+          // skip button is now "done" button
+          skipTooltipButton.focus();
+        } else if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
+          //still in the tour, focus on next
+          nextTooltipButton.focus();
+        }
+
+        // change the scroll of the window, if needed
+        _scrollTo.call(self, targetElement.scrollTo, targetElement, oldtooltipLayer);
+      }, 350);
+
+      // end of old element if-else condition
+    } else {
+      var helperLayer       = document.createElement('div'),
+          referenceLayer    = document.createElement('div'),
+          arrowLayer        = document.createElement('div'),
+          tooltipLayer      = document.createElement('div'),
+          tooltipTextLayer  = document.createElement('div'),
+          bulletsLayer      = document.createElement('div'),
+          progressLayer     = document.createElement('div'),
+          buttonsLayer      = document.createElement('div');
+
+      helperLayer.className = highlightClass;
+      referenceLayer.className = 'introjs-tooltipReferenceLayer';
+
+      // scroll to element
+      scrollParent = _getScrollParent( targetElement.element );
+
+      if (scrollParent !== document.body) {
+        // target is within a scrollable element
+        _scrollParentToElement(scrollParent, targetElement.element);
+      }
+
+      //set new position to helper layer
+      _setHelperLayerPosition.call(self, helperLayer);
+      _setHelperLayerPosition.call(self, referenceLayer);
+
+      //add helper layer to target element
+      this._targetElement.appendChild(helperLayer);
+      this._targetElement.appendChild(referenceLayer);
+
+      arrowLayer.className = 'introjs-arrow';
+
+      tooltipTextLayer.className = 'introjs-tooltiptext';
+      tooltipTextLayer.innerHTML = targetElement.intro;
+
+      bulletsLayer.className = 'introjs-bullets';
+
+      if (this._options.showBullets === false) {
+        bulletsLayer.style.display = 'none';
+      }
+
+      var ulContainer = document.createElement('ul');
+      ulContainer.setAttribute('role', 'tablist');
+
+      var anchorClick = function () {
+          self.goToStep(this.getAttribute('data-stepnumber'));
+      };
+
+      _forEach(this._introItems, function (item, i) {
+        var innerLi    = document.createElement('li');
+        var anchorLink = document.createElement('a');
+        
+        innerLi.setAttribute('role', 'presentation');
+        anchorLink.setAttribute('role', 'tab');
+
+        anchorLink.onclick = anchorClick;
+
+        if (i === (targetElement.step-1)) {
+          anchorLink.className = 'active';
+        } 
+
+        _setAnchorAsButton(anchorLink);
+        anchorLink.innerHTML = "&nbsp;";
+        anchorLink.setAttribute('data-stepnumber', item.step);
+
+        innerLi.appendChild(anchorLink);
+        ulContainer.appendChild(innerLi);
+      });
+
+      bulletsLayer.appendChild(ulContainer);
+
+      progressLayer.className = 'introjs-progress';
+
+      if (this._options.showProgress === false) {
+        progressLayer.style.display = 'none';
+      }
+      var progressBar = document.createElement('div');
+      progressBar.className = 'introjs-progressbar';
+      progressBar.setAttribute('role', 'progress');
+      progressBar.setAttribute('aria-valuemin', 0);
+      progressBar.setAttribute('aria-valuemax', 100);
+      progressBar.setAttribute('aria-valuenow', _getProgress.call(this));
+      progressBar.style.cssText = 'width:' + _getProgress.call(this) + '%;';
+
+      progressLayer.appendChild(progressBar);
+
+      buttonsLayer.className = 'introjs-tooltipbuttons';
+      if (this._options.showButtons === false) {
+        buttonsLayer.style.display = 'none';
+      }
+
+      tooltipLayer.className = 'introjs-tooltip';
+      tooltipLayer.appendChild(tooltipTextLayer);
+      tooltipLayer.appendChild(bulletsLayer);
+      tooltipLayer.appendChild(progressLayer);
+
+      //add helper layer number
+      var helperNumberLayer = document.createElement('span');
+      if (this._options.showStepNumbers === true) {
+        helperNumberLayer.className = 'introjs-helperNumberLayer';
+        helperNumberLayer.innerHTML = targetElement.step;
+        referenceLayer.appendChild(helperNumberLayer);
+      }
+
+      tooltipLayer.appendChild(arrowLayer);
+      referenceLayer.appendChild(tooltipLayer);
+
+      //next button
+      nextTooltipButton = document.createElement('a');
+
+      nextTooltipButton.onclick = function() {
+        if (self._introItems.length - 1 !== self._currentStep) {
+          _nextStep.call(self);
+        }
+      };
+
+      _setAnchorAsButton(nextTooltipButton);
+      nextTooltipButton.innerHTML = this._options.nextLabel;
+
+      //previous button
+      prevTooltipButton = document.createElement('a');
+
+      prevTooltipButton.onclick = function() {
+        if (self._currentStep !== 0) {
+          _previousStep.call(self);
+        }
+      };
+
+      _setAnchorAsButton(prevTooltipButton);
+      prevTooltipButton.innerHTML = this._options.prevLabel;
+
+      //skip button
+      skipTooltipButton = document.createElement('a');
+      skipTooltipButton.className = this._options.buttonClass + ' introjs-skipbutton ';
+      _setAnchorAsButton(skipTooltipButton);
+      skipTooltipButton.innerHTML = this._options.skipLabel;
+
+      skipTooltipButton.onclick = function() {
+        if (self._introItems.length - 1 === self._currentStep && typeof (self._introCompleteCallback) === 'function') {
+          self._introCompleteCallback.call(self);
+        }
+
+        if (self._introItems.length - 1 !== self._currentStep && typeof (self._introExitCallback) === 'function') {
+          self._introExitCallback.call(self);
+        }
+
+        if (typeof(self._introSkipCallback) === 'function') {
+          self._introSkipCallback.call(self);
+        }
+
+        _exitIntro.call(self, self._targetElement);
+      };
+
+      buttonsLayer.appendChild(skipTooltipButton);
+
+      //in order to prevent displaying next/previous button always
+      if (this._introItems.length > 1) {
+        buttonsLayer.appendChild(prevTooltipButton);
+        buttonsLayer.appendChild(nextTooltipButton);
+      }
+
+      tooltipLayer.appendChild(buttonsLayer);
+
+      //set proper position
+      _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
+
+      // change the scroll of the window, if needed
+      _scrollTo.call(this, targetElement.scrollTo, targetElement, tooltipLayer);
+
+      //end of new element if-else condition
+    }
+
+    // removing previous disable interaction layer
+    var disableInteractionLayer = self._targetElement.querySelector('.introjs-disableInteraction');
+    if (disableInteractionLayer) {
+      disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
+    }
+
+    //disable interaction
+    if (targetElement.disableInteraction) {
+      _disableInteraction.call(self);
+    }
+
+    // when it's the first step of tour
+    if (this._currentStep === 0 && this._introItems.length > 1) {
+      if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
+        skipTooltipButton.className = this._options.buttonClass + ' introjs-skipbutton';
+      }
+      if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
+        nextTooltipButton.className = this._options.buttonClass + ' introjs-nextbutton';
+      }
+
+      if (this._options.hidePrev === true) {
+        if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
+          prevTooltipButton.className = this._options.buttonClass + ' introjs-prevbutton introjs-hidden';
+        }
+        if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
+          _addClass(nextTooltipButton, 'introjs-fullbutton');
+        }
+      } else {
+        if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
+          prevTooltipButton.className = this._options.buttonClass + ' introjs-prevbutton introjs-disabled';
+        }
+      }
+
+      if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
+        skipTooltipButton.innerHTML = this._options.skipLabel;
+      }
+    } else if (this._introItems.length - 1 === this._currentStep || this._introItems.length === 1) {
+      // last step of tour
+      if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
+        skipTooltipButton.innerHTML = this._options.doneLabel;
+        // adding donebutton class in addition to skipbutton
+        _addClass(skipTooltipButton, 'introjs-donebutton');
+      }
+      if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
+        prevTooltipButton.className = this._options.buttonClass + ' introjs-prevbutton';
+      }
+
+      if (this._options.hideNext === true) {
+        if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
+          nextTooltipButton.className = this._options.buttonClass + ' introjs-nextbutton introjs-hidden';
+        }
+        if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
+          _addClass(prevTooltipButton, 'introjs-fullbutton');
+        }
+      } else {
+        if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
+          nextTooltipButton.className = this._options.buttonClass + ' introjs-nextbutton introjs-disabled';
+        }
+      }
+    } else {
+      // steps between start and end
+      if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
+        skipTooltipButton.className = this._options.buttonClass + ' introjs-skipbutton';
+      }
+      if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
+        prevTooltipButton.className = this._options.buttonClass + ' introjs-prevbutton';
+      }
+      if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
+        nextTooltipButton.className = this._options.buttonClass + ' introjs-nextbutton';
+      }
+      if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
+        skipTooltipButton.innerHTML = this._options.skipLabel;
+      }
+    }
+
+    prevTooltipButton.setAttribute('role', 'button');
+    nextTooltipButton.setAttribute('role', 'button');
+    skipTooltipButton.setAttribute('role', 'button');
+
+    //Set focus on "next" button, so that hitting Enter always moves you onto the next step
+    if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
+      nextTooltipButton.focus();
+    }
+
+    _setShowElement(targetElement);
+
+    if (typeof (this._introAfterChangeCallback) !== 'undefined') {
+      this._introAfterChangeCallback.call(this, targetElement.element);
+    }
+  }
+
+  /**
+   * To change the scroll of `window` after highlighting an element
+   *
+   * @api private
+   * @method _scrollTo
+   * @param {String} scrollTo
+   * @param {Object} targetElement
+   * @param {Object} tooltipLayer
+   */
+  function _scrollTo(scrollTo, targetElement, tooltipLayer) {
+    if (scrollTo === 'off') return;  
+    var rect;
+
+    if (!this._options.scrollToElement) return;
+
+    if (scrollTo === 'tooltip') {
+      rect = tooltipLayer.getBoundingClientRect();
+    } else {
+      rect = targetElement.element.getBoundingClientRect();
+    }
+
+    if (!_elementInViewport(targetElement.element)) {
+      var winHeight = _getWinSize().height;
+      var top = rect.bottom - (rect.bottom - rect.top);
+
+      // TODO (afshinm): do we need scroll padding now?
+      // I have changed the scroll option and now it scrolls the window to
+      // the center of the target element or tooltip.
+
+      if (top < 0 || targetElement.element.clientHeight > winHeight) {
+        window.scrollBy(0, rect.top - ((winHeight / 2) -  (rect.height / 2)) - this._options.scrollPadding); // 30px padding from edge to look nice
+
+      //Scroll down
+      } else {
+        window.scrollBy(0, rect.top - ((winHeight / 2) -  (rect.height / 2)) + this._options.scrollPadding); // 30px padding from edge to look nice
+      }
+    }
+  }
+
+  /**
+   * To remove all show element(s)
+   *
+   * @api private
+   * @method _removeShowElement
+   */
+  function _removeShowElement() {
+    var elms = document.querySelectorAll('.introjs-showElement');
+
+    _forEach(elms, function (elm) {
+      _removeClass(elm, /introjs-[a-zA-Z]+/g);
+    });
+  }
+
+  /**
+   * To set the show element
+   * This function set a relative (in most cases) position and changes the z-index
+   *
+   * @api private
+   * @method _setShowElement
+   * @param {Object} targetElement
+   */
+  function _setShowElement(targetElement) {
+    var parentElm;
+    // we need to add this show element class to the parent of SVG elements
+    // because the SVG elements can't have independent z-index
+    if (targetElement.element instanceof SVGElement) {
+      parentElm = targetElement.element.parentNode;
+
+      while (targetElement.element.parentNode !== null) {
+        if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
+
+        if (parentElm.tagName.toLowerCase() === 'svg') {
+          _addClass(parentElm, 'introjs-showElement introjs-relativePosition');
+        }
+
+        parentElm = parentElm.parentNode;
+      }
+    }
+
+    _addClass(targetElement.element, 'introjs-showElement');
+
+    var currentElementPosition = _getPropValue(targetElement.element, 'position');
+    if (currentElementPosition !== 'absolute' &&
+        currentElementPosition !== 'relative' &&
+        currentElementPosition !== 'fixed') {
+      //change to new intro item
+      _addClass(targetElement.element, 'introjs-relativePosition');
+    }
+
+    parentElm = targetElement.element.parentNode;
+    while (parentElm !== null) {
+      if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
+
+      //fix The Stacking Context problem.
+      //More detail: https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context
+      var zIndex = _getPropValue(parentElm, 'z-index');
+      var opacity = parseFloat(_getPropValue(parentElm, 'opacity'));
+      var transform = _getPropValue(parentElm, 'transform') || _getPropValue(parentElm, '-webkit-transform') || _getPropValue(parentElm, '-moz-transform') || _getPropValue(parentElm, '-ms-transform') || _getPropValue(parentElm, '-o-transform');
+      if (/[0-9]+/.test(zIndex) || opacity < 1 || (transform !== 'none' && transform !== undefined)) {
+        _addClass(parentElm, 'introjs-fixParent');
+      }
+
+      parentElm = parentElm.parentNode;
+    }
+  }
+
+  /**
+  * Iterates arrays
+  *
+  * @param {Array} arr
+  * @param {Function} forEachFnc
+  * @param {Function} completeFnc
+  * @return {Null}
+  */
+  function _forEach(arr, forEachFnc, completeFnc) {
+    // in case arr is an empty query selector node list
+    if (arr) {
+      for (var i = 0, len = arr.length; i < len; i++) {
+        forEachFnc(arr[i], i);
+      }
+    }
+
+    if (typeof(completeFnc) === 'function') {
+      completeFnc();
+    }
+  }
+
+  /**
+  * Mark any object with an incrementing number
+  * used for keeping track of objects
+  *
+  * @param Object obj   Any object or DOM Element
+  * @param String key
+  * @return Object
+  */
+  var _stamp = (function () {
+    var keys = {};
+    return function stamp (obj, key) {
+      
+      // get group key
+      key = key || 'introjs-stamp';
+
+      // each group increments from 0
+      keys[key] = keys[key] || 0;
+
+      // stamp only once per object
+      if (obj[key] === undefined) {
+        // increment key for each new object
+        obj[key] = keys[key]++;
+      }
+
+      return obj[key];
+    };
+  })();
+
+  /**
+  * DOMEvent Handles all DOM events
+  *
+  * methods:
+  *
+  * on - add event handler
+  * off - remove event
+  */
+  var DOMEvent = (function () {
+    function DOMEvent () {
+      var events_key = 'introjs_event';
+      
+      /**
+      * Gets a unique ID for an event listener
+      *
+      * @param Object obj
+      * @param String type        event type
+      * @param Function listener
+      * @param Object context
+      * @return String
+      */
+      this._id = function (obj, type, listener, context) {
+        return type + _stamp(listener) + (context ? '_' + _stamp(context) : '');
+      };
+
+      /**
+      * Adds event listener
+      *
+      * @param Object obj
+      * @param String type        event type
+      * @param Function listener
+      * @param Object context
+      * @param Boolean useCapture
+      * @return null
+      */
+      this.on = function (obj, type, listener, context, useCapture) {
+        var id = this._id.apply(this, arguments),
+            handler = function (e) {
+              return listener.call(context || obj, e || window.event);
+            };
+
+        if ('addEventListener' in obj) {
+          obj.addEventListener(type, handler, useCapture);
+        } else if ('attachEvent' in obj) {
+          obj.attachEvent('on' + type, handler);
+        }
+
+        obj[events_key] = obj[events_key] || {};
+        obj[events_key][id] = handler;
+      };
+
+      /**
+      * Removes event listener
+      *
+      * @param Object obj
+      * @param String type        event type
+      * @param Function listener
+      * @param Object context
+      * @param Boolean useCapture
+      * @return null
+      */
+      this.off = function (obj, type, listener, context, useCapture) {
+        var id = this._id.apply(this, arguments),
+            handler = obj[events_key] && obj[events_key][id];
+
+        if (!handler) {
+          return;
+        }
+
+        if ('removeEventListener' in obj) {
+          obj.removeEventListener(type, handler, useCapture);
+        } else if ('detachEvent' in obj) {
+          obj.detachEvent('on' + type, handler);
+        }
+
+        obj[events_key][id] = null;
+      };
+    }
+
+    return new DOMEvent();
+  })();
+
+  /**
+   * Append a class to an element
+   *
+   * @api private
+   * @method _addClass
+   * @param {Object} element
+   * @param {String} className
+   * @returns null
+   */
+  function _addClass(element, className) {
+    if (element instanceof SVGElement) {
+      // svg
+      var pre = element.getAttribute('class') || '';
+
+      element.setAttribute('class', pre + ' ' + className);
+    } else {
+      if (element.classList !== undefined) {
+        // check for modern classList property
+        var classes = className.split(' ');
+        _forEach(classes, function (cls) {
+          element.classList.add( cls );
+        });
+      } else if (!element.className.match( className )) {
+        // check if element doesn't already have className
+        element.className += ' ' + className;
+      }
+    }
+  }
+
+  /**
+   * Remove a class from an element
+   *
+   * @api private
+   * @method _removeClass
+   * @param {Object} element
+   * @param {RegExp|String} classNameRegex can be regex or string
+   * @returns null
+   */
+  function _removeClass(element, classNameRegex) {
+    if (element instanceof SVGElement) {
+      var pre = element.getAttribute('class') || '';
+
+      element.setAttribute('class', pre.replace(classNameRegex, '').replace(/^\s+|\s+$/g, ''));
+    } else {
+      element.className = element.className.replace(classNameRegex, '').replace(/^\s+|\s+$/g, '');
+    }
+  }
+
+  /**
+   * Get an element CSS property on the page
+   * Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
+   *
+   * @api private
+   * @method _getPropValue
+   * @param {Object} element
+   * @param {String} propName
+   * @returns Element's property value
+   */
+  function _getPropValue (element, propName) {
+    var propValue = '';
+    if (element.currentStyle) { //IE
+      propValue = element.currentStyle[propName];
+    } else if (document.defaultView && document.defaultView.getComputedStyle) { //Others
+      propValue = document.defaultView.getComputedStyle(element, null).getPropertyValue(propName);
+    }
+
+    //Prevent exception in IE
+    if (propValue && propValue.toLowerCase) {
+      return propValue.toLowerCase();
+    } else {
+      return propValue;
+    }
+  }
+
+  /**
+   * Checks to see if target element (or parents) position is fixed or not
+   *
+   * @api private
+   * @method _isFixed
+   * @param {Object} element
+   * @returns Boolean
+   */
+  function _isFixed (element) {
+    var p = element.parentNode;
+
+    if (!p || p.nodeName === 'HTML') {
+      return false;
+    }
+
+    if (_getPropValue(element, 'position') === 'fixed') {
+      return true;
+    }
+
+    return _isFixed(p);
+  }
+
+  /**
+   * Provides a cross-browser way to get the screen dimensions
+   * via: http://stackoverflow.com/questions/5864467/internet-explorer-innerheight
+   *
+   * @api private
+   * @method _getWinSize
+   * @returns {Object} width and height attributes
+   */
+  function _getWinSize() {
+    if (window.innerWidth !== undefined) {
+      return { width: window.innerWidth, height: window.innerHeight };
+    } else {
+      var D = document.documentElement;
+      return { width: D.clientWidth, height: D.clientHeight };
+    }
+  }
+
+  /**
+   * Check to see if the element is in the viewport or not
+   * http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+   *
+   * @api private
+   * @method _elementInViewport
+   * @param {Object} el
+   */
+  function _elementInViewport(el) {
+    var rect = el.getBoundingClientRect();
+
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
+      rect.right <= window.innerWidth
+    );
+  }
+
+  /**
+   * Add overlay layer to the page
+   *
+   * @api private
+   * @method _addOverlayLayer
+   * @param {Object} targetElm
+   */
+  function _addOverlayLayer(targetElm) {
+    var overlayLayer = document.createElement('div'),
+        styleText = '',
+        self = this;
+
+    //set css class name
+    overlayLayer.className = 'introjs-overlay';
+
+    //check if the target element is body, we should calculate the size of overlay layer in a better way
+    if (!targetElm.tagName || targetElm.tagName.toLowerCase() === 'body') {
+      styleText += 'top: 0;bottom: 0; left: 0;right: 0;position: fixed;';
+      overlayLayer.style.cssText = styleText;
+    } else {
+      //set overlay layer position
+      var elementPosition = _getOffset(targetElm);
+      if (elementPosition) {
+        styleText += 'width: ' + elementPosition.width + 'px; height:' + elementPosition.height + 'px; top:' + elementPosition.top + 'px;left: ' + elementPosition.left + 'px;';
+        overlayLayer.style.cssText = styleText;
+      }
+    }
+
+    targetElm.appendChild(overlayLayer);
+
+    overlayLayer.onclick = function() {
+      if (self._options.exitOnOverlayClick === true) {
+        _exitIntro.call(self, targetElm);
+      }
+    };
+
+    window.setTimeout(function() {
+      styleText += 'opacity: ' + self._options.overlayOpacity.toString() + ';';
+      overlayLayer.style.cssText = styleText;
+    }, 10);
+
+    return true;
+  }
+
+  /**
+   * Removes open hint (tooltip hint)
+   *
+   * @api private
+   * @method _removeHintTooltip
+   */
+  function _removeHintTooltip() {
+    var tooltip = document.querySelector('.introjs-hintReference');
+
+    if (tooltip) {
+      var step = tooltip.getAttribute('data-step');
+      tooltip.parentNode.removeChild(tooltip);
+      return step;
+    }
+  }
+
+  /**
+   * Start parsing hint items
+   *
+   * @api private
+   * @param {Object} targetElm
+   * @method _startHint
+   */
+  function _populateHints(targetElm) {
+
+    this._introItems = [];
+
+    if (this._options.hints) {
+      _forEach(this._options.hints, function (hint) {
+        var currentItem = _cloneObject(hint);
+
+        if (typeof(currentItem.element) === 'string') {
+          //grab the element with given selector from the page
+          currentItem.element = document.querySelector(currentItem.element);
+        }
+
+        currentItem.hintPosition = currentItem.hintPosition || this._options.hintPosition;
+        currentItem.hintAnimation = currentItem.hintAnimation || this._options.hintAnimation;
+
+        if (currentItem.element !== null) {
+          this._introItems.push(currentItem);
+        }
+      }.bind(this));
+    } else {
+      var hints = targetElm.querySelectorAll('*[data-hint]');
+
+      if (!hints || !hints.length) {
+        return false;
+      }
+
+      //first add intro items with data-step
+      _forEach(hints, function (currentElement) {
+        // hint animation
+        var hintAnimation = currentElement.getAttribute('data-hintanimation');
+
+        if (hintAnimation) {
+          hintAnimation = (hintAnimation === 'true');
+        } else {
+          hintAnimation = this._options.hintAnimation;
+        }
+
+        this._introItems.push({
+          element: currentElement,
+          hint: currentElement.getAttribute('data-hint'),
+          hintPosition: currentElement.getAttribute('data-hintposition') || this._options.hintPosition,
+          hintAnimation: hintAnimation,
+          tooltipClass: currentElement.getAttribute('data-tooltipclass'),
+          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+        });
+      }.bind(this));
+    }
+
+    _addHints.call(this);
+
+    /* 
+    todo:
+    these events should be removed at some point 
+    */
+    DOMEvent.on(document, 'click', _removeHintTooltip, this, false);
+    DOMEvent.on(window, 'resize', _reAlignHints, this, true);
+  }
+
+  /**
+   * Re-aligns all hint elements
+   *
+   * @api private
+   * @method _reAlignHints
+   */
+  function _reAlignHints() {
+    _forEach(this._introItems, function (item) {
+      if (typeof(item.targetElement) === 'undefined') {
+        return;
+      }
+
+      _alignHintPosition.call(this, item.hintPosition, item.element, item.targetElement);
+    }.bind(this));
+  }
+
+  /**
+  * Get a queryselector within the hint wrapper
+  *
+  * @param {String} selector
+  * @return {NodeList|Array}
+  */
+  function _hintQuerySelectorAll(selector) {
+    var hintsWrapper = document.querySelector('.introjs-hints');
+    return (hintsWrapper) ? hintsWrapper.querySelectorAll(selector) : [];
+  }
+
+  /**
+   * Hide a hint
+   *
+   * @api private
+   * @method _hideHint
+   */
+  function _hideHint(stepId) {
+    var hint = _hintQuerySelectorAll('.introjs-hint[data-step="' + stepId + '"]')[0];
+    
+    _removeHintTooltip.call(this);
+
+    if (hint) {
+      _addClass(hint, 'introjs-hidehint');
+    }
+
+    // call the callback function (if any)
+    if (typeof (this._hintCloseCallback) !== 'undefined') {
+      this._hintCloseCallback.call(this, stepId);
+    }
+  }
+
+  /**
+   * Hide all hints
+   *
+   * @api private
+   * @method _hideHints
+   */
+  function _hideHints() {
+    var hints = _hintQuerySelectorAll('.introjs-hint');
+
+    _forEach(hints, function (hint) {
+      _hideHint.call(this, hint.getAttribute('data-step'));
+    }.bind(this));
+  }
+
+  /**
+   * Show all hints
+   *
+   * @api private
+   * @method _showHints
+   */
+  function _showHints() {
+    var hints = _hintQuerySelectorAll('.introjs-hint');
+
+    if (hints && hints.length) {
+      _forEach(hints, function (hint) {
+        _showHint.call(this, hint.getAttribute('data-step'));
+      }.bind(this));
+    } else {
+      _populateHints.call(this, this._targetElement);
+    }
+  }
+
+  /**
+   * Show a hint
+   *
+   * @api private
+   * @method _showHint
+   */
+  function _showHint(stepId) {
+    var hint = _hintQuerySelectorAll('.introjs-hint[data-step="' + stepId + '"]')[0];
+
+    if (hint) {
+      _removeClass(hint, /introjs-hidehint/g);
+    }
+  }
+
+  /**
+   * Removes all hint elements on the page
+   * Useful when you want to destroy the elements and add them again (e.g. a modal or popup)
+   *
+   * @api private
+   * @method _removeHints
+   */
+  function _removeHints() {
+    var hints = _hintQuerySelectorAll('.introjs-hint');
+
+    _forEach(hints, function (hint) {
+      _removeHint.call(this, hint.getAttribute('data-step'));
+    }.bind(this));
+  }
+
+  /**
+   * Remove one single hint element from the page
+   * Useful when you want to destroy the element and add them again (e.g. a modal or popup)
+   * Use removeHints if you want to remove all elements.
+   *
+   * @api private
+   * @method _removeHint
+   */
+  function _removeHint(stepId) {
+    var hint = _hintQuerySelectorAll('.introjs-hint[data-step="' + stepId + '"]')[0];
+
+    if (hint) {
+      hint.parentNode.removeChild(hint);
+    }
+  }
+
+  /**
+   * Add all available hints to the page
+   *
+   * @api private
+   * @method _addHints
+   */
+  function _addHints() {
+    var self = this;
+
+    var hintsWrapper = document.querySelector('.introjs-hints');
+
+    if (hintsWrapper === null) {
+      hintsWrapper = document.createElement('div');
+      hintsWrapper.className = 'introjs-hints';
+    }
+
+    /**
+    * Returns an event handler unique to the hint iteration
+    * 
+    * @param {Integer} i
+    * @return {Function}
+    */
+    var getHintClick = function (i) {
+      return function(e) {
+        var evt = e ? e : window.event;
+        
+        if (evt.stopPropagation) {
+          evt.stopPropagation();
+        }
+
+        if (evt.cancelBubble !== null) {
+          evt.cancelBubble = true;
+        }
+
+        _showHintDialog.call(self, i);
+      };
+    };
+
+    _forEach(this._introItems, function(item, i) {
+      // avoid append a hint twice
+      if (document.querySelector('.introjs-hint[data-step="' + i + '"]')) {
+        return;
+      }
+
+      var hint = document.createElement('a');
+      _setAnchorAsButton(hint);
+
+      hint.onclick = getHintClick(i);
+
+      hint.className = 'introjs-hint';
+
+      if (!item.hintAnimation) {
+        _addClass(hint, 'introjs-hint-no-anim');
+      }
+
+      // hint's position should be fixed if the target element's position is fixed
+      if (_isFixed(item.element)) {
+        _addClass(hint, 'introjs-fixedhint');
+      }
+
+      var hintDot = document.createElement('div');
+      hintDot.className = 'introjs-hint-dot';
+      var hintPulse = document.createElement('div');
+      hintPulse.className = 'introjs-hint-pulse';
+
+      hint.appendChild(hintDot);
+      hint.appendChild(hintPulse);
+      hint.setAttribute('data-step', i);
+
+      // we swap the hint element with target element
+      // because _setHelperLayerPosition uses `element` property
+      item.targetElement = item.element;
+      item.element = hint;
+
+      // align the hint position
+      _alignHintPosition.call(this, item.hintPosition, hint, item.targetElement);
+
+      hintsWrapper.appendChild(hint);
+    }.bind(this));
+
+    // adding the hints wrapper
+    document.body.appendChild(hintsWrapper);
+
+    // call the callback function (if any)
+    if (typeof (this._hintsAddedCallback) !== 'undefined') {
+      this._hintsAddedCallback.call(this);
+    }
+  }
+
+  /**
+   * Aligns hint position
+   *
+   * @api private
+   * @method _alignHintPosition
+   * @param {String} position
+   * @param {Object} hint
+   * @param {Object} element
+   */
+  function _alignHintPosition(position, hint, element) {
+    // get/calculate offset of target element
+    var offset = _getOffset.call(this, element);
+    var iconWidth = 20;
+    var iconHeight = 20;
+
+    // align the hint element
+    switch (position) {
+      default:
+      case 'top-left':
+        hint.style.left = offset.left + 'px';
+        hint.style.top = offset.top + 'px';
+        break;
+      case 'top-right':
+        hint.style.left = (offset.left + offset.width - iconWidth) + 'px';
+        hint.style.top = offset.top + 'px';
+        break;
+      case 'bottom-left':
+        hint.style.left = offset.left + 'px';
+        hint.style.top = (offset.top + offset.height - iconHeight) + 'px';
+        break;
+      case 'bottom-right':
+        hint.style.left = (offset.left + offset.width - iconWidth) + 'px';
+        hint.style.top = (offset.top + offset.height - iconHeight) + 'px';
+        break;
+      case 'middle-left':
+        hint.style.left = offset.left + 'px';
+        hint.style.top = (offset.top + (offset.height - iconHeight) / 2) + 'px';
+        break;
+      case 'middle-right':
+        hint.style.left = (offset.left + offset.width - iconWidth) + 'px';
+        hint.style.top = (offset.top + (offset.height - iconHeight) / 2) + 'px';
+        break;
+      case 'middle-middle':
+        hint.style.left = (offset.left + (offset.width - iconWidth) / 2) + 'px';
+        hint.style.top = (offset.top + (offset.height - iconHeight) / 2) + 'px';
+        break;
+      case 'bottom-middle':
+        hint.style.left = (offset.left + (offset.width - iconWidth) / 2) + 'px';
+        hint.style.top = (offset.top + offset.height - iconHeight) + 'px';
+        break;
+      case 'top-middle':
+        hint.style.left = (offset.left + (offset.width - iconWidth) / 2) + 'px';
+        hint.style.top = offset.top + 'px';
+        break;
+    }
+  }
+
+  /**
+   * Triggers when user clicks on the hint element
+   *
+   * @api private
+   * @method _showHintDialog
+   * @param {Number} stepId
+   */
+  function _showHintDialog(stepId) {
+    var hintElement = document.querySelector('.introjs-hint[data-step="' + stepId + '"]');
+    var item = this._introItems[stepId];
+
+    // call the callback function (if any)
+    if (typeof (this._hintClickCallback) !== 'undefined') {
+      this._hintClickCallback.call(this, hintElement, item, stepId);
+    }
+
+    // remove all open tooltips
+    var removedStep = _removeHintTooltip.call(this);
+
+    // to toggle the tooltip
+    if (parseInt(removedStep, 10) === stepId) {
+      return;
+    }
+
+    var tooltipLayer = document.createElement('div');
+    var tooltipTextLayer = document.createElement('div');
+    var arrowLayer = document.createElement('div');
+    var referenceLayer = document.createElement('div');
+
+    tooltipLayer.className = 'introjs-tooltip';
+
+    tooltipLayer.onclick = function (e) {
+      //IE9 & Other Browsers
+      if (e.stopPropagation) {
+        e.stopPropagation();
+      }
+      //IE8 and Lower
+      else {
+        e.cancelBubble = true;
+      }
+    };
+
+    tooltipTextLayer.className = 'introjs-tooltiptext';
+
+    var tooltipWrapper = document.createElement('p');
+    tooltipWrapper.innerHTML = item.hint;
+
+    var closeButton = document.createElement('a');
+    closeButton.className = this._options.buttonClass;
+    closeButton.setAttribute('role', 'button');
+    closeButton.innerHTML = this._options.hintButtonLabel;
+    closeButton.onclick = _hideHint.bind(this, stepId);
+
+    tooltipTextLayer.appendChild(tooltipWrapper);
+    tooltipTextLayer.appendChild(closeButton);
+
+    arrowLayer.className = 'introjs-arrow';
+    tooltipLayer.appendChild(arrowLayer);
+
+    tooltipLayer.appendChild(tooltipTextLayer);
+
+    // set current step for _placeTooltip function
+    this._currentStep = hintElement.getAttribute('data-step');
+
+    // align reference layer position
+    referenceLayer.className = 'introjs-tooltipReferenceLayer introjs-hintReference';
+    referenceLayer.setAttribute('data-step', hintElement.getAttribute('data-step'));
+    _setHelperLayerPosition.call(this, referenceLayer);
+
+    referenceLayer.appendChild(tooltipLayer);
+    document.body.appendChild(referenceLayer);
+
+    //set proper position
+    _placeTooltip.call(this, hintElement, tooltipLayer, arrowLayer, null, true);
+  }
+
+  /**
+   * Get an element position on the page
+   * Thanks to `meouw`: http://stackoverflow.com/a/442474/375966
+   *
+   * @api private
+   * @method _getOffset
+   * @param {Object} element
+   * @returns Element's position info
+   */
+  function _getOffset(element) {
+    var body = document.body;
+    var docEl = document.documentElement;
+    var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+    var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+    var x = element.getBoundingClientRect();
+    return {
+      top: x.top + scrollTop,
+      width: x.width,
+      height: x.height,
+      left: x.left + scrollLeft
+    };
+  }
+
+  /**
+  * Find the nearest scrollable parent
+  * copied from https://stackoverflow.com/questions/35939886/find-first-scrollable-parent
+  *
+  * @param Element element
+  * @return Element
+  */
+  function _getScrollParent(element) {
+    var style = window.getComputedStyle(element);
+    var excludeStaticParent = (style.position === "absolute");
+    var overflowRegex = /(auto|scroll)/;
+
+    if (style.position === "fixed") return document.body;
+    
+    for (var parent = element; (parent = parent.parentElement);) {
+      style = window.getComputedStyle(parent);
+      if (excludeStaticParent && style.position === "static") {
+        continue;
+      }
+      if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX)) return parent;
+    }
+
+    return document.body;
+  }
+
+  /**
+  * scroll a scrollable element to a child element
+  *
+  * @param Element parent
+  * @param Element element
+  * @return Null
+  */
+  function _scrollParentToElement (parent, element) {
+    parent.scrollTop = element.offsetTop - parent.offsetTop;
+  }
+
+  /**
+   * Gets the current progress percentage
+   *
+   * @api private
+   * @method _getProgress
+   * @returns current progress percentage
+   */
+  function _getProgress() {
+    // Steps are 0 indexed
+    var currentStep = parseInt((this._currentStep + 1), 10);
+    return ((currentStep / this._introItems.length) * 100);
+  }
+
+  /**
+   * Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
+   * via: http://stackoverflow.com/questions/171251/how-can-i-merge-properties-of-two-javascript-objects-dynamically
+   *
+   * @param obj1
+   * @param obj2
+   * @returns obj3 a new object based on obj1 and obj2
+   */
+  function _mergeOptions(obj1,obj2) {
+    var obj3 = {},
+      attrname;
+    for (attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+    for (attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+    return obj3;
+  }
+
+  var introJs = function (targetElm) {
+    var instance;
+
+    if (typeof (targetElm) === 'object') {
+      //Ok, create a new instance
+      instance = new IntroJs(targetElm);
+
+    } else if (typeof (targetElm) === 'string') {
+      //select the target element with query selector
+      var targetElement = document.querySelector(targetElm);
+
+      if (targetElement) {
+        instance = new IntroJs(targetElement);
+      } else {
+        throw new Error('There is no element with given selector.');
+      }
+    } else {
+      instance = new IntroJs(document.body);
+    }
+    // add instance to list of _instances
+    // passing group to _stamp to increment
+    // from 0 onward somewhat reliably
+    introJs.instances[ _stamp(instance, 'introjs-instance') ] = instance;
+
+    return instance;
+  };
+
+  /**
+   * Current IntroJs version
+   *
+   * @property version
+   * @type String
+   */
+  introJs.version = VERSION;
+
+  /**
+  * key-val object helper for introJs instances
+  *
+  * @property instances
+  * @type Object
+  */
+  introJs.instances = {};
+
+  //Prototype
+  introJs.fn = IntroJs.prototype = {
+    clone: function () {
+      return new IntroJs(this);
+    },
+    setOption: function(option, value) {
+      this._options[option] = value;
+      return this;
+    },
+    setOptions: function(options) {
+      this._options = _mergeOptions(this._options, options);
+      return this;
+    },
+    start: function (group) {
+      _introForElement.call(this, this._targetElement, group);
+      return this;
+    },
+    goToStep: function(step) {
+      _goToStep.call(this, step);
+      return this;
+    },
+    addStep: function(options) {
+      if (!this._options.steps) {
+        this._options.steps = [];
+      }
+
+      this._options.steps.push(options);
+
+      return this;
+    },
+    addSteps: function(steps) {
+      if (!steps.length) return;
+
+      for(var index = 0; index < steps.length; index++) {
+        this.addStep(steps[index]);
+      }
+
+      return this;
+    },
+    goToStepNumber: function(step) {
+      _goToStepNumber.call(this, step);
+
+      return this;
+    },
+    nextStep: function() {
+      _nextStep.call(this);
+      return this;
+    },
+    previousStep: function() {
+      _previousStep.call(this);
+      return this;
+    },
+    exit: function(force) {
+      _exitIntro.call(this, this._targetElement, force);
+      return this;
+    },
+    refresh: function() {
+      _refresh.call(this);
+      return this;
+    },
+    onbeforechange: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._introBeforeChangeCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onbeforechange was not a function');
+      }
+      return this;
+    },
+    onchange: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._introChangeCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onchange was not a function.');
+      }
+      return this;
+    },
+    onafterchange: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._introAfterChangeCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onafterchange was not a function');
+      }
+      return this;
+    },
+    oncomplete: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._introCompleteCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for oncomplete was not a function.');
+      }
+      return this;
+    },
+    onhintsadded: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._hintsAddedCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onhintsadded was not a function.');
+      }
+      return this;
+    },
+    onhintclick: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._hintClickCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onhintclick was not a function.');
+      }
+      return this;
+    },
+    onhintclose: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._hintCloseCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onhintclose was not a function.');
+      }
+      return this;
+    },
+    onexit: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._introExitCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onexit was not a function.');
+      }
+      return this;
+    },
+    onskip: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._introSkipCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onskip was not a function.');
+      }
+      return this;
+    },
+    onbeforeexit: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._introBeforeExitCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onbeforeexit was not a function.');
+      }
+      return this;
+    },
+    addHints: function() {
+      _populateHints.call(this, this._targetElement);
+      return this;
+    },
+    hideHint: function (stepId) {
+      _hideHint.call(this, stepId);
+      return this;
+    },
+    hideHints: function () {
+      _hideHints.call(this);
+      return this;
+    },
+    showHint: function (stepId) {
+      _showHint.call(this, stepId);
+      return this;
+    },
+    showHints: function () {
+      _showHints.call(this);
+      return this;
+    },
+    removeHints: function () {
+      _removeHints.call(this);
+      return this;
+    },
+    removeHint: function (stepId) {
+      _removeHint.call(this, stepId);
+      return this;
+    },
+    showHintDialog: function (stepId) {
+      _showHintDialog.call(this, stepId);
+      return this;
+    }
+  };
+
+  return introJs;
+});
 
 
 /***/ }),
@@ -49004,6 +51560,19 @@ return VueChatScroll;
 
 /***/ }),
 
+/***/ "./node_modules/vue-introjs/dist/index.min.js":
+/*!****************************************************!*\
+  !*** ./node_modules/vue-introjs/dist/index.min.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(introJs) {!function(t,e){ true?module.exports=e():undefined}(window,function(){return function(t){var e={};function n(r){if(e[r])return e[r].exports;var o=e[r]={i:r,l:!1,exports:{}};return t[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}return n.m=t,n.c=e,n.d=function(t,e,r){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:r})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var o in t)n.d(r,o,function(e){return t[e]}.bind(null,o));return r},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=102)}([function(t,e){var n=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=n)},function(t,e,n){var r=n(38)("wks"),o=n(37),i=n(0).Symbol,u="function"==typeof i;(t.exports=function(t){return r[t]||(r[t]=u&&i[t]||(u?i:o)("Symbol."+t))}).store=r},function(t,e){var n=t.exports={version:"2.5.7"};"number"==typeof __e&&(__e=n)},function(t,e,n){var r=n(8);t.exports=function(t){if(!r(t))throw TypeError(t+" is not an object!");return t}},function(t,e,n){var r=n(12),o=n(41);t.exports=n(7)?function(t,e,n){return r.f(t,e,o(1,n))}:function(t,e,n){return t[e]=n,t}},function(t,e,n){var r=n(0),o=n(2),i=n(14),u=n(4),c=n(10),a=function(t,e,n){var s,f,l,p=t&a.F,v=t&a.G,h=t&a.S,d=t&a.P,y=t&a.B,_=t&a.W,m=v?o:o[e]||(o[e]={}),g=m.prototype,x=v?r:h?r[e]:(r[e]||{}).prototype;for(s in v&&(n=e),n)(f=!p&&x&&void 0!==x[s])&&c(m,s)||(l=f?x[s]:n[s],m[s]=v&&"function"!=typeof x[s]?n[s]:y&&f?i(l,r):_&&x[s]==l?function(t){var e=function(e,n,r){if(this instanceof t){switch(arguments.length){case 0:return new t;case 1:return new t(e);case 2:return new t(e,n)}return new t(e,n,r)}return t.apply(this,arguments)};return e.prototype=t.prototype,e}(l):d&&"function"==typeof l?i(Function.call,l):l,d&&((m.virtual||(m.virtual={}))[s]=l,t&a.R&&g&&!g[s]&&u(g,s,l)))};a.F=1,a.G=2,a.S=4,a.P=8,a.B=16,a.W=32,a.U=64,a.R=128,t.exports=a},function(t,e){t.exports={}},function(t,e,n){t.exports=!n(11)(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},function(t,e){t.exports=function(t){return"object"==typeof t?null!==t:"function"==typeof t}},function(t,e){var n={}.toString;t.exports=function(t){return n.call(t).slice(8,-1)}},function(t,e){var n={}.hasOwnProperty;t.exports=function(t,e){return n.call(t,e)}},function(t,e){t.exports=function(t){try{return!!t()}catch(t){return!0}}},function(t,e,n){var r=n(3),o=n(98),i=n(97),u=Object.defineProperty;e.f=n(7)?Object.defineProperty:function(t,e,n){if(r(t),e=i(e,!0),r(n),o)try{return u(t,e,n)}catch(t){}if("get"in n||"set"in n)throw TypeError("Accessors not supported!");return"value"in n&&(t[e]=n.value),t}},function(t,e){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},function(t,e,n){var r=n(13);t.exports=function(t,e,n){if(r(t),void 0===e)return t;switch(n){case 1:return function(n){return t.call(e,n)};case 2:return function(n,r){return t.call(e,n,r)};case 3:return function(n,r,o){return t.call(e,n,r,o)}}return function(){return t.apply(e,arguments)}}},function(t,e,n){"use strict";var r=n(13);t.exports.f=function(t){return new function(t){var e,n;this.promise=new t(function(t,r){if(void 0!==e||void 0!==n)throw TypeError("Bad Promise constructor");e=t,n=r}),this.resolve=r(e),this.reject=r(n)}(t)}},function(t,e,n){var r=n(12).f,o=n(10),i=n(1)("toStringTag");t.exports=function(t,e,n){t&&!o(t=n?t:t.prototype,i)&&r(t,i,{configurable:!0,value:e})}},function(t,e,n){var r=n(21);t.exports=function(t){return Object(r(t))}},function(t,e){t.exports=!0},function(t,e,n){var r=n(38)("keys"),o=n(37);t.exports=function(t){return r[t]||(r[t]=o(t))}},function(t,e){var n=Math.ceil,r=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?r:n)(t)}},function(t,e){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},function(t,e,n){var r=n(40),o=n(21);t.exports=function(t){return r(o(t))}},function(t,e,n){var r=n(95),o=n(36);t.exports=Object.keys||function(t){return r(t,o)}},function(t,e,n){var r=n(8),o=n(0).document,i=r(o)&&r(o.createElement);t.exports=function(t){return i?o.createElement(t):{}}},function(t,e,n){var r=n(3),o=n(8),i=n(15);t.exports=function(t,e){if(r(t),o(e)&&e.constructor===t)return e;var n=i.f(t);return(0,n.resolve)(e),n.promise}},function(t,e){t.exports=function(t){try{return{e:!1,v:t()}}catch(t){return{e:!0,v:t}}}},function(t,e,n){var r,o,i,u=n(14),c=n(52),a=n(33),s=n(24),f=n(0),l=f.process,p=f.setImmediate,v=f.clearImmediate,h=f.MessageChannel,d=f.Dispatch,y=0,_={},m=function(){var t=+this;if(_.hasOwnProperty(t)){var e=_[t];delete _[t],e()}},g=function(t){m.call(t.data)};p&&v||(p=function(t){for(var e=[],n=1;arguments.length>n;)e.push(arguments[n++]);return _[++y]=function(){c("function"==typeof t?t:Function(t),e)},r(y),y},v=function(t){delete _[t]},"process"==n(9)(l)?r=function(t){l.nextTick(u(m,t,1))}:d&&d.now?r=function(t){d.now(u(m,t,1))}:h?(i=(o=new h).port2,o.port1.onmessage=g,r=u(i.postMessage,i,1)):f.addEventListener&&"function"==typeof postMessage&&!f.importScripts?(r=function(t){f.postMessage(t+"","*")},f.addEventListener("message",g,!1)):r="onreadystatechange"in s("script")?function(t){a.appendChild(s("script")).onreadystatechange=function(){a.removeChild(this),m.call(t)}}:function(t){setTimeout(u(m,t,1),0)}),t.exports={set:p,clear:v}},function(t,e,n){var r=n(3),o=n(13),i=n(1)("species");t.exports=function(t,e){var n,u=r(t).constructor;return void 0===u||void 0==(n=r(u)[i])?e:o(n)}},function(t,e,n){t.exports={default:n(59),__esModule:!0}},function(t,e,n){var r=n(9),o=n(1)("toStringTag"),i="Arguments"==r(function(){return arguments}());t.exports=function(t){var e,n,u;return void 0===t?"Undefined":null===t?"Null":"string"==typeof(n=function(t,e){try{return t[e]}catch(t){}}(e=Object(t),o))?n:i?r(e):"Object"==(u=r(e))&&"function"==typeof e.callee?"Arguments":u}},function(t,e,n){var r=n(30),o=n(1)("iterator"),i=n(6);t.exports=n(2).getIteratorMethod=function(t){if(void 0!=t)return t[o]||t["@@iterator"]||i[r(t)]}},function(t,e,n){"use strict";var r=n(66)(!0);n(34)(String,"String",function(t){this._t=String(t),this._i=0},function(){var t,e=this._t,n=this._i;return n>=e.length?{value:void 0,done:!0}:(t=r(e,n),this._i+=t.length,{value:t,done:!1})})},function(t,e,n){var r=n(0).document;t.exports=r&&r.documentElement},function(t,e,n){"use strict";var r=n(18),o=n(5),i=n(71),u=n(4),c=n(6),a=n(70),s=n(16),f=n(67),l=n(1)("iterator"),p=!([].keys&&"next"in[].keys()),v=function(){return this};t.exports=function(t,e,n,h,d,y,_){a(n,e,h);var m,g,x,b=function(t){if(!p&&t in E)return E[t];switch(t){case"keys":case"values":return function(){return new n(this,t)}}return function(){return new n(this,t)}},w=e+" Iterator",j="values"==d,O=!1,E=t.prototype,P=E[l]||E["@@iterator"]||d&&E[d],S=P||b(d),T=d?j?b("entries"):S:void 0,L="Array"==e&&E.entries||P;if(L&&(x=f(L.call(new t)))!==Object.prototype&&x.next&&(s(x,w,!0),r||"function"==typeof x[l]||u(x,l,v)),j&&P&&"values"!==P.name&&(O=!0,S=function(){return P.call(this)}),r&&!_||!p&&!O&&E[l]||u(E,l,S),c[e]=S,c[w]=v,d)if(m={values:j?S:b("values"),keys:y?S:b("keys"),entries:T},_)for(g in m)g in E||i(E,g,m[g]);else o(o.P+o.F*(p||O),e,m);return m}},function(t,e,n){n(74);for(var r=n(0),o=n(4),i=n(6),u=n(1)("toStringTag"),c="CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,TextTrackList,TouchList".split(","),a=0;a<c.length;a++){var s=c[a],f=r[s],l=f&&f.prototype;l&&!l[u]&&o(l,u,s),i[s]=i.Array}},function(t,e){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")},function(t,e){var n=0,r=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++n+r).toString(36))}},function(t,e,n){var r=n(2),o=n(0),i=o["__core-js_shared__"]||(o["__core-js_shared__"]={});(t.exports=function(t,e){return i[t]||(i[t]=void 0!==e?e:{})})("versions",[]).push({version:r.version,mode:n(18)?"pure":"global",copyright:"© 2018 Denis Pushkarev (zloirock.ru)"})},function(t,e,n){var r=n(20),o=Math.min;t.exports=function(t){return t>0?o(r(t),9007199254740991):0}},function(t,e,n){var r=n(9);t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==r(t)?t.split(""):Object(t)}},function(t,e){t.exports=function(t,e){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:e}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.default={props:{waitTimeout:Number},data:function(){return{timer:null,ready:!1}},created:function(){this.restartTimer()},methods:{restartTimer:function(){var t=this;clearTimeout(this.timer),this.timer=setTimeout(function(){t.ready=!0,t.$emit("ready",t.ready)},this.waitTimeout)},ping:function(){this.restartTimer()}}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.default={bind:function(t,e){!1===e.value&&(delete t.dataset.intro,delete t.dataset.hint)}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(t){return t&&t.__esModule?t:{default:t}}(n(29));e.waitForDirectives=function(){return new r.default(function(t){window.__introjsDiscovery.ready?t():window.__introjsDiscovery.$on("ready",function(){t()})})}},function(t,e,n){"use strict";var r=n(5),o=n(15),i=n(26);r(r.S,"Promise",{try:function(t){var e=o.f(this),n=i(t);return(n.e?e.reject:e.resolve)(n.v),e.promise}})},function(t,e,n){"use strict";var r=n(5),o=n(2),i=n(0),u=n(28),c=n(25);r(r.P+r.R,"Promise",{finally:function(t){var e=u(this,o.Promise||i.Promise),n="function"==typeof t;return this.then(n?function(n){return c(e,t()).then(function(){return n})}:t,n?function(n){return c(e,t()).then(function(){throw n})}:t)}})},function(t,e,n){var r=n(1)("iterator"),o=!1;try{var i=[7][r]();i.return=function(){o=!0},Array.from(i,function(){throw 2})}catch(t){}t.exports=function(t,e){if(!e&&!o)return!1;var n=!1;try{var i=[7],u=i[r]();u.next=function(){return{done:n=!0}},i[r]=function(){return u},t(i)}catch(t){}return n}},function(t,e,n){"use strict";var r=n(0),o=n(2),i=n(12),u=n(7),c=n(1)("species");t.exports=function(t){var e="function"==typeof o[t]?o[t]:r[t];u&&e&&!e[c]&&i.f(e,c,{configurable:!0,get:function(){return this}})}},function(t,e,n){var r=n(4);t.exports=function(t,e,n){for(var o in e)n&&t[o]?t[o]=e[o]:r(t,o,e[o]);return t}},function(t,e,n){var r=n(0).navigator;t.exports=r&&r.userAgent||""},function(t,e,n){var r=n(0),o=n(27).set,i=r.MutationObserver||r.WebKitMutationObserver,u=r.process,c=r.Promise,a="process"==n(9)(u);t.exports=function(){var t,e,n,s=function(){var r,o;for(a&&(r=u.domain)&&r.exit();t;){o=t.fn,t=t.next;try{o()}catch(r){throw t?n():e=void 0,r}}e=void 0,r&&r.enter()};if(a)n=function(){u.nextTick(s)};else if(!i||r.navigator&&r.navigator.standalone)if(c&&c.resolve){var f=c.resolve(void 0);n=function(){f.then(s)}}else n=function(){o.call(r,s)};else{var l=!0,p=document.createTextNode("");new i(s).observe(p,{characterData:!0}),n=function(){p.data=l=!l}}return function(r){var o={fn:r,next:void 0};e&&(e.next=o),t||(t=o,n()),e=o}}},function(t,e){t.exports=function(t,e,n){var r=void 0===n;switch(e.length){case 0:return r?t():t.call(n);case 1:return r?t(e[0]):t.call(n,e[0]);case 2:return r?t(e[0],e[1]):t.call(n,e[0],e[1]);case 3:return r?t(e[0],e[1],e[2]):t.call(n,e[0],e[1],e[2]);case 4:return r?t(e[0],e[1],e[2],e[3]):t.call(n,e[0],e[1],e[2],e[3])}return t.apply(n,e)}},function(t,e,n){var r=n(6),o=n(1)("iterator"),i=Array.prototype;t.exports=function(t){return void 0!==t&&(r.Array===t||i[o]===t)}},function(t,e,n){var r=n(3);t.exports=function(t,e,n,o){try{return o?e(r(n)[0],n[1]):e(n)}catch(e){var i=t.return;throw void 0!==i&&r(i.call(t)),e}}},function(t,e,n){var r=n(14),o=n(54),i=n(53),u=n(3),c=n(39),a=n(31),s={},f={};(e=t.exports=function(t,e,n,l,p){var v,h,d,y,_=p?function(){return t}:a(t),m=r(n,l,e?2:1),g=0;if("function"!=typeof _)throw TypeError(t+" is not iterable!");if(i(_)){for(v=c(t.length);v>g;g++)if((y=e?m(u(h=t[g])[0],h[1]):m(t[g]))===s||y===f)return y}else for(d=_.call(t);!(h=d.next()).done;)if((y=o(d,m,h.value,e))===s||y===f)return y}).BREAK=s,e.RETURN=f},function(t,e){t.exports=function(t,e,n,r){if(!(t instanceof e)||void 0!==r&&r in t)throw TypeError(n+": incorrect invocation!");return t}},function(t,e,n){"use strict";var r,o,i,u,c=n(18),a=n(0),s=n(14),f=n(30),l=n(5),p=n(8),v=n(13),h=n(56),d=n(55),y=n(28),_=n(27).set,m=n(51)(),g=n(15),x=n(26),b=n(50),w=n(25),j=a.TypeError,O=a.process,E=O&&O.versions,P=E&&E.v8||"",S=a.Promise,T="process"==f(O),L=function(){},M=o=g.f,k=!!function(){try{var t=S.resolve(1),e=(t.constructor={})[n(1)("species")]=function(t){t(L,L)};return(T||"function"==typeof PromiseRejectionEvent)&&t.then(L)instanceof e&&0!==P.indexOf("6.6")&&-1===b.indexOf("Chrome/66")}catch(t){}}(),I=function(t){var e;return!(!p(t)||"function"!=typeof(e=t.then))&&e},R=function(t,e){if(!t._n){t._n=!0;var n=t._c;m(function(){for(var r=t._v,o=1==t._s,i=0,u=function(e){var n,i,u,c=o?e.ok:e.fail,a=e.resolve,s=e.reject,f=e.domain;try{c?(o||(2==t._h&&D(t),t._h=1),!0===c?n=r:(f&&f.enter(),n=c(r),f&&(f.exit(),u=!0)),n===e.promise?s(j("Promise-chain cycle")):(i=I(n))?i.call(n,a,s):a(n)):s(r)}catch(t){f&&!u&&f.exit(),s(t)}};n.length>i;)u(n[i++]);t._c=[],t._n=!1,e&&!t._h&&C(t)})}},C=function(t){_.call(a,function(){var e,n,r,o=t._v,i=A(t);if(i&&(e=x(function(){T?O.emit("unhandledRejection",o,t):(n=a.onunhandledrejection)?n({promise:t,reason:o}):(r=a.console)&&r.error&&r.error("Unhandled promise rejection",o)}),t._h=T||A(t)?2:1),t._a=void 0,i&&e.e)throw e.v})},A=function(t){return 1!==t._h&&0===(t._a||t._c).length},D=function(t){_.call(a,function(){var e;T?O.emit("rejectionHandled",t):(e=a.onrejectionhandled)&&e({promise:t,reason:t._v})})},F=function(t){var e=this;e._d||(e._d=!0,(e=e._w||e)._v=t,e._s=2,e._a||(e._a=e._c.slice()),R(e,!0))},V=function(t){var e,n=this;if(!n._d){n._d=!0,n=n._w||n;try{if(n===t)throw j("Promise can't be resolved itself");(e=I(t))?m(function(){var r={_w:n,_d:!1};try{e.call(t,s(V,r,1),s(F,r,1))}catch(t){F.call(r,t)}}):(n._v=t,n._s=1,R(n,!1))}catch(t){F.call({_w:n,_d:!1},t)}}};k||(S=function(t){h(this,S,"Promise","_h"),v(t),r.call(this);try{t(s(V,this,1),s(F,this,1))}catch(t){F.call(this,t)}},(r=function(t){this._c=[],this._a=void 0,this._s=0,this._d=!1,this._v=void 0,this._h=0,this._n=!1}).prototype=n(49)(S.prototype,{then:function(t,e){var n=M(y(this,S));return n.ok="function"!=typeof t||t,n.fail="function"==typeof e&&e,n.domain=T?O.domain:void 0,this._c.push(n),this._a&&this._a.push(n),this._s&&R(this,!1),n.promise},catch:function(t){return this.then(void 0,t)}}),i=function(){var t=new r;this.promise=t,this.resolve=s(V,t,1),this.reject=s(F,t,1)},g.f=M=function(t){return t===S||t===u?new i(t):o(t)}),l(l.G+l.W+l.F*!k,{Promise:S}),n(16)(S,"Promise"),n(48)("Promise"),u=n(2).Promise,l(l.S+l.F*!k,"Promise",{reject:function(t){var e=M(this);return(0,e.reject)(t),e.promise}}),l(l.S+l.F*(c||!k),"Promise",{resolve:function(t){return w(c&&this===u?S:this,t)}}),l(l.S+l.F*!(k&&n(47)(function(t){S.all(t).catch(L)})),"Promise",{all:function(t){var e=this,n=M(e),r=n.resolve,o=n.reject,i=x(function(){var n=[],i=0,u=1;d(t,!1,function(t){var c=i++,a=!1;n.push(void 0),u++,e.resolve(t).then(function(t){a||(a=!0,n[c]=t,--u||r(n))},o)}),--u||r(n)});return i.e&&o(i.v),n.promise},race:function(t){var e=this,n=M(e),r=n.reject,o=x(function(){d(t,!1,function(t){e.resolve(t).then(n.resolve,r)})});return o.e&&r(o.v),n.promise}})},function(t,e){},function(t,e,n){n(58),n(32),n(35),n(57),n(46),n(45),t.exports=n(2).Promise},function(t,e,n){"use strict";e.__esModule=!0;var r=function(t){return t&&t.__esModule?t:{default:t}}(n(29));e.default=function(t){return function(){var e=t.apply(this,arguments);return new r.default(function(t,n){return function o(i,u){try{var c=e[i](u),a=c.value}catch(t){return void n(t)}if(!c.done)return r.default.resolve(a).then(function(t){o("next",t)},function(t){o("throw",t)});t(a)}("next")})}}},function(t,e,n){var r=n(5),o=n(2),i=n(11);t.exports=function(t,e){var n=(o.Object||{})[t]||Object[t],u={};u[t]=e(n),r(r.S+r.F*i(function(){n(1)}),"Object",u)}},function(t,e,n){var r=n(17),o=n(23);n(61)("keys",function(){return function(t){return o(r(t))}})},function(t,e,n){n(62),t.exports=n(2).Object.keys},function(t,e,n){t.exports={default:n(63),__esModule:!0}},function(t,e,n){var r=n(3),o=n(31);t.exports=n(2).getIterator=function(t){var e=o(t);if("function"!=typeof e)throw TypeError(t+" is not iterable!");return r(e.call(t))}},function(t,e,n){var r=n(20),o=n(21);t.exports=function(t){return function(e,n){var i,u,c=String(o(e)),a=r(n),s=c.length;return a<0||a>=s?t?"":void 0:(i=c.charCodeAt(a))<55296||i>56319||a+1===s||(u=c.charCodeAt(a+1))<56320||u>57343?t?c.charAt(a):i:t?c.slice(a,a+2):u-56320+(i-55296<<10)+65536}}},function(t,e,n){var r=n(10),o=n(17),i=n(19)("IE_PROTO"),u=Object.prototype;t.exports=Object.getPrototypeOf||function(t){return t=o(t),r(t,i)?t[i]:"function"==typeof t.constructor&&t instanceof t.constructor?t.constructor.prototype:t instanceof Object?u:null}},function(t,e,n){var r=n(12),o=n(3),i=n(23);t.exports=n(7)?Object.defineProperties:function(t,e){o(t);for(var n,u=i(e),c=u.length,a=0;c>a;)r.f(t,n=u[a++],e[n]);return t}},function(t,e,n){var r=n(3),o=n(68),i=n(36),u=n(19)("IE_PROTO"),c=function(){},a=function(){var t,e=n(24)("iframe"),r=i.length;for(e.style.display="none",n(33).appendChild(e),e.src="javascript:",(t=e.contentWindow.document).open(),t.write("<script>document.F=Object<\/script>"),t.close(),a=t.F;r--;)delete a.prototype[i[r]];return a()};t.exports=Object.create||function(t,e){var n;return null!==t?(c.prototype=r(t),n=new c,c.prototype=null,n[u]=t):n=a(),void 0===e?n:o(n,e)}},function(t,e,n){"use strict";var r=n(69),o=n(41),i=n(16),u={};n(4)(u,n(1)("iterator"),function(){return this}),t.exports=function(t,e,n){t.prototype=r(u,{next:o(1,n)}),i(t,e+" Iterator")}},function(t,e,n){t.exports=n(4)},function(t,e){t.exports=function(t,e){return{value:e,done:!!t}}},function(t,e){t.exports=function(){}},function(t,e,n){"use strict";var r=n(73),o=n(72),i=n(6),u=n(22);t.exports=n(34)(Array,"Array",function(t,e){this._t=u(t),this._i=0,this._k=e},function(){var t=this._t,e=this._k,n=this._i++;return!t||n>=t.length?(this._t=void 0,o(1)):o(0,"keys"==e?n:"values"==e?t[n]:[n,t[n]])},"values"),i.Arguments=i.Array,r("keys"),r("values"),r("entries")},function(t,e,n){n(35),n(32),t.exports=n(65)},function(t,e,n){t.exports={default:n(75),__esModule:!0}},function(t,e){!function(e){"use strict";var n,r=Object.prototype,o=r.hasOwnProperty,i="function"==typeof Symbol?Symbol:{},u=i.iterator||"@@iterator",c=i.asyncIterator||"@@asyncIterator",a=i.toStringTag||"@@toStringTag",s="object"==typeof t,f=e.regeneratorRuntime;if(f)s&&(t.exports=f);else{(f=e.regeneratorRuntime=s?t.exports:{}).wrap=x;var l="suspendedStart",p="suspendedYield",v="executing",h="completed",d={},y={};y[u]=function(){return this};var _=Object.getPrototypeOf,m=_&&_(_(k([])));m&&m!==r&&o.call(m,u)&&(y=m);var g=O.prototype=w.prototype=Object.create(y);j.prototype=g.constructor=O,O.constructor=j,O[a]=j.displayName="GeneratorFunction",f.isGeneratorFunction=function(t){var e="function"==typeof t&&t.constructor;return!!e&&(e===j||"GeneratorFunction"===(e.displayName||e.name))},f.mark=function(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,O):(t.__proto__=O,a in t||(t[a]="GeneratorFunction")),t.prototype=Object.create(g),t},f.awrap=function(t){return{__await:t}},E(P.prototype),P.prototype[c]=function(){return this},f.AsyncIterator=P,f.async=function(t,e,n,r){var o=new P(x(t,e,n,r));return f.isGeneratorFunction(e)?o:o.next().then(function(t){return t.done?t.value:o.next()})},E(g),g[a]="Generator",g[u]=function(){return this},g.toString=function(){return"[object Generator]"},f.keys=function(t){var e=[];for(var n in t)e.push(n);return e.reverse(),function n(){for(;e.length;){var r=e.pop();if(r in t)return n.value=r,n.done=!1,n}return n.done=!0,n}},f.values=k,M.prototype={constructor:M,reset:function(t){if(this.prev=0,this.next=0,this.sent=this._sent=n,this.done=!1,this.delegate=null,this.method="next",this.arg=n,this.tryEntries.forEach(L),!t)for(var e in this)"t"===e.charAt(0)&&o.call(this,e)&&!isNaN(+e.slice(1))&&(this[e]=n)},stop:function(){this.done=!0;var t=this.tryEntries[0].completion;if("throw"===t.type)throw t.arg;return this.rval},dispatchException:function(t){if(this.done)throw t;var e=this;function r(r,o){return c.type="throw",c.arg=t,e.next=r,o&&(e.method="next",e.arg=n),!!o}for(var i=this.tryEntries.length-1;i>=0;--i){var u=this.tryEntries[i],c=u.completion;if("root"===u.tryLoc)return r("end");if(u.tryLoc<=this.prev){var a=o.call(u,"catchLoc"),s=o.call(u,"finallyLoc");if(a&&s){if(this.prev<u.catchLoc)return r(u.catchLoc,!0);if(this.prev<u.finallyLoc)return r(u.finallyLoc)}else if(a){if(this.prev<u.catchLoc)return r(u.catchLoc,!0)}else{if(!s)throw new Error("try statement without catch or finally");if(this.prev<u.finallyLoc)return r(u.finallyLoc)}}}},abrupt:function(t,e){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.tryLoc<=this.prev&&o.call(r,"finallyLoc")&&this.prev<r.finallyLoc){var i=r;break}}i&&("break"===t||"continue"===t)&&i.tryLoc<=e&&e<=i.finallyLoc&&(i=null);var u=i?i.completion:{};return u.type=t,u.arg=e,i?(this.method="next",this.next=i.finallyLoc,d):this.complete(u)},complete:function(t,e){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&e&&(this.next=e),d},finish:function(t){for(var e=this.tryEntries.length-1;e>=0;--e){var n=this.tryEntries[e];if(n.finallyLoc===t)return this.complete(n.completion,n.afterLoc),L(n),d}},catch:function(t){for(var e=this.tryEntries.length-1;e>=0;--e){var n=this.tryEntries[e];if(n.tryLoc===t){var r=n.completion;if("throw"===r.type){var o=r.arg;L(n)}return o}}throw new Error("illegal catch attempt")},delegateYield:function(t,e,r){return this.delegate={iterator:k(t),resultName:e,nextLoc:r},"next"===this.method&&(this.arg=n),d}}}function x(t,e,n,r){var o=e&&e.prototype instanceof w?e:w,i=Object.create(o.prototype),u=new M(r||[]);return i._invoke=function(t,e,n){var r=l;return function(o,i){if(r===v)throw new Error("Generator is already running");if(r===h){if("throw"===o)throw i;return I()}for(n.method=o,n.arg=i;;){var u=n.delegate;if(u){var c=S(u,n);if(c){if(c===d)continue;return c}}if("next"===n.method)n.sent=n._sent=n.arg;else if("throw"===n.method){if(r===l)throw r=h,n.arg;n.dispatchException(n.arg)}else"return"===n.method&&n.abrupt("return",n.arg);r=v;var a=b(t,e,n);if("normal"===a.type){if(r=n.done?h:p,a.arg===d)continue;return{value:a.arg,done:n.done}}"throw"===a.type&&(r=h,n.method="throw",n.arg=a.arg)}}}(t,n,u),i}function b(t,e,n){try{return{type:"normal",arg:t.call(e,n)}}catch(t){return{type:"throw",arg:t}}}function w(){}function j(){}function O(){}function E(t){["next","throw","return"].forEach(function(e){t[e]=function(t){return this._invoke(e,t)}})}function P(t){var e;this._invoke=function(n,r){function i(){return new Promise(function(e,i){!function e(n,r,i,u){var c=b(t[n],t,r);if("throw"!==c.type){var a=c.arg,s=a.value;return s&&"object"==typeof s&&o.call(s,"__await")?Promise.resolve(s.__await).then(function(t){e("next",t,i,u)},function(t){e("throw",t,i,u)}):Promise.resolve(s).then(function(t){a.value=t,i(a)},u)}u(c.arg)}(n,r,e,i)})}return e=e?e.then(i,i):i()}}function S(t,e){var r=t.iterator[e.method];if(r===n){if(e.delegate=null,"throw"===e.method){if(t.iterator.return&&(e.method="return",e.arg=n,S(t,e),"throw"===e.method))return d;e.method="throw",e.arg=new TypeError("The iterator does not provide a 'throw' method")}return d}var o=b(r,t.iterator,e.arg);if("throw"===o.type)return e.method="throw",e.arg=o.arg,e.delegate=null,d;var i=o.arg;return i?i.done?(e[t.resultName]=i.value,e.next=t.nextLoc,"return"!==e.method&&(e.method="next",e.arg=n),e.delegate=null,d):i:(e.method="throw",e.arg=new TypeError("iterator result is not an object"),e.delegate=null,d)}function T(t){var e={tryLoc:t[0]};1 in t&&(e.catchLoc=t[1]),2 in t&&(e.finallyLoc=t[2],e.afterLoc=t[3]),this.tryEntries.push(e)}function L(t){var e=t.completion||{};e.type="normal",delete e.arg,t.completion=e}function M(t){this.tryEntries=[{tryLoc:"root"}],t.forEach(T,this),this.reset(!0)}function k(t){if(t){var e=t[u];if(e)return e.call(t);if("function"==typeof t.next)return t;if(!isNaN(t.length)){var r=-1,i=function e(){for(;++r<t.length;)if(o.call(t,r))return e.value=t[r],e.done=!1,e;return e.value=n,e.done=!0,e};return i.next=i}}return{next:I}}function I(){return{value:n,done:!0}}}(function(){return this}()||Function("return this")())},function(t,e,n){var r=function(){return this}()||Function("return this")(),o=r.regeneratorRuntime&&Object.getOwnPropertyNames(r).indexOf("regeneratorRuntime")>=0,i=o&&r.regeneratorRuntime;if(r.regeneratorRuntime=void 0,t.exports=n(77),o)r.regeneratorRuntime=i;else try{delete r.regeneratorRuntime}catch(t){r.regeneratorRuntime=void 0}},function(t,e,n){t.exports=n(78)},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=a(n(79)),o=a(n(76)),i=a(n(64)),u=a(n(60)),c=n(44);function a(t){return t&&t.__esModule?t:{default:t}}var s=!1;function f(t){s||(s=!0,t.__introjs.start(),t.__introjs.onAutostartHook&&t.__introjs.onAutostartHook(t),t.hasOwnProperty("__introjsAutoHints")&&(t.__introjs.showHints(),t.__introjs.onAutostartHintsHook&&t.__introjs.onAutostartHintsHook(t)))}e.default=function(){var t=(0,u.default)(r.default.mark(function t(e,n){var u,a,s,l,p,v,h,d,y;return r.default.wrap(function(t){for(;;)switch(t.prev=t.next){case 0:if(!1!==n.value){t.next=2;break}return t.abrupt("return");case 2:if(e.hasOwnProperty("__introjs")||(e.__introjs=introJs(),e.__introjs.onautostart=function(t){e.__introjs.onAutostartHook=t},e.__introjs.onautostarthints=function(t){e.__introjs.onAutostartHintsHook=t}),"hints"===n.arg&&(e.__introjsAutoHints=!0),"on"!==n.arg){t.next=28;break}for(u=(0,i.default)(n.modifiers),(a=function(t){return n.value(t,e.__introjs)}).bind(e.__introjs),s=!0,l=!1,p=void 0,t.prev=11,v=(0,o.default)(u);!(s=(h=v.next()).done);s=!0)d=h.value,y="on"+d,e.__introjs[y](a);t.next=19;break;case 15:t.prev=15,t.t0=t.catch(11),l=!0,p=t.t0;case 19:t.prev=19,t.prev=20,!s&&v.return&&v.return();case 22:if(t.prev=22,!l){t.next=25;break}throw p;case 25:return t.finish(22);case 26:return t.finish(19);case 27:return t.abrupt("return");case 28:if(!("config"in n.modifiers)){t.next=31;break}return e.__introjs.setOptions(n.value),t.abrupt("return");case 31:return t.prev=31,t.next=34,(0,c.waitForDirectives)();case 34:f(e),t.next=40;break;case 37:t.prev=37,t.t1=t.catch(31),console.error(t.t1);case 40:case"end":return t.stop()}},t,void 0,[[11,15,19,27],[20,,22,26],[31,37]])}));return function(e,n){return t.apply(this,arguments)}}()},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.default={bind:function(t,e){t.dataset.hintposition=e.value}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.default={bind:function(t,e){t.dataset.hint=e.value,window.__introjsDiscovery.ping()}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.default={bind:function(t,e){t.dataset.disableInteraction=e.value}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.default={bind:function(t,e){t.dataset.scrollto=e.value}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.default={bind:function(t,e){t.dataset.highlightclass=e.value}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.default={bind:function(t,e){t.dataset.tooltipclass=e.value}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.default={bind:function(t,e){t.dataset.position=e.value}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.default={bind:function(t,e){t.dataset.step=e.value}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.default={bind:function(t,e){t.dataset.intro=e.value,window.__introjsDiscovery.ping()}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.DIRECTIVES=void 0;var r=h(n(89)),o=h(n(88)),i=h(n(87)),u=h(n(86)),c=h(n(85)),a=h(n(84)),s=h(n(83)),f=h(n(82)),l=h(n(81)),p=h(n(80)),v=h(n(43));function h(t){return t&&t.__esModule?t:{default:t}}e.DIRECTIVES={intro:r.default,step:o.default,position:i.default,tooltipClass:u.default,highlightClass:c.default,scrollTo:a.default,disableInteraction:s.default,hint:f.default,hintPosition:l.default,autostart:p.default,conditional:v.default}},function(t,e){e.f={}.propertyIsEnumerable},function(t,e){e.f=Object.getOwnPropertySymbols},function(t,e,n){var r=n(20),o=Math.max,i=Math.min;t.exports=function(t,e){return(t=r(t))<0?o(t+e,0):i(t,e)}},function(t,e,n){var r=n(22),o=n(39),i=n(93);t.exports=function(t){return function(e,n,u){var c,a=r(e),s=o(a.length),f=i(u,s);if(t&&n!=n){for(;s>f;)if((c=a[f++])!=c)return!0}else for(;s>f;f++)if((t||f in a)&&a[f]===n)return t||f||0;return!t&&-1}}},function(t,e,n){var r=n(10),o=n(22),i=n(94)(!1),u=n(19)("IE_PROTO");t.exports=function(t,e){var n,c=o(t),a=0,s=[];for(n in c)n!=u&&r(c,n)&&s.push(n);for(;e.length>a;)r(c,n=e[a++])&&(~i(s,n)||s.push(n));return s}},function(t,e,n){"use strict";var r=n(23),o=n(92),i=n(91),u=n(17),c=n(40),a=Object.assign;t.exports=!a||n(11)(function(){var t={},e={},n=Symbol(),r="abcdefghijklmnopqrst";return t[n]=7,r.split("").forEach(function(t){e[t]=t}),7!=a({},t)[n]||Object.keys(a({},e)).join("")!=r})?function(t,e){for(var n=u(t),a=arguments.length,s=1,f=o.f,l=i.f;a>s;)for(var p,v=c(arguments[s++]),h=f?r(v).concat(f(v)):r(v),d=h.length,y=0;d>y;)l.call(v,p=h[y++])&&(n[p]=v[p]);return n}:a},function(t,e,n){var r=n(8);t.exports=function(t,e){if(!r(t))return t;var n,o;if(e&&"function"==typeof(n=t.toString)&&!r(o=n.call(t)))return o;if("function"==typeof(n=t.valueOf)&&!r(o=n.call(t)))return o;if(!e&&"function"==typeof(n=t.toString)&&!r(o=n.call(t)))return o;throw TypeError("Can't convert object to primitive value")}},function(t,e,n){t.exports=!n(7)&&!n(11)(function(){return 7!=Object.defineProperty(n(24)("div"),"a",{get:function(){return 7}}).a})},function(t,e,n){var r=n(5);r(r.S+r.F,"Object",{assign:n(96)})},function(t,e,n){n(99),t.exports=n(2).Object.assign},function(t,e,n){t.exports={default:n(100),__esModule:!0}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=u(n(101));e.autoregister=s;var o=n(90),i=u(n(42));function u(t){return t&&t.__esModule?t:{default:t}}var c={waitTimeout:400},a={install:function(t,e){e=(0,r.default)({},c,e),t.prototype.$intro=function(){return introJs.apply(void 0,arguments)};var n=t.extend(i.default);window.__introjsDiscovery=new n({propsData:e}),t.directive("intro",o.DIRECTIVES.intro),t.directive("intro-step",o.DIRECTIVES.step),t.directive("intro-position",o.DIRECTIVES.position),t.directive("intro-tooltip-class",o.DIRECTIVES.tooltipClass),t.directive("intro-highlight-class",o.DIRECTIVES.highlightClass),t.directive("intro-scroll-to",o.DIRECTIVES.scrollTo),t.directive("intro-disable-interaction",o.DIRECTIVES.disableInteraction),t.directive("intro-hint",o.DIRECTIVES.hint),t.directive("intro-hint-position",o.DIRECTIVES.hintPosition),t.directive("intro-autostart",o.DIRECTIVES.autostart),t.directive("intro-if",o.DIRECTIVES.conditional)}};function s(){window.Vue&&window.Vue.use(a)}e.default=a,s()}])});
+//# sourceMappingURL=index.min.js.map
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! intro.js */ "./node_modules/intro.js/intro.js")))
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/AuctionComponent.vue?vue&type=template&id=09e6d19e&":
 /*!**************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/AuctionComponent.vue?vue&type=template&id=09e6d19e& ***!
@@ -49049,7 +51618,7 @@ var render = function() {
           [
             _c("h3", { key: _vm.xGame.high_bid_amount }, [
               _vm._v(
-                "£" + _vm._s(_vm.numberWithCommas(_vm.xGame.high_bid_amount))
+                "₿" + _vm._s(_vm.numberWithCommas(_vm.xGame.high_bid_amount))
               )
             ])
           ]
@@ -49085,27 +51654,55 @@ var render = function() {
     _c("h6", { staticClass: "text-center" }, [_vm._v("BANK BALANCE")]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "card-text" }, [
-          _c("h4", { staticClass: "text-center text-responsive" }, [
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "intro",
+              rawName: "v-intro",
+              value:
+                "This is your bank balance, shown in bitcoin to futureproof against the imminent obsolescence of government-issued currencies.",
+              expression:
+                "'This is your bank balance, shown in bitcoin to futureproof against the imminent obsolescence of government-issued currencies.'"
+            }
+          ],
+          staticClass: "card-body text-center align-bottom bank"
+        },
+        [
+          _c("img", {
+            staticClass: "mx-1 btc",
+            attrs: { src: "/images/opengraph.png", width: "30px" }
+          }),
+          _vm._v(" "),
+          _c("span", [
             _vm._v(
-              "£" +
-                _vm._s(
-                  _vm.numberWithCommas(
-                    _vm.$store.getters.GET_GAME.player.balance
-                  )
-                )
+              _vm._s(
+                _vm.numberWithCommas(_vm.$store.getters.GET_GAME.player.balance)
+              )
             )
           ])
-        ])
-      ])
+        ]
+      )
     ]),
     _vm._v(" "),
     _c("h6", { staticClass: "text-center mt-3" }, [_vm._v("STARS")]),
     _vm._v(" "),
     _c(
       "div",
-      { staticClass: "mt-3" },
+      {
+        directives: [
+          {
+            name: "intro",
+            rawName: "v-intro",
+            value:
+              "You can buy star players and boost your score by 1 goal per star. To play or remove a star, click on the ball. (You don't have any stars at the beginning of the game and it's probably best to wait until the later rounds when you have fewer teams and more money!)",
+            expression:
+              "'You can buy star players and boost your score by 1 goal per star. To play or remove a star, click on the ball. (You don\\'t have any stars at the beginning of the game and it\\'s probably best to wait until the later rounds when you have fewer teams and more money!)'"
+          }
+        ],
+        staticClass: "mt-3"
+      },
       _vm._l(_vm.restingStars, function(star) {
         return _vm.restingStars
           ? _c("div", [
@@ -49243,74 +51840,90 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _vm.auth
-    ? _c("div", { staticClass: "input-group" }, [
-        _c(
-          "select",
-          {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.selected,
-                expression: "selected"
-              }
-            ],
-            staticClass: "custom-select custom-select-sm",
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.selected = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
-            }
-          },
-          [
-            _c("option", { attrs: { value: "0", selected: "" } }, [
-              _vm._v("Boost...")
-            ]),
-            _vm._v(" "),
-            _vm._l(_vm.$store.getters.GET_GAME.stars, function(star, index) {
-              return _c(
-                "option",
-                {
-                  attrs: { disabled: _vm.getDisabled(star.id) },
-                  domProps: { value: star.id }
-                },
-                [
-                  _vm._v(
-                    "\n      " +
-                      _vm._s(star.type) +
-                      " (£" +
-                      _vm._s(_vm.numberWithCommas(star.price)) +
-                      ")   \n    "
-                  )
-                ]
-              )
-            })
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "input-group-append" }, [
-          _c(
-            "button",
+    ? _c(
+        "div",
+        {
+          directives: [
             {
-              staticClass: "btn btn-outline-primary btn-sm",
-              attrs: { type: "button" },
-              on: { click: _vm.buyStar }
+              name: "intro",
+              rawName: "v-intro",
+              value:
+                "You can buy star players to boost your chances. Each one is an extra goal. Only one star of each type is allowed. If you win you keep your stars and if you lose,you lose them. Click on the ball to play or rest stars you own. Stars are usually bought in the later rounds when you have fewer teams and more money!",
+              expression:
+                "'You can buy star players to boost your chances. Each one is an extra goal. Only one star of each type is allowed. If you win you keep your stars and if you lose,you lose them. Click on the ball to play or rest stars you own. Stars are usually bought in the later rounds when you have fewer teams and more money!'"
+            }
+          ],
+          staticClass: "input-group"
+        },
+        [
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.selected,
+                  expression: "selected"
+                }
+              ],
+              staticClass: "custom-select custom-select-sm",
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.selected = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
             },
-            [_vm._v("Buy")]
-          )
-        ])
-      ])
+            [
+              _c("option", { attrs: { value: "0", selected: "" } }, [
+                _vm._v("Boost...")
+              ]),
+              _vm._v(" "),
+              _vm._l(_vm.$store.getters.GET_GAME.stars, function(star, index) {
+                return _c(
+                  "option",
+                  {
+                    attrs: { disabled: _vm.getDisabled(star.id) },
+                    domProps: { value: star.id }
+                  },
+                  [
+                    _vm._v(
+                      "\n      " +
+                        _vm._s(star.type) +
+                        " (₿" +
+                        _vm._s(_vm.numberWithCommas(star.price)) +
+                        ")   \n    "
+                    )
+                  ]
+                )
+              })
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group-append" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-primary btn-sm",
+                attrs: { type: "button" },
+                on: { click: _vm.buyStar }
+              },
+              [_vm._v("Buy")]
+            )
+          ])
+        ]
+      )
     : _vm._e()
 }
 var staticRenderFns = []
@@ -49462,13 +52075,57 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.xGame.owner
-    ? _c(
-        "button",
-        { staticClass: "btn btn-primary", on: { click: _vm.handler } },
-        [_vm._v("\n    " + _vm._s(_vm.context.buttonText) + "\n")]
-      )
-    : _c("p", [_vm._v(_vm._s(_vm.context.punterText))])
+  return _c("div", [
+    _vm.xGame.owner
+      ? _c(
+          "button",
+          {
+            directives: [
+              {
+                name: "intro",
+                rawName: "v-intro",
+                value:
+                  "As tournament creator, you are responsible for starting matches and ending auctions. (Temporary for this prototype - everything will be on timers eventually!)",
+                expression:
+                  "'As tournament creator, you are responsible for starting matches and ending auctions. (Temporary for this prototype - everything will be on timers eventually!)'"
+              }
+            ],
+            staticClass: "btn btn-primary",
+            on: { click: _vm.handler }
+          },
+          [_vm._v("\n      " + _vm._s(_vm.context.buttonText) + "\n  ")]
+        )
+      : _c(
+          "span",
+          {
+            directives: [
+              {
+                name: "intro",
+                rawName: "v-intro",
+                value:
+                  "The creator of the tournament controls the start of matches and the end of auctions. Hold tight! This is a temporary solution and everything will eventually be on timers. In the meantime, you can keep the game moving by letting them know whether you want to buy stars or teams in the chat.",
+                expression:
+                  "'The creator of the tournament controls the start of matches and the end of auctions. Hold tight! This is a temporary solution and everything will eventually be on timers. In the meantime, you can keep the game moving by letting them know whether you want to buy stars or teams in the chat.'"
+              }
+            ],
+            staticClass: "small mr-2"
+          },
+          [_vm._v("\n    " + _vm._s(_vm.context.punterText))]
+        ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-outline-info help-button",
+        on: {
+          click: function($event) {
+            _vm.$intro().start()
+          }
+        }
+      },
+      [_vm._v("\n      ?\n  ")]
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -49504,44 +52161,76 @@ var render = function() {
           }
         },
         [
-          _c("p", { staticClass: "mb-0 small" }, [
+          _c(
+            "p",
+            {
+              directives: [
+                {
+                  name: "intro",
+                  rawName: "v-intro",
+                  value:
+                    "The progress of the tournament. The aim is to get teams through each round, earn money, and then have one of your teams win the final!",
+                  expression:
+                    "'The progress of the tournament. The aim is to get teams through each round, earn money, and then have one of your teams win the final!'"
+                }
+              ],
+              staticClass: "mb-0 small"
+            },
+            [
+              _vm._v(
+                "\n        " +
+                  _vm._s(_vm.$store.getters.GET_GAME.round.name) +
+                  " | Match " +
+                  _vm._s(_vm.$store.getters.GET_GAME.round.position) +
+                  " of " +
+                  _vm._s(_vm.$store.getters.GET_GAME.round.number_of_matches) +
+                  "\n        \n    "
+              )
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "p",
+        {
+          directives: [
+            {
+              name: "intro",
+              rawName: "v-intro",
+              value:
+                "You earn money whenever one of your team plays. The owner of the winning team gets 2/3rds of the HOME (top) team's gate money and goes through to the next round. The loser gets 1/3rd and the team goes out. In this prototype, in the case of a draw the away team automatically wins and goes through. Replays coming soon!",
+              expression:
+                "'You earn money whenever one of your team plays. The owner of the winning team gets 2/3rds of the HOME (top) team\\'s gate money and goes through to the next round. The loser gets 1/3rd and the team goes out. In this prototype, in the case of a draw the away team automatically wins and goes through. Replays coming soon!'"
+            }
+          ],
+          staticClass: "small"
+        },
+        [
+          _vm._v(" \n    Win "),
+          _c("strong", [
             _vm._v(
-              "\n        " +
-                _vm._s(_vm.$store.getters.GET_GAME.round.name) +
-                " | Match " +
-                _vm._s(_vm.$store.getters.GET_GAME.round.position) +
-                " of " +
-                _vm._s(_vm.$store.getters.GET_GAME.round.number_of_matches) +
-                "\n        \n    "
+              "₿" +
+                _vm._s(
+                  _vm.numberWithCommas(
+                    (2 * _vm.$store.getters.GET_GAME.home_team.gate) / 3
+                  )
+                )
+            )
+          ]),
+          _vm._v(" | Lose "),
+          _c("strong", [
+            _vm._v(
+              "₿" +
+                _vm._s(
+                  _vm.numberWithCommas(
+                    _vm.$store.getters.GET_GAME.home_team.gate / 3
+                  )
+                )
             )
           ])
         ]
       ),
-      _vm._v(" "),
-      _c("p", { staticClass: "small" }, [
-        _vm._v("\n    Win "),
-        _c("strong", [
-          _vm._v(
-            "£" +
-              _vm._s(
-                _vm.numberWithCommas(
-                  (2 * _vm.$store.getters.GET_GAME.home_team.gate) / 3
-                )
-              )
-          )
-        ]),
-        _vm._v(" | Lose "),
-        _c("strong", [
-          _vm._v(
-            "£" +
-              _vm._s(
-                _vm.numberWithCommas(
-                  _vm.$store.getters.GET_GAME.home_team.gate / 3
-                )
-              )
-          )
-        ])
-      ]),
       _vm._v(" "),
       _c("hr")
     ],
@@ -49798,7 +52487,19 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c(
           "div",
-          { staticClass: "col-4" },
+          {
+            directives: [
+              {
+                name: "intro",
+                rawName: "v-intro",
+                value:
+                  "This is the HOME team. If a team is not allocated to one of the players (shown as FOR SALE) it goes to auction.",
+                expression:
+                  "'This is the HOME team. If a team is not allocated to one of the players (shown as FOR SALE) it goes to auction.'"
+              }
+            ],
+            staticClass: "col-4"
+          },
           [
             _c(
               "transition",
@@ -49828,39 +52529,58 @@ var render = function() {
           1
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "col-4" }, [
-          _c(
-            "svg",
-            {
-              attrs: {
-                viewBox: "0 0 130 55",
-                xmlns: "http://www.w3.org/2000/svg"
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "intro",
+                rawName: "v-intro",
+                value:
+                  "This shows the chances of the side scoring 0,1,2,3,4 or 5 goals. Top flight (red) teams are generally more likely to score, but lower league (green) teams are capable of giant killing - with freak 5-goal upsets!",
+                expression:
+                  "'This shows the chances of the side scoring 0,1,2,3,4 or 5 goals. Top flight (red) teams are generally more likely to score, but lower league (green) teams are capable of giant killing - with freak 5-goal upsets!'"
               }
-            },
-            [
-              _vm._l(_vm.xGame.home_team.division.odds, function(odd, i) {
-                return [
-                  _c(
-                    "text",
-                    { staticClass: "goals", attrs: { x: "7", y: 53 - 8 * i } },
-                    [_vm._v(_vm._s(i))]
-                  ),
-                  _vm._v(" "),
-                  _c("line", {
-                    style: _vm.getStyle(_vm.xGame.home_team.division.level),
-                    attrs: {
-                      x1: "20",
-                      y1: 50 - 8 * i,
-                      x2: _vm.strokeEnd(odd.home_odds),
-                      y2: 50 - 8 * i
-                    }
-                  })
-                ]
-              })
             ],
-            2
-          )
-        ]),
+            staticClass: "col-4"
+          },
+          [
+            _c(
+              "svg",
+              {
+                attrs: {
+                  viewBox: "0 0 130 55",
+                  xmlns: "http://www.w3.org/2000/svg"
+                }
+              },
+              [
+                _vm._l(_vm.xGame.home_team.division.odds, function(odd, i) {
+                  return [
+                    _c(
+                      "text",
+                      {
+                        staticClass: "goals",
+                        attrs: { x: "7", y: 53 - 8 * i }
+                      },
+                      [_vm._v(_vm._s(i))]
+                    ),
+                    _vm._v(" "),
+                    _c("line", {
+                      style: _vm.getStyle(_vm.xGame.home_team.division.level),
+                      attrs: {
+                        x1: "20",
+                        y1: 50 - 8 * i,
+                        x2: _vm.strokeEnd(odd.home_odds),
+                        y2: 50 - 8 * i
+                      }
+                    })
+                  ]
+                })
+              ],
+              2
+            )
+          ]
+        ),
         _vm._v(" "),
         _c(
           "div",
@@ -49895,7 +52615,19 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c(
           "div",
-          { staticClass: "col-4" },
+          {
+            directives: [
+              {
+                name: "intro",
+                rawName: "v-intro",
+                value:
+                  "This is the AWAY team. If both teams belong to the same player, she must choose which team plays in the tie (and the other team goes to the bottom of the draw)",
+                expression:
+                  "'This is the AWAY team. If both teams belong to the same player, she must choose which team plays in the tie (and the other team goes to the bottom of the draw)'"
+              }
+            ],
+            staticClass: "col-4"
+          },
           [
             _c(
               "transition",
@@ -50258,12 +52990,12 @@ var render = function() {
     _c("table", { staticClass: "table table-sm" }, [
       _c("thead", [
         _c("tr", { class: _vm.getClass(_vm.division) }, [
-          _c("th", { staticClass: "p-0 text-center" }, [
+          _c("th", { staticClass: "pl-1 py-0 text-left" }, [
             _vm._v("D" + _vm._s(_vm.division))
           ]),
           _vm._v(" "),
           _c("th", { staticClass: "py-0 gate text-right" }, [
-            _vm._v("£" + _vm._s(_vm.gate))
+            _vm._v("₿" + _vm._s(_vm.gate))
           ])
         ])
       ])
@@ -50334,7 +53066,7 @@ var render = function() {
                   { staticClass: "card-body card-body-team text-center" },
                   [
                     _vm._v(
-                      "\n                    £" +
+                      "\n                    ₿" +
                         _vm._s(_vm.numberWithCommas(allocation.team.gate)) +
                         "\n                "
                     )
@@ -50375,51 +53107,52 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.$store.getters.GET_GAME.phase == "complete"
-        ? _c("win-component")
+      _vm.$store.getters.GET_GAME.phase == "round"
+        ? _c("round-component")
         : [
-            _vm.$store.getters.GET_GAME.phase == "round"
-              ? _c("round-component")
-              : [
-                  _c("div", { staticClass: "row" }, [
-                    _c(
-                      "div",
-                      { staticClass: "col-8" },
-                      [_c("details-component")],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "col-4 text-center" },
-                      [_c("control-component")],
-                      1
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("play-component")
-                ],
-            _vm._v(" "),
-            _c("chat-component", {
-              attrs: { tournament_id: _vm.tournament_id, user: _vm.user }
-            }),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "row" },
-              [_c("teams-component"), _vm._v(" "), _c("bank-component")],
-              1
-            ),
-            _vm._v(" "),
             _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-8" }, [_c("details-component")], 1),
+              _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "col-sm-8" },
-                [_c("results-component")],
+                { staticClass: "col-4 text-right" },
+                [_c("control-component")],
                 1
               )
-            ])
-          ]
+            ]),
+            _vm._v(" "),
+            _c("play-component")
+          ],
+      _vm._v(" "),
+      _c("chat-component", {
+        attrs: { tournament_id: _vm.tournament_id, user: _vm.user }
+      }),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "row" },
+        [
+          _c("teams-component", {
+            directives: [
+              {
+                name: "intro",
+                rawName: "v-intro",
+                value:
+                  "These are the teams you own. Red is a top flight team, blue is mid tier and green is lower league. Amount is the gate money when the team plays at home.",
+                expression:
+                  "'These are the teams you own. Red is a top flight team, blue is mid tier and green is lower league. Amount is the gate money when the team plays at home.'"
+              }
+            ]
+          }),
+          _vm._v(" "),
+          _c("bank-component")
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-sm-8" }, [_c("results-component")], 1)
+      ])
     ],
     2
   )
@@ -63787,6 +66520,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _helpers_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers/index */ "./resources/assets/js/helpers/index.js");
 /* harmony import */ var vue_chat_scroll__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-chat-scroll */ "./node_modules/vue-chat-scroll/dist/vue-chat-scroll.js");
 /* harmony import */ var vue_chat_scroll__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_chat_scroll__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vue_introjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-introjs */ "./node_modules/vue-introjs/dist/index.min.js");
+/* harmony import */ var vue_introjs__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_introjs__WEBPACK_IMPORTED_MODULE_5__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -63825,6 +66560,8 @@ files.keys().map(function (key) {
 
 
 Vue.use(vue_chat_scroll__WEBPACK_IMPORTED_MODULE_4___default.a);
+
+Vue.use(vue_introjs__WEBPACK_IMPORTED_MODULE_5___default.a);
 var app = new Vue({
   el: '#app',
   store: store

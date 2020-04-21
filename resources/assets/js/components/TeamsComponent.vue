@@ -19,7 +19,7 @@
                     </div>
                     <div
                         class="card-body card-body-team text-center">
-                        £{{ numberWithCommas(allocation.team.gate) }}
+                        ₿{{ numberWithCommas(allocation.team.gate) }}
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@
             <transition
                 name="fade"
                 enter-active-class="animated bounceIn">
-                <h3 :key="xGame.high_bid_amount">£{{ numberWithCommas(xGame.high_bid_amount) }}</h3>
+                <h3 :key="xGame.high_bid_amount">₿{{ numberWithCommas(xGame.high_bid_amount) }}</h3>
             </transition>
         </div>
     </div>

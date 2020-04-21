@@ -3,7 +3,9 @@
 
         <div class="col-sm-8">
             <div class="row">
-                <div class="col-4">
+                <div
+                    class="col-4"
+                    v-intro="'This is the HOME team. If a team is not allocated to one of the players (shown as FOR SALE) it goes to auction.'">
                     <transition
                         name="side"
                         enter-active-class="animated bounceIn">
@@ -17,7 +19,9 @@
                     </transition>
                 </div>
 
-                <div class="col-4">
+                <div
+                    class="col-4"
+                    v-intro="'This shows the chances of the side scoring 0,1,2,3,4 or 5 goals. Top flight (red) teams are generally more likely to score, but lower league (green) teams are capable of giant killing - with freak 5-goal upsets!'">
                     
                     <svg viewBox="0 0 130 55" xmlns="http://www.w3.org/2000/svg">
 
@@ -47,7 +51,9 @@
             </div>
 
             <div class="row">
-                <div class="col-4">
+                <div
+                    class="col-4"
+                    v-intro="'This is the AWAY team. If both teams belong to the same player, she must choose which team plays in the tie (and the other team goes to the bottom of the draw)'">
                     <transition
                         name="side"
                         enter-active-class="animated bounceIn">

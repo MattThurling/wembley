@@ -1,30 +1,28 @@
 <template>
     <div>
-        <win-component v-if="$store.getters.GET_GAME.phase == 'complete'"/>
+        <round-component v-if="$store.getters.GET_GAME.phase == 'round'"/>
         <template v-else>
-            <round-component v-if="$store.getters.GET_GAME.phase == 'round'"/>
-            <template v-else>
-                <div class="row">
-                    <div class="col-8">
-                        <details-component />
-                    </div>
-                    <div class="col-4 text-center">
-                        <control-component />
-                    </div>
+            <div class="row">
+                <div class="col-8">
+                    <details-component />
                 </div>
-                <play-component />
-            </template>
-            <chat-component :tournament_id="tournament_id" :user="user" />
-            <div class="row">
-                <teams-component />
-                <bank-component />
-            </div>
-            <div class="row">
-                <div class="col-sm-8">
-                    <results-component />
+                <div class="col-4 text-right">
+                    <control-component />
                 </div>
             </div>
+            <play-component />
         </template>
+        <chat-component :tournament_id="tournament_id" :user="user" />
+        <div class="row">
+            <teams-component
+                v-intro="'These are the teams you own. Red is a top flight team, blue is mid tier and green is lower league. Amount is the gate money when the team plays at home.'"/>
+            <bank-component />
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
+                <results-component />
+            </div>
+        </div>
     </div>
 
 </template>

@@ -10,8 +10,8 @@
     <table class="table table-sm">
       <thead>
         <tr :class="getClass(division)">
-          <th class="p-0 text-center">D{{division}}</th>
-          <th class="py-0 gate text-right">£{{gate}}</th>
+          <th class="pl-1 py-0 text-left">D{{division}}</th>
+          <th class="py-0 gate text-right">₿{{gate}}</th>
         </tr>
       </thead>
     </table>

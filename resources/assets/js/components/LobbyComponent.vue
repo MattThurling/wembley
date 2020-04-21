@@ -67,6 +67,9 @@
                 tournaments: []
             }
         },
+        mounted() {
+            this.$intro().start();
+        },
         created() {
             this.getTournaments();
             Echo.join('lobby')
@@ -115,5 +118,5 @@
                 });
             }
         }
-    }
+    };
 </script>

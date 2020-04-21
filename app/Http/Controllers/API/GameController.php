@@ -62,7 +62,7 @@ class GameController extends Controller
     $bid_side = null;
     $high_bid = null;
     $high_bidder_name = 'MINIMUM';
-    $high_bid_amount = 10000;
+    $high_bid_amount = 1;
 
     if ($round) {
       // The initial draw of teams. There may be some shenanigans - auctions and reordering
@@ -323,7 +323,7 @@ class GameController extends Controller
     $player->balance -= $bid->amount;
     $player->save();
     Bid::where('round_id', $tournament->round->id)->delete();
-    $message = 'Auction closed! ' . $allocation->team->name . ' sold to ' . $player->user->name . ' for £' . number_format($bid->amount);
+    $message = 'Auction closed! ' . $allocation->team->name . ' sold to ' . $player->user->name . ' for ₿' . number_format($bid->amount);
     $this->systemChat->do($tournament, $message, $message);
     broadcast(new UpdateTournamentEvent($tournament->id));
   }

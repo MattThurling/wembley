@@ -39,10 +39,10 @@ class BidController extends Controller
                 ->orderBy('amount', 'desc')
                 ->first();
 
-    if ($amount < 10000) $message = 'Minimum bid is £10,000';
+    if ($amount < 1) $message = 'Minimum bid is ₿1';
 
     if ($high) {
-      if ($amount < $high->amount + 10000) $message = 'Bid must be at least £10,000 more than highest bid';
+      if ($amount < $high->amount + 1) $message = 'Bid must be at least ₿1 more than highest bid';
     }
 
     if ($amount > $player->balance) $message = "That's more than you've got";
@@ -69,7 +69,7 @@ class BidController extends Controller
           'player_id' => $player->id,
           'team_id' => $team->id]);
 
-    $system_message = $player->user->name . ' has bid £' . number_format($amount) . ' for ' . $team->name;
+    $system_message = $player->user->name . ' has bid ₿' . number_format($amount) . ' for ' . $team->name;
 
     $this->systemChat->do($tournament, $system_message, $system_message); 
 

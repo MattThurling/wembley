@@ -47,7 +47,7 @@ class TournamentController extends Controller
   // Add a player to an existing tournament
   public function join(Tournament $tournament)
   {
-      $tournament->players()->create(['user_id' => Auth::id(), 'balance' => 1500000]);
+      $tournament->players()->create(['user_id' => Auth::id(), 'balance' => 250]);
       broadcast(new TournamentJoined($tournament));
       return 'Success';
   }
